@@ -3,8 +3,12 @@
 	retry_in: minutes. If the site is no back up, keeps trying in the last value
 	
 	Both ping_interval and retry_in array can be defined at host or url level.
+	
+	notify_after_failed_ping:  
+	You can set how many failed pings needs to be counted before triggering the notification email. 
+	Ex: 1 (the second failed ping will trigger notification)
 */
-var one_minute = 1 //you can set this to other value for testing the service in dev env.
+var one_minute = 60 //you can set this to other value for testing the service in dev env.
 
 exports.hosts = 
 	[
@@ -15,6 +19,7 @@ exports.hosts =
 			ping_interval: one_minute * 5, //seconds
 			retry_in: [10,30,120], //minutes
 			enabled: true,
+			notify_after_failed_ping: 1,
 			urls : [
 				{
 					method: 'get', 
@@ -38,6 +43,7 @@ exports.hosts =
 			ping_interval: one_minute * 5,
 			retry_in: [10,30,120],
 			enabled: true,
+			notify_after_failed_ping: 1,
 			urls : [
 				{
 					method: 'get', 
@@ -59,6 +65,7 @@ exports.hosts =
 			ping_interval: one_minute * 5,
 			retry_in: [10,30,120],
 			enabled: true,
+			notify_after_failed_ping: 1,
 			alert_to: 'ajax@aspphotogallery.net', //you can include a different email recipient per host
 			urls : [
 				{
@@ -86,6 +93,7 @@ exports.hosts =
 			ping_interval: one_minute * 5,
 			retry_in: [10,30,120],
 			enabled: true,
+			notify_after_failed_ping: 1,
 			urls : [
 				{
 					method: 'get', 
@@ -102,6 +110,7 @@ exports.hosts =
 			ping_interval: one_minute * 5,
 			retry_in: [10,30,120],
 			enabled: true,
+			notify_after_failed_ping: 1,
 			urls : [
 				{
 					method: 'get', 
@@ -118,6 +127,7 @@ exports.hosts =
 			ping_interval: one_minute * 5,
 			retry_in: [10,30,120],
 			enabled: true,
+			notify_after_failed_ping: 1,
 			urls : [
 				{
 					method: 'get', 
@@ -134,6 +144,7 @@ exports.hosts =
 			ping_interval: one_minute * 5,
 			retry_in: [10,30,120],
 			enabled: true,
+			notify_after_failed_ping: 1,
 			urls : [
 				{
 					method: 'get', 
@@ -148,8 +159,9 @@ exports.hosts =
 			host: '127.0.0.1', 
 			port:8080, 
 			ping_interval: one_minute * 5,
-			retry_in: [10,30,120],
-			enabled: false,
+			retry_in: [1,30,120],
+			enabled: true,
+			notify_after_failed_ping: 1,
 			urls : [
 				{
 					method: 'get', 
