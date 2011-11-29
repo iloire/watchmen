@@ -45,9 +45,9 @@
 
 ## History
 
-0.1
+**0.1**
 
-	* First release.
+  - First release.
 
 ## TODO
 
