@@ -4,7 +4,7 @@
 	
 	Both ping_interval and retry_in array can be defined at host or url level.
 */
-var one_minute = 1
+var one_minute = 60 //you can set this to other value for testing the service in dev env.
 
 exports.hosts = 
 	[
@@ -56,6 +56,7 @@ exports.hosts =
 			port:80, 
 			ping_interval: one_minute * 5,
 			retry_in: [10,30,120],
+			alert_to: 'ajax@aspphotogallery.net', //you can include a different email recipient per host
 			urls : [
 				{
 					method: 'get', 
