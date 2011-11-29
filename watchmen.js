@@ -77,7 +77,7 @@ for (var i=0; i<config.hosts.length;i++){
 		var url = host.urls[u]
 		url.host = host
 		var ping = (url.ping_interval || host.ping_interval) 
-		console.log (' -- url "' + url.url + '" every ' + ping + ' seconds...')
+		console.log (' -- ping "' + url.url + '" every ' + ping + ' seconds...')
 		setTimeout (query_url, ping * 1000, url);
 	}
 }
