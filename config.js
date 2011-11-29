@@ -4,7 +4,7 @@
 	
 	Both ping_interval and retry_in array can be defined at host or url level.
 */
-var one_minute = 60 //you can set this to other value for testing the service in dev env.
+var one_minute = 1 //you can set this to other value for testing the service in dev env.
 
 exports.hosts = 
 	[
@@ -14,6 +14,7 @@ exports.hosts =
 			port:80,
 			ping_interval: one_minute * 5, //seconds
 			retry_in: [10,30,120], //minutes
+			enabled: true,
 			urls : [
 				{
 					method: 'get', 
@@ -36,6 +37,7 @@ exports.hosts =
 			port:80, 
 			ping_interval: one_minute * 5,
 			retry_in: [10,30,120],
+			enabled: true,
 			urls : [
 				{
 					method: 'get', 
@@ -56,6 +58,7 @@ exports.hosts =
 			port:80, 
 			ping_interval: one_minute * 5,
 			retry_in: [10,30,120],
+			enabled: true,
 			alert_to: 'ajax@aspphotogallery.net', //you can include a different email recipient per host
 			urls : [
 				{
@@ -82,6 +85,7 @@ exports.hosts =
 			port:80, 
 			ping_interval: one_minute * 5,
 			retry_in: [10,30,120],
+			enabled: true,
 			urls : [
 				{
 					method: 'get', 
@@ -97,6 +101,7 @@ exports.hosts =
 			port:80, 
 			ping_interval: one_minute * 5,
 			retry_in: [10,30,120],
+			enabled: true,
 			urls : [
 				{
 					method: 'get', 
@@ -112,6 +117,7 @@ exports.hosts =
 			port:8080, 
 			ping_interval: one_minute * 5,
 			retry_in: [10,30,120],
+			enabled: true,
 			urls : [
 				{
 					method: 'get', 
@@ -127,6 +133,7 @@ exports.hosts =
 			port:8081, 
 			ping_interval: one_minute * 5,
 			retry_in: [10,30,120],
+			enabled: true,
 			urls : [
 				{
 					method: 'get', 
@@ -134,13 +141,30 @@ exports.hosts =
 					expected: {statuscode: 200, contains: 'directory'}
 				}
 			]
-		}		
+		}
+		,
+		{
+			name:'localhost service', 
+			host: '127.0.0.1', 
+			port:8080, 
+			ping_interval: one_minute * 5,
+			retry_in: [10,30,120],
+			enabled: false,
+			urls : [
+				{
+					method: 'get', 
+					url : '/', 
+					expected: {statuscode: 200, contains: 'blog about node'}
+				}
+			]
+		}
+		
 	]
 
 
 exports.notifications = {
-	To: 'ivan@iloire.com',
-	Subject: 'Site {site} down!'
+	Enabled: true, //if disabled, just console messages on site down
+	To: 'ivan@iloire.com'
 } 
 
 

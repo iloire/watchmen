@@ -111,12 +111,17 @@ console.log ('Starting Watchmen...')
 
 for (var i=0; i<config.hosts.length;i++){
 	var host = config.hosts[i];
-	console.log ('Monitoring ' + host.name + ':')
-	for (var u=0;u<config.hosts[i].urls.length;u++){
-		var url = host.urls[u]
-		url.host = host
-		var ping = (url.ping_interval || host.ping_interval) 
-		console.log (' -- ping "' + url.url + '" every ' + ping + ' seconds...')
-		setTimeout (query_url, ping * 1000, url);
+	if (host.enabled){
+		console.log ('Monitoring ' + host.name + ':')
+		for (var u=0;u<config.hosts[i].urls.length;u++){
+			var url = host.urls[u]
+			url.host = host
+			var ping = (url.ping_interval || host.ping_interval) 
+			console.log (' -- ping "' + url.url + '" every ' + ping + ' seconds...')
+			setTimeout (query_url, ping * 1000, url);
+		}
+	}
+	else{
+		console.log ('Skipping ' + host.name + '...')
 	}
 }
