@@ -2,14 +2,14 @@
 
   - Watchmen monitors HTTP servers by sending GET or POST pings (HTTP requests) in pre-defined intervals.
   - You can check for a) certain status code or b) a certain text in the response stream.
-  - If site is down, ping interval will increase (10', 30', 1 hour, etc... set in config file) until the site is back up again. Once is up you get another email.
+  - If site is down, ping interval will change (10', 30', 1 hour, etc... set in config file) until the site is back up again. Once the service is up again you get another email.
   - You are notified by email by using postmarkapp.com
 
 ## Configuration
   
   Edit config.js:
   
-  a) Define hosts and url's to be monitored:
+  a) **Define hosts and url's to be monitored:**
 
 		{
 			name:'letsnode.com',
@@ -31,7 +31,7 @@
 			]
 		}
   
-  b) Define Postmark and notifications settings:
+  b) **Define Postmark and notifications settings:**
 
 		exports.notifications = {
 			Enabled: true, //if disabled, just console messages on site down
