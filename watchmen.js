@@ -38,8 +38,8 @@ function query_url(url_conf){
 			postmark.sendEmail(
 				{
 				'From' : config.postmark.From,
-				'To':config.notifications.To, 
-				'Subject':config.notifications.Subject.replace('{site}', host_conf.name), 
+				'To': host_conf.alert_to || config.notifications.To,
+				'Subject':config.notifications.Subject.replace('{site}', host_conf.name),
 				'TextBody': error }, config.postmark.Api_key, function(err, data) {
 				
 				if (err) {
@@ -77,8 +77,7 @@ for (var i=0; i<config.hosts.length;i++){
 		var url = host.urls[u]
 		url.host = host
 		var ping = (url.ping_interval || host.ping_interval) 
-		console.log (' -- url "' + url.url + '" every ' + ping + ' seconds...')		
-		setTimeout (query_url, ping * 1000, url);	
+		console.log (' -- url "' + url.url + '" every ' + ping + ' seconds...')
+		setTimeout (query_url, ping * 1000, url);
 	}
 }
-
