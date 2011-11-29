@@ -70,20 +70,20 @@ function query_url(url_conf){
 		
 		console.log (host_conf.host + ':'+ host_conf.port + ', url: "' +  url_conf.url + '" : ' + (error || ' response ok!'))
 		
-		if (error){
-			if (config.notifications.Enabled){
+		if (error){			
+			if (url_conf.attempts==undefined)
+				url_conf.attempts = 0
+			else if (url_conf.attempts < (url_conf.retry_in || url_conf.host.retry_in).length-1){
+				url_conf.attempts++;
+			}
+			
+			if ((url_conf.attempts >= (url_conf.notify_after_failed_ping || host_conf.notify_after_failed_ping)) && config.notifications.Enabled){
 				sendEmail(
 					host_conf.alert_to || config.notifications.To, 
 					host_conf.host + ':'+ host_conf.port  + url_conf.url + ' is down!',
 					error);
-			}else{
-				console.log ('Notification disabled');
-			}
-			
-			if (!url_conf.attempts)
-				url_conf.attempts = 1
-			else if (url_conf.attempts < (url_conf.retry_in || url_conf.host.retry_in).length-1){
-				url_conf.attempts++;
+			} else{
+				console.log ('Notification disabled or not triggered this time');
 			}
 			
 			next_attempt_secs = (url_conf.retry_in || url_conf.host.retry_in) [url_conf.attempts] * 60;
