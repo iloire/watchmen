@@ -8,7 +8,7 @@
 	You can set how many failed pings needs to be counted before triggering the notification email. 
 	Ex: 1 (the second failed ping will trigger notification)
 */
-var one_minute = 60 //you can set this to other value for testing the service in dev env.
+var one_minute = 1 //you can set this to other value for testing the service in dev env.
 
 exports.hosts = 
 	[
@@ -88,7 +88,7 @@ exports.hosts =
 		,
 		{
 			name:'CachiruloValley', 
-			host: 'www.cachirulovalley.com', 
+			host: 'cachirulovalley.com', 
 			port:80, 
 			ping_interval: one_minute * 5,
 			retry_in: [10,30,120],
@@ -98,7 +98,24 @@ exports.hosts =
 				{
 					method: 'get', 
 					url : '/', 
-					expected: {statuscode: 301, contains: ''}
+					expected: {statuscode: 200, contains: ''}
+				}
+			]
+		}
+		,
+		{
+			name:'SocialMadrid', 
+			host: 'socialmadrid11.com', 
+			port:80, 
+			ping_interval: one_minute * 5,
+			retry_in: [10,30,120],
+			enabled: true,
+			notify_after_failed_ping: 1,
+			urls : [
+				{
+					method: 'get', 
+					url : '/', 
+					expected: {statuscode: 302, contains: ''}
 				}
 			]
 		}
@@ -155,12 +172,29 @@ exports.hosts =
 		}
 		,
 		{
-			name:'localhost service', 
+			name:'google.com', 
+			host: 'www.google.com', 
+			port:80, 
+			ping_interval: one_minute * 5,
+			retry_in: [10,30,120],
+			enabled: true,
+			notify_after_failed_ping: 1,
+			urls : [
+				{
+					method: 'get', 
+					url : '/', 
+					expected: {statuscode: 302, contains: ''}
+				}
+			]
+		}
+		,
+		{
+			name:'localhost service test', 
 			host: '127.0.0.1', 
 			port:8080, 
 			ping_interval: one_minute * 5,
 			retry_in: [1,30,120],
-			enabled: true,
+			enabled: false,
 			notify_after_failed_ping: 1,
 			urls : [
 				{
@@ -170,17 +204,38 @@ exports.hosts =
 				}
 			]
 		}
-		
+		,
+		{
+			name:'form post test', 
+			host: 'hroch486.icpf.cas.cz', 
+			port:80, 
+			ping_interval: one_minute,
+			retry_in: [1,30,120],
+			enabled: true,
+			notify_after_failed_ping: 1,
+			urls : [
+				{
+					method: 'get',
+					url : '/formpost.html', 
+					expected: {statuscode: 200, contains: 'Test Form -- POST method'}
+				},
+				{
+					method: 'post',
+					input_data : 'your_name=Ivan&fruit=Banana', 
+					content_type : 'application/x-www-form-urlencoded', // application/json
+					url : '/cgi-bin/echo.pl', 
+					expected: {statuscode: 200, contains: 'your_name = Ivan'}
+				}
+			]
+		}
 	]
 
 
 exports.notifications = {
-	Enabled: true, //if disabled, just console messages on site down
-	To: 'ivan@iloire.com'
+	Enabled: false, //if disabled, no email will be sent (just console messages)
+	To: 'ivan@iloire.com',
+	postmark : {
+		From: 'ivan@iloire.com',
+		Api_key : 'your-key-here'
+	}
 } 
-
-
-exports.postmark = {
-	From: 'ivan@iloire.com',
-	Api_key : 'your-key-here'
-}
