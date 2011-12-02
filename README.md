@@ -45,13 +45,19 @@
 
 ## History
 
+**0.2**
+
+  - Allow ping with POST method (for testing forms)
+  - Added Marak/colors.js to output success and error messages
+  - Refactoring
+
 **0.1**
 
   - First release.
 
 ## TODO
 
- - Enable POST pings
  - Write log to file
  - Stats
  - Regular expressions support
+ - REDIS support
