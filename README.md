@@ -1,9 +1,9 @@
-# "Watchmen", HTTP monitor for node.js
+# "watchmen", HTTP monitor for node.js
 
-  - Watchmen monitors HTTP servers by sending GET or POST pings (HTTP requests) in pre-defined intervals.
+  - "watchmen" monitors HTTP servers by sending GET or POST pings (HTTP requests) in pre-defined intervals.
   - You can check for a) certain status code or b) a certain text in the response stream.
   - If site is down, ping interval will change (10', 30', 1 hour, etc... set in config file) until the site is back up again. Once the service is up again you get another email.
-  - You are notified by email by using postmarkapp.com
+  - You are notified by email if the site is down by using postmarkapp.com (you can choose whatever being notified in the first, second, etc.. failure). You will be notified once the site is back up online.
 
 ## Configuration
   
@@ -43,12 +43,21 @@
 			Api_key : 'your-postmark-key-here'
 		}
 
+  c) **Run watchmen**
+
+		$ node watchmen.js
+
+  or probably you would want to use **forever** to run it in the background (more commmon)
+
+		$ forever start watchmen.js
+
 ## History
 
 **0.2**
 
-  - Allow ping with POST method (for testing forms)
+  - Allow POST method (for testing forms)
   - Added Marak/colors.js to output success and error messages
+  - Displays request duration time
   - Refactoring
 
 **0.1**
@@ -57,7 +66,9 @@
 
 ## TODO
 
+ - Create NPM package 
  - Write log to file
  - Stats
  - Regular expressions support
  - REDIS support
+ - Warning if request takes more than xx miliseconds
