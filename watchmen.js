@@ -30,6 +30,10 @@ var sys = require('sys');
 var colors = require('colors');
  
 function processRequest (url_conf, callback){
+
+	// record start time
+	var startTime = new Date();
+	
 	var headers = {
 	    'Host': url_conf.host.host
 	};
@@ -56,18 +60,19 @@ function processRequest (url_conf, callback){
 		});
 	
 		response.on('end', function() {
-			callback(null, body, response)
+			var timeDiff = (new Date() - startTime) / 1000;
+			callback(null, body, response, timeDiff)
 		});
 		
 		response.on('error', function(e) {
 			log_error ('Error on response :' + url_conf.host)
-			callback(e.message, null, null)
+			callback(e.message, null, null, null)
 		});
 	});
 	
 	request.on('error', function(e) {
-		log_error ('E	rror on request :' + url_conf.host)
-		callback(e.message, null, null)
+		log_error ('Error on request :' + url_conf.host)
+		callback(e.message, null, null, null)
 	});
 	
 	request.write(JSON.stringify(url_conf.input_data) || '');
@@ -98,7 +103,7 @@ function sendEmail (to, subject, body){
 function query_url(url_conf){
 	var host_conf = url_conf.host
 	var url_info = host_conf.host + ':'+ host_conf.port  + url_conf.url + ' [' + url_conf.method + ']'
-	processRequest(url_conf, function(request_err, body, response){
+	processRequest(url_conf, function(request_err, body, response, elapsed_time){
 		var error, next_attempt_secs
 		if (!request_err){
 			if (response.statusCode != url_conf.expected.statuscode){
@@ -141,7 +146,7 @@ function query_url(url_conf){
 				log_ok (url_info +' is back!')
 			}
 			else{
-				log_ok (url_info + ' responded OK!')
+				log_ok (url_info + ' responded OK! (' + elapsed_time + ' secs)')
 			}
 		}
 		
@@ -159,11 +164,10 @@ for (var i=0; i<config.hosts.length;i++){
 	if (host.enabled){
 		log_info ('Monitoring ' + host.name + ':')
 		for (var u=0;u<config.hosts[i].urls.length;u++){
-			var url = host.urls[u]
-			url.host = host
-			var ping = (url.ping_interval || host.ping_interval) 
-			log_info (' -- Queuing "' + url.url + '".. ping every ' + ping + ' seconds...')
-			setTimeout (query_url, ping * 1000, url);
+			host.urls[u].host = host
+			var ping = (host.urls[u].ping_interval || host.ping_interval) 
+			log_info (' -- Queuing "' + host.urls[u].url + '".. ping every ' + ping + ' seconds...')
+			setTimeout (query_url, ping * 1000, host.urls[u]);
 		}
 	}
 	else{
