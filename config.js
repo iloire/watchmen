@@ -8,7 +8,7 @@
 	You can set how many failed pings needs to be counted before triggering the notification email. 
 	Ex: 1 (the second failed ping will trigger notification)
 */
-var one_minute = 1 //you can set this to other value for testing the service in dev env.
+var one_minute = 60 //you can set this to other value for testing the service in dev env.
 
 exports.hosts = 
 	[
@@ -19,7 +19,7 @@ exports.hosts =
 			ping_interval: one_minute * 5, //seconds
 			retry_in: [10,30,120], //minutes
 			enabled: true,
-			notify_after_failed_ping: 1,
+			notify_after_failed_ping: 0,
 			urls : [
 				{
 					method: 'get', 
@@ -232,7 +232,7 @@ exports.hosts =
 
 
 exports.notifications = {
-	Enabled: false, //if disabled, no email will be sent (just console messages)
+	Enabled: true, //if disabled, no email will be sent (just console messages)
 	To: 'ivan@iloire.com',
 	postmark : {
 		From: 'ivan@iloire.com',
