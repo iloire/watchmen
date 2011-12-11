@@ -2,8 +2,8 @@
 
   - "watchmen" monitors HTTP servers by sending GET or POST pings (HTTP requests) in pre-defined intervals.
   - You can check for a) certain status code or b) a certain text in the response stream.
-  - If site is down, ping interval will change (10', 30', 1 hour, etc... set in config file) until the site is back up again. Once the service is up again you get another email.
-  - You are notified by email if the site is down by using postmarkapp.com (you can choose whatever being notified in the first, second, etc.. failure). You will be notified once the site is back up online.
+  - If site is down, ping interval will change (10', 30', 1 hour, etc... you set that in the config file) until the site is back up again. Once the service is up again you get another notification (email for now).
+  - You are notified if the site is down by using postmarkapp.com (you can choose whatever being notified in the first, second, etc.. failure). You will be notified again once the site is back up online.
 
 ## Configuration
   
@@ -34,31 +34,42 @@
   b) **Define Postmark and notifications settings:**
 
 		exports.notifications = {
-			Enabled: true, //if disabled, just console messages on site down
-			To: 'ivan@iloire.com'
+			Enabled: false, //if disabled, no email will be sent (just console messages)
+			To: 'ivan@iloire.com',
+			postmark : {
+				From: 'ivan@iloire.com',
+				Api_key : 'your-postmark-key-here'
+			}
 		} 
 
-		exports.postmark = {
-			From: 'your-email-here',
-			Api_key : 'your-postmark-key-here'
+  c) **Define logging options**
+
+		exports.logging = {
+			Enabled: true,
+			base_path : '/Users/ivanloire/dev/node/watchmen/logs/' //use last "/"
 		}
 
-  c) **Run watchmen**
+  d) **Run watchmen**
 
 		$ node watchmen.js
 
-  or probably you would want to use **forever** to run it in the background (more commmon)
+  or more probably you would want to use **forever** to run it in the background
 
 		$ forever start watchmen.js
 
 ## History
 
+**0.3**
+  
+  - Logs "site down" and "site back up" messages to a file (logs in a different file per host)
+  - Fix bug when reading url_conf.attempts on site back.
+
 **0.2**
 
-  - Allow POST method (for testing forms)
-  - Added Marak/colors.js to output success and error messages
-  - Displays request duration time
-  - Refactoring
+  - Allow POST method (for testing forms).
+  - Added Marak/colors.js to output success and error messages.
+  - Displays request duration time.
+  - Refactoring.
 
 **0.1**
 
@@ -66,9 +77,10 @@
 
 ## TODO
 
+ - When site is back, add information about how long the site was down.
  - Create NPM package 
- - Write log to file
  - Stats
  - Regular expressions support
  - REDIS support
+ - With REDIS backend done, web UI to check uptime information
  - Warning if request takes more than xx miliseconds
