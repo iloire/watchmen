@@ -28,6 +28,18 @@ var http = require('http');
 var postmark= require('./postmark');
 var sys = require('sys');
 var colors = require('colors');
+
+/*write to file*/
+function log_to_file (file, str){
+	var fs = require('fs');
+	fs.open(config.logging.base_path + file, 'a', 0666, function( e, id ) {
+	  fs.write( id, '\n' + new Date() + ' ' + str, null, 'utf8', function(){
+	    fs.close(id, function(){
+	      //console.log('file closed');
+	    });
+	  });
+	});
+}
  
 function processRequest (url_conf, callback){
 
@@ -79,10 +91,10 @@ function processRequest (url_conf, callback){
 	request.end();
 }
 
-function log_info (str){ sys.puts (str.grey) }
+function log_info (str){ sys.puts (str) }
 function log_ok (str){ sys.puts (str.green) }
 function log_error (str){ sys.puts (str.red) }
-function log_warning (str){ sys.puts (str.yellow.bold) }
+function log_warning (str){ sys.puts (str.cyan.bold) }
 
 function sendEmail (to, subject, body){
 	postmark.sendEmail(
@@ -116,9 +128,9 @@ function query_url(url_conf){
 		else
 			error = 'Connection error when processing request: ' + request_err
 		
-		if (error){
+		if (error){ //site down
 			if (url_conf.attempts==undefined)
-				url_conf.attempts = 0
+				url_conf.attempts = 1
 			else if (url_conf.attempts < (url_conf.retry_in || url_conf.host.retry_in).length-1){
 				url_conf.attempts++;
 			}
@@ -132,20 +144,28 @@ function query_url(url_conf){
 				log_info ('Notification disabled or not triggered this time');
 			}
 			
-			next_attempt_secs = (url_conf.retry_in || url_conf.host.retry_in) [url_conf.attempts] * 60;
-			log_error (url_info + ' down!. Error: ' + error + '. Retrying in ' + next_attempt_secs / 60 + ' minute(s)..')
+			next_attempt_secs = (url_conf.retry_in || url_conf.host.retry_in) [url_conf.attempts-1] * 60;
+			var info = url_info + ' down!. Error: ' + error + '. Retrying in ' + next_attempt_secs / 60 + ' minute(s)..';
+			if (config.logging.Enabled)
+				log_to_file(url_conf.host.name + '.log', info)
+			log_error (info)
 		}
 		else { //site up. queue next ping
-			next_attempt_secs = (url_conf.ping_interval || url_conf.host.ping_interval);
-			if (url_conf.attempts){ //site is up again!
+			next_attempt_secs = url_conf.ping_interval || url_conf.host.ping_interval;
+			if (url_conf.attempts){ //site was down and now it is up again!
 				url_conf.attempts = 0
-				sendEmail(
-					host_conf.alert_to || config.notifications.To,
-					url_info + ' is back up!',
-					'site is up again!');
-				log_ok (url_info +' is back!')
+				if (config.notifications.Enabled){
+					sendEmail(
+						host_conf.alert_to || config.notifications.To,
+						url_info + ' is back up!',
+						'site is up again!');
+				}
+				var info = url_info +' is back!';
+				if (config.logging.Enabled)
+					log_to_file(url_conf.host.name + '.log', info)
+				log_ok (info)
 			}
-			else{
+			else{ //site up
 				log_ok (url_info + ' responded OK! (' + elapsed_time + ' secs)')
 			}
 		}
@@ -156,21 +176,21 @@ function query_url(url_conf){
 
 /*main*/
 
-log_info ('starting watchmen...')
+log_info ('\nstarting watchmen...')
 log_info ('reading configuration and queuing hosts for pinging...')
 
 for (var i=0; i<config.hosts.length;i++){
 	var host = config.hosts[i];
 	if (host.enabled){
-		log_info ('Monitoring ' + host.name + ':')
+		log_info ('monitoring ' + host.name + ':')
 		for (var u=0;u<config.hosts[i].urls.length;u++){
 			host.urls[u].host = host
-			var ping = (host.urls[u].ping_interval || host.ping_interval) 
-			log_info (' -- Queuing "' + host.urls[u].url + '".. ping every ' + ping + ' seconds...')
+			var ping = host.urls[u].ping_interval || host.ping_interval
+			log_info (' -- queuing "' + host.urls[u].url + '".. ping every ' + ping + ' seconds...')
 			setTimeout (query_url, ping * 1000, host.urls[u]);
 		}
 	}
 	else{
-		log_warning ('Skipping ' + host.name + ' (disabled entry)...')
+		log_warning ('skipping ' + host.name + ' (disabled entry)...')
 	}
 }
