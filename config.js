@@ -1,12 +1,15 @@
 /*
-	ping_interval: in seconds
-	retry_in: minutes. If the site is no back up, keeps trying in the last value
+	ping_interval (host or url level): 
+	- ping interval, in seconds.
 	
-	Both ping_interval and retry_in array can be defined at host or url level.
+	retry_in (host or url level): 
+	- in minutes. Defines periods to retry pinging the site in case of failure or site down.
+	- If the site is no back up when the last value is tried, it will keep trying using that last value
 	
-	notify_after_failed_ping:  
-	You can set how many failed pings needs to be counted before triggering the notification email. 
-	Ex: 1 (the second failed ping will trigger notification)
+	notify_after_failed_ping (host or url level):
+	- You can set how many failed pings need to be counted before triggering notifications. 
+	- Ex: 2 (the first failed ping will be skipped and only the second failed ping will trigger notifications)
+		
 */
 var one_minute = 60 //you can set this to other value for testing the service in dev env.
 
@@ -189,11 +192,11 @@ exports.hosts =
 		}
 		,
 		{
-			name:'localhost service test', 
+			name:'localhost_test', 
 			host: '127.0.0.1', 
 			port:8080, 
 			ping_interval: one_minute * 5,
-			retry_in: [1,30,120],
+			retry_in: [0.1,0.1,120],
 			enabled: false,
 			notify_after_failed_ping: 1,
 			urls : [
@@ -230,12 +233,16 @@ exports.hosts =
 		}
 	]
 
+exports.logging = {
+	Enabled : true,
+	base_path : './logs/' //use last "/". Make sure this directory exists
+}
 
 exports.notifications = {
 	Enabled: true, //if disabled, no email will be sent (just console messages)
 	To: 'ivan@iloire.com',
 	postmark : {
 		From: 'ivan@iloire.com',
-		Api_key : 'your-key-here'
+		Api_key : 'your-postmark-key-here'
 	}
 } 
