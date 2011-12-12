@@ -82,7 +82,8 @@ exports.hosts =
 					expected: {statuscode: 200, contains: 'Knockout'}
 				},
 				{
-					method: 'get', 
+					method: 'get',
+					enabled: false,
 					url : '/demomvc', 
 					expected: {statuscode: 200, contains: 'Simple, sexy, FAST, ASP.NET MVC photo gallery'}
 				}

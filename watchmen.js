@@ -184,13 +184,18 @@ for (var i=0; i<config.hosts.length;i++){
 	if (host.enabled){
 		log_info ('monitoring ' + host.name + ':')
 		for (var u=0;u<config.hosts[i].urls.length;u++){
-			host.urls[u].host = host
-			var ping = host.urls[u].ping_interval || host.ping_interval
-			log_info (' -- queuing "' + host.urls[u].url + '".. ping every ' + ping + ' seconds...')
-			setTimeout (query_url, ping * 1000, host.urls[u]);
+			if (host.urls[u].enabled != false){
+				host.urls[u].host = host
+				var ping = host.urls[u].ping_interval || host.ping_interval
+				log_info (' -- queuing "' + host.urls[u].url + '".. ping every ' + ping + ' seconds...')
+				setTimeout (query_url, ping * 1000, host.urls[u]);
+			}
+			else{
+				log_warning (' -- skipping url: ' + host.name + host.urls[u].url + ' (disabled entry)...')
+			}
 		}
 	}
 	else{
-		log_warning ('skipping ' + host.name + ' (disabled entry)...')
+		log_warning ('skipping host: ' + host.name + ' (disabled entry)...')
 	}
 }
