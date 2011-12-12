@@ -133,7 +133,7 @@ function query_url(url_conf){
 				url_conf.attempts = 1
 				url_conf.down_timestamp = new Date()
 			}
-			else if (url_conf.attempts < (url_conf.retry_in || url_conf.host.retry_in).length-1){
+			else if (url_conf.attempts < (url_conf.retry_in || url_conf.host.retry_in).length){
 				url_conf.attempts++;
 			}
 			
