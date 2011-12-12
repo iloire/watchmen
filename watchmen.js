@@ -117,7 +117,7 @@ function query_url(url_conf){
 	var url_info = host_conf.host + ':'+ host_conf.port  + url_conf.url + ' [' + url_conf.method + ']'
 	processRequest(url_conf, function(request_err, body, response, elapsed_time){
 		var error, next_attempt_secs
-		if (!request_err){
+		if (!request_err){ //request completed successfully
 			if (response.statusCode != url_conf.expected.statuscode){
 				error = 'FAILED! expected status code :' + url_conf.expected.statuscode + ' at ' + url_conf.url + ' but got ' + response.statusCode
 			}
@@ -125,12 +125,14 @@ function query_url(url_conf){
 				error = 'FAILED! expected text "' + url_conf.expected.contains + '" but it wasn\'t found'
 			}
 		}
-		else
+		else //error processing request. host down, dns resolution problem, etc..
 			error = 'Connection error when processing request: ' + request_err
 		
 		if (error){ //site down
-			if (url_conf.attempts==undefined)
+			if (url_conf.attempts==undefined){
 				url_conf.attempts = 1
+				url_conf.down_timestamp = new Date()
+			}
 			else if (url_conf.attempts < (url_conf.retry_in || url_conf.host.retry_in).length-1){
 				url_conf.attempts++;
 			}
@@ -138,8 +140,7 @@ function query_url(url_conf){
 			if ((url_conf.attempts >= (url_conf.notify_after_failed_ping || host_conf.notify_after_failed_ping)) && config.notifications.Enabled){
 				sendEmail(
 					host_conf.alert_to || config.notifications.To, 
-					url_info + ' is down!',
-					error);
+					url_info + ' is down!', url_info + ' is down!. Reason: ' + error);
 			} else{
 				log_info ('Notification disabled or not triggered this time');
 			}
@@ -153,17 +154,17 @@ function query_url(url_conf){
 		else { //site up. queue next ping
 			next_attempt_secs = url_conf.ping_interval || url_conf.host.ping_interval;
 			if (url_conf.attempts){ //site was down and now it is up again!
-				url_conf.attempts = 0
+				url_conf.attempts = undefined
+				var info = url_info + ' is back!. Downtime: ' + (new Date() - url_conf.down_timestamp) / 1000 + ' seconds.'; 
 				if (config.notifications.Enabled){
 					sendEmail(
 						host_conf.alert_to || config.notifications.To,
-						url_info + ' is back up!',
-						'site is up again!');
+						url_info + ' is back up!', info);
 				}
-				var info = url_info +' is back!';
+
 				if (config.logging.Enabled)
 					log_to_file(url_conf.host.name + '.log', info)
-				log_ok (info)
+				log_warning (info)
 			}
 			else{ //site up
 				log_ok (url_info + ' responded OK! (' + elapsed_time + ' secs)')

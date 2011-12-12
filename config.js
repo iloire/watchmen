@@ -4,7 +4,9 @@
 	
 	retry_in (host or url level): 
 	- in minutes. Defines periods to retry pinging the site in case of failure or site down.
-	- If the site is no back up when the last value is tried, it will keep trying using that last value
+	- If the site is no back up when the last value is tried, it will keep trying using that last value.
+	- Ex: retry_in: [10,30,120], means: if site down, try again in 10 minutes. If down, try again in 30 min.
+	  If still down, try in 120 minutes, and repeat.
 	
 	notify_after_failed_ping (host or url level):
 	- You can set how many failed pings need to be counted before triggering notifications. 
@@ -181,7 +183,7 @@ exports.hosts =
 			port:80, 
 			ping_interval: one_minute * 5,
 			retry_in: [10,30,120],
-			enabled: true,
+			enabled: false,
 			notify_after_failed_ping: 1,
 			urls : [
 				{
@@ -198,7 +200,7 @@ exports.hosts =
 			port:8080, 
 			ping_interval: one_minute * 5,
 			retry_in: [0.1,0.1,120],
-			enabled: false,
+			enabled: true,
 			notify_after_failed_ping: 1,
 			urls : [
 				{
@@ -215,7 +217,7 @@ exports.hosts =
 			port:80, 
 			ping_interval: one_minute,
 			retry_in: [1,30,120],
-			enabled: true,
+			enabled: false,
 			notify_after_failed_ping: 1,
 			urls : [
 				{
