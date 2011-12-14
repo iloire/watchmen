@@ -59,6 +59,11 @@
 
 ## History
 
+**0.5**
+
+  - REDIS backend
+  - Web server control panel to display reports (express.js app using REDIS backend)
+
 **0.4**
 
   - Be able to disable entries in config file at url level
@@ -81,10 +86,10 @@
   - First release.
 
 ## TODO
-
+ - Google chart in url uptime history
+ - Uptime stats info
+ - Change configuration from control panel
+ - Reset stats from control panel
  - Create NPM package 
- - Stats
  - Regular expressions support
- - REDIS support
- - With REDIS backend done, web UI to check uptime information
  - Warning if request takes more than xx miliseconds

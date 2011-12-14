@@ -29,6 +29,9 @@ var postmark= require('./postmark');
 var sys = require('sys');
 var colors = require('colors');
 
+var _redis = require("redis")
+var redis = _redis.createClient()
+
 /*write to file*/
 function log_to_file (file, str){
 	var fs = require('fs');
@@ -96,6 +99,15 @@ function log_ok (str){ sys.puts (str.green) }
 function log_error (str){ sys.puts (str.red) }
 function log_warning (str){ sys.puts (str.cyan.bold) }
 
+function $() { return Array.prototype.slice.call(arguments).join(':') }
+
+function log_failure_to_redis (url, msg){
+	var timestamp = new Date().getTime();
+	redis.lpush($(url.host.host, url.url, 'failure'), timestamp); //add to list of failures
+	redis.set($(url.host.host, url.url, 'failure', timestamp), msg); //add failure details
+	redis.set($(url.host.host, url.url, 'lastfailure'), timestamp); //record last failure
+}
+
 function sendEmail (to, subject, body){
 	postmark.sendEmail(
 	{
@@ -149,7 +161,9 @@ function query_url(url_conf){
 			var info = url_info + ' down!. Error: ' + error + '. Retrying in ' + next_attempt_secs / 60 + ' minute(s)..';
 			if (config.logging.Enabled)
 				log_to_file(url_conf.host.name + '.log', info)
-			log_error (info)
+
+			log_error (info);
+			log_failure_to_redis (url_conf, error);
 		}
 		else { //site up. queue next ping
 			next_attempt_secs = url_conf.ping_interval || url_conf.host.ping_interval;
@@ -200,3 +214,10 @@ for (var i=0; i<config.hosts.length;i++){
 		log_warning ('skipping host: ' + host.name + ' (disabled entry)...')
 	}
 }
+
+
+process.on('SIGINT', function () {
+	console.log('stopping watchmen..');
+	redis.quit();
+	process.exit(0);
+});

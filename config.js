@@ -13,7 +13,7 @@
 	- Ex: 2 (the first failed ping will be skipped and only the second failed ping will trigger notifications)
 		
 */
-var one_minute = 60 //you can set this to other value for testing the service in dev env.
+var one_minute = 1 //you can set this to other value for testing the service in dev env.
 
 exports.hosts = 
 	[
@@ -242,10 +242,10 @@ exports.logging = {
 }
 
 exports.notifications = {
-	Enabled: true, //if disabled, no email will be sent (just console messages)
+	Enabled: false, //if disabled, no email will be sent (just console messages)
 	To: 'ivan@iloire.com',
 	postmark : {
 		From: 'ivan@iloire.com',
-		Api_key : 'your-postmark-key-here'
+		Api_key : 'your-postmark-key-here''
 	}
 } 
