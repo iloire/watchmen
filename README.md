@@ -46,7 +46,7 @@
 
 		exports.logging = {
 			Enabled: true,
-			base_path : '/Users/ivanloire/dev/node/watchmen/logs/' //use last "/"
+			base_path : './logs' //use last "/"
 		}
 
   d) **Run watchmen**
@@ -58,6 +58,11 @@
 		$ forever start watchmen.js
 
 ## History
+
+**0.4**
+
+  - Be able to disable entries in config file at url level
+  - When site is back, displays and logs information about how long the site has been down.
 
 **0.3**
   
@@ -77,7 +82,6 @@
 
 ## TODO
 
- - When site is back, add information about how long the site was down.
  - Create NPM package 
  - Stats
  - Regular expressions support
