@@ -1,0 +1,47 @@
+
+<p>Welcome to watchmen control panel.</p>
+<p>Web site status:</p>
+
+<%
+	for (var i=0; i<hosts.length;i++){
+		var host = hosts[i];
+		%>
+		<h3><%=host.name%> (<%=host.host%>)<%
+			if (host.enabled==false){
+			%>
+			<small>(disabled)</small>
+			<%
+			}
+			%>
+		</h3>
+		<ul>
+		<%
+		for (var u=0;u<hosts[i].urls.length;u++){
+			%>
+			<li><%=host.urls[u].url%>
+			<%
+			if (host.urls[u].enabled == false){
+				%>
+				(url disabled)
+				<%
+			}
+			if (host.urls[u].lastfailure){
+				%>
+				last failure: <span class="failure"><%=new Date(parseFloat(host.urls[u].lastfailure)).toUTCString()%></span>
+				<%
+			}
+			else{
+				%>
+				<span class="ok">OK</span>
+				<%
+			}
+			%>
+			<a href="/log?url=<%=encodeURIComponent(host.urls[u].url)%>&host=<%=encodeURIComponent(host.host)%>">log details</a>
+			</li>
+			<%
+		}
+		%>
+		</ul>
+		<%
+	}
+%>

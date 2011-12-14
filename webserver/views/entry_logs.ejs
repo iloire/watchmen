@@ -1,0 +1,25 @@
+<h1><%=title%></h1>
+
+<%if (logs.length) {%>
+	<ul>
+	<%
+	for (var i=0; i<logs.length;i++){
+		%>
+		<li><%=new Date(parseFloat(logs[i].timestamp)).toUTCString()%>: <span class="failure"><%=logs[i].msg%></span></li>
+		<%
+	}
+	%>
+	</ul>
+<% } else {%>
+	<p>No failure logs found</p>
+<%}%>
+
+<h2>TODO:</h2>
+<ul>
+	<li>google chart</li>
+	<li>uptime stats info</li>
+	<li>change configuration from here</li>
+	<li>reset stats</li>
+</ul>
+
+<a href="/" class="btn primary">back to list</a>
