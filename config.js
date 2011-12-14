@@ -13,7 +13,7 @@
 	- Ex: 2 (the first failed ping will be skipped and only the second failed ping will trigger notifications)
 		
 */
-var one_minute = 1 //you can set this to other value for testing the service in dev env.
+var one_minute = 60 //you can set this to other value for testing the service in dev env.
 
 exports.hosts = 
 	[
@@ -21,7 +21,7 @@ exports.hosts =
 			name:'VitaminasDev', 
 			host: 'www.vitaminasdev.com', 
 			port:80,
-			ping_interval: one_minute * 5, //seconds
+			ping_interval: one_minute, //seconds
 			retry_in: [10,30,120], //minutes
 			enabled: true,
 			notify_after_failed_ping: 0,
@@ -45,7 +45,7 @@ exports.hosts =
 			name:'iloire.com', 
 			host: 'www.iloire.com', 
 			port:80, 
-			ping_interval: one_minute * 5,
+			ping_interval: one_minute,
 			retry_in: [10,30,120],
 			enabled: true,
 			notify_after_failed_ping: 1,
@@ -67,7 +67,7 @@ exports.hosts =
 			name:'ASP Photo Gallery', 
 			host: 'www.aspphotogallery.net', 
 			port:80, 
-			ping_interval: one_minute * 5,
+			ping_interval: one_minute,
 			retry_in: [10,30,120],
 			enabled: true,
 			notify_after_failed_ping: 1,
@@ -96,7 +96,7 @@ exports.hosts =
 			name:'CachiruloValley', 
 			host: 'cachirulovalley.com', 
 			port:80, 
-			ping_interval: one_minute * 5,
+			ping_interval: one_minute,
 			retry_in: [10,30,120],
 			enabled: true,
 			notify_after_failed_ping: 1,
@@ -113,7 +113,7 @@ exports.hosts =
 			name:'SocialMadrid', 
 			host: 'socialmadrid11.com', 
 			port:80, 
-			ping_interval: one_minute * 5,
+			ping_interval: one_minute,
 			retry_in: [10,30,120],
 			enabled: true,
 			notify_after_failed_ping: 1,
@@ -130,7 +130,7 @@ exports.hosts =
 			name:'letsnode.com', 
 			host: 'letsnode.com', 
 			port:80, 
-			ping_interval: one_minute * 5,
+			ping_interval: one_minute,
 			retry_in: [10,30,120],
 			enabled: true,
 			notify_after_failed_ping: 1,
@@ -147,7 +147,7 @@ exports.hosts =
 			name:'letsnode.com frelancer service', 
 			host: 'letsnode.com', 
 			port:8080, 
-			ping_interval: one_minute * 5,
+			ping_interval: one_minute,
 			retry_in: [10,30,120],
 			enabled: true,
 			notify_after_failed_ping: 1,
@@ -164,7 +164,7 @@ exports.hosts =
 			name:'letsnode.com directory web', 
 			host: 'letsnode.com', 
 			port:8081, 
-			ping_interval: one_minute * 5,
+			ping_interval: one_minute,
 			retry_in: [10,30,120],
 			enabled: true,
 			notify_after_failed_ping: 1,
@@ -181,7 +181,7 @@ exports.hosts =
 			name:'google.com', 
 			host: 'www.google.com', 
 			port:80, 
-			ping_interval: one_minute * 5,
+			ping_interval: one_minute,
 			retry_in: [10,30,120],
 			enabled: false,
 			notify_after_failed_ping: 1,
@@ -198,7 +198,7 @@ exports.hosts =
 			name:'localhost_test', 
 			host: '127.0.0.1', 
 			port:8080, 
-			ping_interval: one_minute * 5,
+			ping_interval: one_minute,
 			retry_in: [0.1,0.1,120],
 			enabled: true,
 			notify_after_failed_ping: 1,
@@ -246,6 +246,6 @@ exports.notifications = {
 	To: 'ivan@iloire.com',
 	postmark : {
 		From: 'ivan@iloire.com',
-		Api_key : 'your-postmark-key-here''
+		Api_key : 'your-postmark-key-here'
 	}
 } 

@@ -5,7 +5,13 @@
 	<%
 	for (var i=0; i<logs.length;i++){
 		%>
-		<li><%=new Date(parseFloat(logs[i].timestamp)).toUTCString()%>: <span class="failure"><%=logs[i].msg%></span></li>
+		<li>
+		<%=new Date(parseFloat(logs[i].timestamp)).toUTCString()%>: 
+		<%if (logs[i].event =='failure'){%>
+			<span class="failure"><%=logs[i].msg%></span></li>
+		<%} else {%>
+			<span class="ok"><%=logs[i].msg%></span></li>
+		<%}%>
 		<%
 	}
 	%>

@@ -101,11 +101,17 @@ function log_warning (str){ sys.puts (str.cyan.bold) }
 
 function $() { return Array.prototype.slice.call(arguments).join(':') }
 
-function log_failure_to_redis (url, msg){
+function log_event_to_redis (url, event_type, msg){
 	var timestamp = new Date().getTime();
-	redis.lpush($(url.host.host, url.url, 'failure'), timestamp); //add to list of failures
-	redis.set($(url.host.host, url.url, 'failure', timestamp), msg); //add failure details
-	redis.set($(url.host.host, url.url, 'lastfailure'), timestamp); //record last failure
+	if (event_type == 'failure')
+		redis.set($(url.host.host, url.url, 'lastfailure'), timestamp); //easy access to last failure
+	else
+		redis.set($(url.host.host, url.url, 'lastok'), timestamp); //easy access to last successful ping
+
+	if (msg){
+		redis.lpush($(url.host.host, url.url, 'events'), timestamp); //prepend to list of events
+		redis.set($(url.host.host, url.url, 'event', timestamp), JSON.stringify({event: event_type, timestamp: timestamp, msg: msg})); //add event details
+	}
 }
 
 function sendEmail (to, subject, body){
@@ -163,7 +169,7 @@ function query_url(url_conf){
 				log_to_file(url_conf.host.name + '.log', info)
 
 			log_error (info);
-			log_failure_to_redis (url_conf, error);
+			log_event_to_redis (url_conf, 'failure' , error)
 		}
 		else { //site up. queue next ping
 			next_attempt_secs = url_conf.ping_interval || url_conf.host.ping_interval;
@@ -178,10 +184,13 @@ function query_url(url_conf){
 
 				if (config.logging.Enabled)
 					log_to_file(url_conf.host.name + '.log', info)
+
 				log_warning (info)
+				log_event_to_redis (url_conf, 'ok' , 'site back up! downtime:' + (new Date() - url_conf.down_timestamp) / 1000 + ' seconds.')
 			}
 			else{ //site up
 				log_ok (url_info + ' responded OK! (' + elapsed_time + ' secs)')
+				log_event_to_redis (url_conf, 'ok' , '')
 			}
 		}
 		

@@ -31,16 +31,16 @@ app.get('/log', function(req, res){
 	var host = req.query ['host'], url = req.query ['url']
 
 	var logs = [];
-	redis.lrange ($(host, url, 'failure'), 0, 100, function(err, timestamps) {
+	redis.lrange ($(host, url, 'events'), 0, 100, function(err, timestamps) {
 		var multi = redis.multi()
 		for (i=0;i<timestamps.length;i++)	{
-			var key = $(host, url, 'failure', timestamps[i]);
+			var key = $(host, url, 'event', timestamps[i]);
 			multi.get (key);
 		}
 		
 		multi.exec(function(err, replies) {
 			for (i=0;i<replies.length;i++){
-				logs.push  ({timestamp: timestamps[i], msg: replies[i]});
+				logs.push  (JSON.parse(replies[i]));
 			}
 			res.render('entry_logs', {title: 'Logs for ' + host + ' ' + url, logs: logs});
 		});
@@ -56,6 +56,7 @@ app.get('/', function(req, res){
 	for (var i=0; i<hosts.length;i++){
 		for (var u=0;u<hosts[i].urls.length;u++){
 			multi.get ($(hosts[i].host, hosts[i].urls[u].url, 'lastfailure'));
+			multi.get ($(hosts[i].host, hosts[i].urls[u].url, 'lastok'));
 		}
 	}
 	
@@ -68,6 +69,8 @@ app.get('/', function(req, res){
 			for (i=0;i<hosts.length;i++) {
 				for (var u=0;u<hosts[i].urls.length;u++){
 					hosts[i].urls[u].lastfailure = replies[counter];
+					counter++;
+					hosts[i].urls[u].lastok = replies[counter];
 					counter++;
 				}
 			}

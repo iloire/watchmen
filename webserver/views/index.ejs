@@ -32,7 +32,8 @@
 			}
 			else{
 				%>
-				<span class="ok">OK</span>
+				last successful reply: 
+				<span class="ok"><%=new Date(parseFloat(host.urls[u].lastok)).toUTCString()%></span>
 				<%
 			}
 			%>
