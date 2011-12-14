@@ -27,13 +27,19 @@
 			}
 			if (host.urls[u].lastfailure){
 				%>
-				last failure: <span class="failure"><%=new Date(parseFloat(host.urls[u].lastfailure)).toUTCString()%></span>
+				last failure: 
+				<span class="failure">
+					<%=new Date(parseFloat(host.urls[u].lastfailure)).toUTCString()%>
+					<time class="timeago" datetime="<%=new Date(parseFloat(host.urls[u].lastfailure)).toISOString()%>"><%=new Date(parseFloat(host.urls[u].lastok)).toISOString()%></time>
+				</span>
 				<%
 			}
 			else{
 				%>
 				last successful reply: 
-				<span class="ok"><%=new Date(parseFloat(host.urls[u].lastok)).toUTCString()%></span>
+				<span class="ok">
+					<time class="timeago" datetime="<%=new Date(parseFloat(host.urls[u].lastok)).toISOString()%>"><%=new Date(parseFloat(host.urls[u].lastok)).toISOString()%></time>
+				</span>
 				<%
 			}
 			%>

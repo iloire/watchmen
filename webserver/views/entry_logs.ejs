@@ -6,7 +6,7 @@
 	for (var i=0; i<logs.length;i++){
 		%>
 		<li>
-		<%=new Date(parseFloat(logs[i].timestamp)).toUTCString()%>: 
+		<time class="timeago" datetime="<%=new Date(parseFloat(logs[i].timestamp)).toISOString()%>"><%=new Date(parseFloat(logs[i].timestamp)).toISOString()%></time>:
 		<%if (logs[i].event =='failure'){%>
 			<span class="failure"><%=logs[i].msg%></span></li>
 		<%} else {%>
