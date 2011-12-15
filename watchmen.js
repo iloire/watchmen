@@ -147,34 +147,32 @@ function query_url(url_conf){
 			error = 'Connection error when processing request: ' + request_err
 		
 		if (error){ //site down
-			if (url_conf.attempts==undefined){
-				url_conf.attempts = 1
-				url_conf.down_timestamp = new Date()
-			}
-			else if (url_conf.attempts < (url_conf.retry_in || url_conf.host.retry_in).length){
-				url_conf.attempts++;
-			}
-			
-			if ((url_conf.attempts >= (url_conf.notify_after_failed_ping || host_conf.notify_after_failed_ping)) && config.notifications.Enabled){
-				sendEmail(
-					host_conf.alert_to || config.notifications.To, 
-					url_info + ' is down!', url_info + ' is down!. Reason: ' + error);
-			} else{
-				log_info ('Notification disabled or not triggered this time');
-			}
-			
-			next_attempt_secs = (url_conf.retry_in || url_conf.host.retry_in) [url_conf.attempts-1] * 60;
-			var info = url_info + ' down!. Error: ' + error + '. Retrying in ' + next_attempt_secs / 60 + ' minute(s)..';
-			if (config.logging.Enabled)
-				log_to_file(url_conf.host.name + '.log', info)
+			next_attempt_secs = url_conf.failed_ping_interval || url_conf.host.failed_ping_interval;
 
-			log_error (info);
-			log_event_to_redis (url_conf, 'failure' , error)
+			var info = url_info + ' down!. Error: ' + error + '. Retrying in ' + next_attempt_secs / 60 + ' minute(s)..';
+			log_error (info); //console log
+			if (config.logging.Enabled) //log to file
+				log_to_file(url_conf.host.name + '.log', info)
+			
+			if (!url_conf.down_timestamp){ //site down (first failure)
+				url_conf.down_timestamp = new Date()
+				if (config.notifications.Enabled){
+					sendEmail(
+						host_conf.alert_to || config.notifications.To, 
+						url_info + ' is down!', url_info + ' is down!. Reason: ' + error);
+				}
+				else{
+					log_info ('Notification disabled or not triggered this time');
+				}
+
+				log_event_to_redis (url_conf, 'failure' , error) //log to redis
+			}
 		}
 		else { //site up. queue next ping
 			next_attempt_secs = url_conf.ping_interval || url_conf.host.ping_interval;
-			if (url_conf.attempts){ //site was down and now it is up again!
-				url_conf.attempts = undefined
+			
+			if (url_conf.down_timestamp){ //site was down and now it is up again!
+				url_conf.down_timestamp = undefined
 				var info = url_info + ' is back!. Downtime: ' + (new Date() - url_conf.down_timestamp) / 1000 + ' seconds.'; 
 				if (config.notifications.Enabled){
 					sendEmail(
@@ -188,7 +186,7 @@ function query_url(url_conf){
 				log_warning (info)
 				log_event_to_redis (url_conf, 'ok' , 'site back up! downtime:' + (new Date() - url_conf.down_timestamp) / 1000 + ' seconds.')
 			}
-			else{ //site up
+			else{ //site up as normal
 				log_ok (url_info + ' responded OK! (' + elapsed_time + ' secs)')
 				log_event_to_redis (url_conf, 'ok' , '')
 			}

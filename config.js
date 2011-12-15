@@ -2,18 +2,11 @@
 	ping_interval (host or url level): 
 	- ping interval, in seconds.
 	
-	retry_in (host or url level): 
-	- in minutes. Defines periods to retry pinging the site in case of failure or site down.
-	- If the site is no back up when the last value is tried, it will keep trying using that last value.
-	- Ex: retry_in: [10,30,120], means: if site down, try again in 10 minutes. If down, try again in 30 min.
-	  If still down, try in 120 minutes, and repeat.
-	
-	notify_after_failed_ping (host or url level):
-	- You can set how many failed pings need to be counted before triggering notifications. 
-	- Ex: 2 (the first failed ping will be skipped and only the second failed ping will trigger notifications)
-		
+	failed_ping_interval (host or url level): 
+	- when site is down, ping interval, in seconds, until site is backup again
+
 */
-var one_minute = 60 //you can set this to other value for testing the service in dev env.
+var one_minute = 10 //you can set this to other value for testing the service in dev env.
 
 exports.hosts = 
 	[
@@ -22,9 +15,8 @@ exports.hosts =
 			host: 'www.vitaminasdev.com', 
 			port:80,
 			ping_interval: one_minute, //seconds
-			retry_in: [10,30,120], //minutes
+			failed_ping_interval: one_minute, //minutes
 			enabled: true,
-			notify_after_failed_ping: 0,
 			urls : [
 				{
 					method: 'get', 
@@ -36,7 +28,7 @@ exports.hosts =
 					url : '/Home/Contacto', 
 					expected: {statuscode: 200, contains: 'encantados'},
 					ping_interval:200, //overwrite ping and retry intervals for this url
-					retry_in: [10,20,30]
+					failed_ping_interval: one_minute/2
 				}
 			]
 		}
@@ -46,9 +38,8 @@ exports.hosts =
 			host: 'www.iloire.com', 
 			port:80, 
 			ping_interval: one_minute,
-			retry_in: [10,30,120],
+			failed_ping_interval: one_minute,
 			enabled: true,
-			notify_after_failed_ping: 1,
 			urls : [
 				{
 					method: 'get', 
@@ -68,9 +59,8 @@ exports.hosts =
 			host: 'www.aspphotogallery.net', 
 			port:80, 
 			ping_interval: one_minute,
-			retry_in: [10,30,120],
+			failed_ping_interval: one_minute,
 			enabled: true,
-			notify_after_failed_ping: 1,
 			alert_to: 'ajax@aspphotogallery.net', //you can include a different email recipient per host
 			urls : [
 				{
@@ -97,9 +87,8 @@ exports.hosts =
 			host: 'cachirulovalley.com', 
 			port:80, 
 			ping_interval: one_minute,
-			retry_in: [10,30,120],
+			failed_ping_interval: one_minute,
 			enabled: true,
-			notify_after_failed_ping: 1,
 			urls : [
 				{
 					method: 'get', 
@@ -114,9 +103,8 @@ exports.hosts =
 			host: 'socialmadrid11.com', 
 			port:80, 
 			ping_interval: one_minute,
-			retry_in: [10,30,120],
+			failed_ping_interval: one_minute,
 			enabled: true,
-			notify_after_failed_ping: 1,
 			urls : [
 				{
 					method: 'get', 
@@ -131,9 +119,8 @@ exports.hosts =
 			host: 'letsnode.com', 
 			port:80, 
 			ping_interval: one_minute,
-			retry_in: [10,30,120],
+			failed_ping_interval: one_minute,
 			enabled: true,
-			notify_after_failed_ping: 1,
 			urls : [
 				{
 					method: 'get', 
@@ -148,9 +135,8 @@ exports.hosts =
 			host: 'letsnode.com', 
 			port:8080, 
 			ping_interval: one_minute,
-			retry_in: [10,30,120],
+			failed_ping_interval: one_minute,
 			enabled: true,
-			notify_after_failed_ping: 1,
 			urls : [
 				{
 					method: 'get', 
@@ -165,9 +151,8 @@ exports.hosts =
 			host: 'letsnode.com', 
 			port:8081, 
 			ping_interval: one_minute,
-			retry_in: [10,30,120],
+			failed_ping_interval: one_minute,
 			enabled: true,
-			notify_after_failed_ping: 1,
 			urls : [
 				{
 					method: 'get', 
@@ -182,9 +167,8 @@ exports.hosts =
 			host: 'www.google.com', 
 			port:80, 
 			ping_interval: one_minute,
-			retry_in: [10,30,120],
+			failed_ping_interval: one_minute,
 			enabled: false,
-			notify_after_failed_ping: 1,
 			urls : [
 				{
 					method: 'get', 
@@ -199,9 +183,8 @@ exports.hosts =
 			host: '127.0.0.1', 
 			port:8080, 
 			ping_interval: one_minute,
-			retry_in: [0.1,0.1,120],
+			failed_ping_interval: one_minute,
 			enabled: true,
-			notify_after_failed_ping: 1,
 			urls : [
 				{
 					method: 'get', 
@@ -216,9 +199,8 @@ exports.hosts =
 			host: 'hroch486.icpf.cas.cz', 
 			port:80, 
 			ping_interval: one_minute,
-			retry_in: [1,30,120],
+			failed_ping_interval: one_minute,
 			enabled: false,
-			notify_after_failed_ping: 1,
 			urls : [
 				{
 					method: 'get',

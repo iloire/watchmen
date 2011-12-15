@@ -15,12 +15,9 @@
 			name:'letsnode.com',
 			host: 'letsnode.com',
 			port:80, 
-			ping_interval: one_minute * 5, //set ping interval (in seconds)
-			//set retry interval (in minutes), you can add as many intervals as you want
-			//if site is still down, will repeat the last interval
-			retry_in: [10,30,120], 
+			ping_interval: one_minute, //set ping interval (in seconds)
+			failed_ping_interval: one_minute, //set ping interval if site is down (in seconds)
 			enabled: true, //enables/disables this host
-			notify_after_failed_ping: 1, //want to receive notification after "n" failed pings
 			urls : [
 				{
 					method: 'get', 
@@ -60,9 +57,9 @@
 ## History
 
 **0.5**
-
-  - REDIS backend
-  - Web server control panel to display reports (express.js app using REDIS backend)
+  - Removed "retry_in" option. Watchmen works in a smarter way now.
+  - REDIS backend.
+  - Web server control panel to display reports (express.js app using REDIS backend).
 
 **0.4**
 
