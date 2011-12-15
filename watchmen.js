@@ -114,18 +114,18 @@ function log_event_to_redis (url, event_type, msg){
 	}
 }
 
-function sendEmail (to, subject, body){
+function sendEmail (to_list, subject, body){
 	postmark.sendEmail(
 	{
 		'From' : config.notifications.postmark.From,
-		'To': to,
+		'To': to_list.join(','),
 		'Subject': subject,
 		'TextBody': body }, config.notifications.postmark.Api_key, function(err, data) {
 
 		if (err) {
 			log_error('Error sending email: ' + JSON.stringify(err))
 		} else {
-			log_ok('Email sent successfully')
+			log_ok('Email sent successfully to ' + to_list.join(','))
 		}
 	})
 }
@@ -158,7 +158,7 @@ function query_url(url_conf){
 				url_conf.down_timestamp = new Date()
 				if (config.notifications.Enabled){
 					sendEmail(
-						host_conf.alert_to || config.notifications.To, 
+						url_conf.alert_to || host_conf.alert_to || config.notifications.To,
 						url_info + ' is down!', url_info + ' is down!. Reason: ' + error);
 				}
 				else{
@@ -175,7 +175,7 @@ function query_url(url_conf){
 				var info = url_info + ' is back!. Downtime: ' + (new Date() - url_conf.down_timestamp) / 1000 + ' seconds.';
 				if (config.notifications.Enabled){
 					sendEmail(
-						host_conf.alert_to || config.notifications.To,
+						url_conf.alert_to || host_conf.alert_to || config.notifications.To,
 						url_info + ' is back up!', info);
 				}
 

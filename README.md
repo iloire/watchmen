@@ -2,8 +2,7 @@
 
   - "watchmen" monitors HTTP servers by sending GET or POST pings (HTTP requests) in pre-defined intervals.
   - You can check for a) certain status code or b) a certain text in the response stream.
-  - If site is down, ping interval will change (10', 30', 1 hour, etc... you set that in the config file) until the site is back up again. Once the service is up again you get another notification (email for now).
-  - You are notified if the site is down by using postmarkapp.com (you can choose whatever being notified in the first, second, etc.. failure). You will be notified again once the site is back up online.
+  - If site is down, you will get a notification. Once the service is up again you get another notification (just email transport protocol for now by using postmark). You define notifications recipients per url, host or application level.
 
 ## Configuration
   
@@ -57,6 +56,8 @@
 ## History
 
 **0.5**
+  
+  - Multiple recipients in notifications.
   - Removed "retry_in" option. Watchmen works in a smarter way now.
   - REDIS backend.
   - Web server control panel to display reports (express.js app using REDIS backend).

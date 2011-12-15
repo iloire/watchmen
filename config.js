@@ -17,6 +17,7 @@ exports.hosts =
 			ping_interval: one_minute, //seconds
 			failed_ping_interval: one_minute, //minutes
 			enabled: true,
+			alert_to: ['ivan@iloire.com'], 
 			urls : [
 				{
 					method: 'get', 
@@ -61,7 +62,7 @@ exports.hosts =
 			ping_interval: one_minute,
 			failed_ping_interval: one_minute,
 			enabled: true,
-			alert_to: 'ajax@aspphotogallery.net', //you can include a different email recipient per host
+			alert_to: ['ajax@aspphotogallery.net'], //you can include a different email recipient per host
 			urls : [
 				{
 					method: 'get', 
@@ -184,6 +185,7 @@ exports.hosts =
 			port:8080, 
 			ping_interval: one_minute,
 			failed_ping_interval: one_minute,
+			alert_to: ['ivan@iloire.com','iloire@gmail.com'],
 			enabled: true,
 			urls : [
 				{
@@ -224,8 +226,8 @@ exports.logging = {
 }
 
 exports.notifications = {
-	Enabled: false, //if disabled, no email will be sent (just console messages)
-	To: 'ivan@iloire.com',
+	Enabled: true, //if disabled, no email will be sent (just console messages)
+	To: ['ivan@iloire.com'], //default notification list if no alert_to is specified for host or url
 	postmark : {
 		From: 'ivan@iloire.com',
 		Api_key : 'your-postmark-key-here'
