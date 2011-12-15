@@ -197,6 +197,40 @@ exports.hosts =
 		}
 		,
 		{
+			name:'Idibay', 
+			host: 'direct.idibay.com', 
+			port:80, 
+			ping_interval: one_minute,
+			failed_ping_interval: one_minute,
+			enabled: true,
+			alert_to:['ivan@iloire.com'],
+			urls : [
+				{
+					method: 'get',
+					url : '/', 
+					expected: {statuscode: 200, contains: 'Mundo Idibay'}
+				}
+			]
+		}
+		,
+		{
+			name:'Cuéntica', 
+			host: 'www.cuentica.com', 
+			port:80, 
+			ping_interval: one_minute,
+			failed_ping_interval: one_minute,
+			enabled: true,
+			alert_to:['ivan@iloire.com'],
+			urls : [
+				{
+					method: 'get',
+					url : '/', 
+					expected: {statuscode: 200, contains: 'Cuéntica'}
+				}
+			]
+		}
+		,
+		{
 			name:'form post test', 
 			host: 'hroch486.icpf.cas.cz', 
 			port:80, 
@@ -218,6 +252,7 @@ exports.hosts =
 				}
 			]
 		}
+		
 	]
 
 exports.logging = {
