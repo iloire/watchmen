@@ -172,8 +172,7 @@ function query_url(url_conf){
 			next_attempt_secs = url_conf.ping_interval || url_conf.host.ping_interval;
 			
 			if (url_conf.down_timestamp){ //site was down and now it is up again!
-				url_conf.down_timestamp = undefined
-				var info = url_info + ' is back!. Downtime: ' + (new Date() - url_conf.down_timestamp) / 1000 + ' seconds.'; 
+				var info = url_info + ' is back!. Downtime: ' + (new Date() - url_conf.down_timestamp) / 1000 + ' seconds.';
 				if (config.notifications.Enabled){
 					sendEmail(
 						host_conf.alert_to || config.notifications.To,
@@ -185,6 +184,8 @@ function query_url(url_conf){
 
 				log_warning (info)
 				log_event_to_redis (url_conf, 'ok' , 'site back up! downtime:' + (new Date() - url_conf.down_timestamp) / 1000 + ' seconds.')
+				
+				url_conf.down_timestamp = undefined //reset downtime
 			}
 			else{ //site up as normal
 				log_ok (url_info + ' responded OK! (' + elapsed_time + ' secs)')
