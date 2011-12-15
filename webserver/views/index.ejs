@@ -1,54 +1,58 @@
-
-<p>Welcome to watchmen control panel.</p>
-<p>Web site status:</p>
-
+<table>
+	<thead>
+		<th>HOST+URL</th>
+		<th>Enabled</th>
+		<th>Ping interval</th>
+		<th>Last failure</th>
+		<th>Last ok</th>
+		<th></th>
+	</thead>
 <%
 	for (var i=0; i<hosts.length;i++){
 		var host = hosts[i];
-		%>
-		<h3><%=host.name%> (<%=host.host%>)<%
-			if (host.enabled==false){
-			%>
-			<small>(disabled)</small>
-			<%
-			}
-			%>
-		</h3>
-		<ul>
-		<%
 		for (var u=0;u<hosts[i].urls.length;u++){
 			%>
-			<li><%=host.urls[u].url%>
+			<tr>
+			<td><a href="http://<%=host.host%><%=host.urls[u].url%>" target="_blank"><%=host.host%><%=host.urls[u].url%></a></td>
+			<td>
 			<%
 			if (host.urls[u].enabled == false){
 				%>
-				(url disabled)
-				<%
-			}
-			if (host.urls[u].lastfailure){
-				%>
-				last failure: 
-				<span class="failure">
-					<%=new Date(parseFloat(host.urls[u].lastfailure)).toUTCString()%>
-					<time class="timeago" datetime="<%=new Date(parseFloat(host.urls[u].lastfailure)).toISOString()%>"><%=new Date(parseFloat(host.urls[u].lastok)).toISOString()%></time>
-				</span>
+				<span class="label important">DISABLED</span>
 				<%
 			}
 			else{
 				%>
-				last successful reply: 
-				<span class="ok">
-					<time class="timeago" datetime="<%=new Date(parseFloat(host.urls[u].lastok)).toISOString()%>"><%=new Date(parseFloat(host.urls[u].lastok)).toISOString()%></time>
-				</span>
+				<span class="label success">ENABLED</span>
 				<%
 			}
 			%>
+			</td>
+			<td>
+				<%=(host.urls[u].ping_interval || host.ping_interval)%> secs.
+			</td>
+			<td>
+			<%if (host.urls[u].lastfailure) {%>
+				<span class="failure">
+				<time class="timeago" datetime="<%=new Date(parseFloat(host.urls[u].lastfailure)).toISOString()%>"><%=new Date(parseFloat(host.urls[u].lastfailure)).toISOString()%></time>
+				</span>
+			<%}%>
+			</td>
+			<td>
+			<%if (host.urls[u].lastok) {%>
+				<span class="ok">
+					<time class="timeago" datetime="<%=new Date(parseFloat(host.urls[u].lastok)).toISOString()%>"><%=new Date(parseFloat(host.urls[u].lastok)).toISOString()%></time>
+				</span>
+			<%}%>
+			</td>
+			<td>
 			<a href="/log?url=<%=encodeURIComponent(host.urls[u].url)%>&host=<%=encodeURIComponent(host.host)%>">log details</a>
-			</li>
+			</td>
 			<%
 		}
 		%>
-		</ul>
+		</tr>
 		<%
 	}
 %>
+</table>
