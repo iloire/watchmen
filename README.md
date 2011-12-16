@@ -57,6 +57,9 @@
 
 **0.5**
   
+  - Added expiration time to event records
+  - Stores avg response time for each url.
+  - Warns if response time > limit.
   - Multiple recipients in notifications.
   - Removed "retry_in" option. Watchmen works in a smarter way now.
   - REDIS backend.
