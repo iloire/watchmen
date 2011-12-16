@@ -4,8 +4,10 @@
     <title><%= title %></title>
 	<link rel="stylesheet" href="http://twitter.github.com/bootstrap/1.4.0/bootstrap.min.css">
     <link rel='stylesheet' href='/stylesheets/style.css' />
+    <link rel='stylesheet' href='/stylesheets/tablesorterblue/style.css' />
 	<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js" type="text/javascript"></script>
 	<script src="/js/jquery.timeago.js" type="text/javascript"></script>
+	<script src="/js/jquery.tablesorter.min.js"></script>
   </head>
   <body>	
 	<div class="topbar">
@@ -19,8 +21,9 @@
     <%- body %>
 	</div>
 	<script>
-	jQuery(document).ready(function() {
-	  jQuery("time.timeago").timeago();
+	$(document).ready(function() {
+	  $("time.timeago").timeago();
+	  $("table").tablesorter({ sortList: [[1,0]] });
 	});
 	</script>
   </body>
