@@ -9,6 +9,8 @@
 		<time class="timeago" datetime="<%=new Date(parseFloat(logs[i].timestamp)).toISOString()%>"><%=new Date(parseFloat(logs[i].timestamp)).toISOString()%></time>:
 		<%if (logs[i].event =='failure'){%>
 			<span class="failure"><%=logs[i].msg%></span></li>
+		<%} else if (logs[i].event =='warning'){%>
+			<span class="warning"><%=logs[i].msg%></span></li>
 		<%} else {%>
 			<span class="ok"><%=logs[i].msg%></span></li>
 		<%}%>
@@ -19,13 +21,5 @@
 <% } else {%>
 	<p>No failure logs found</p>
 <%}%>
-
-<h2>TODO:</h2>
-<ul>
-	<li>google chart</li>
-	<li>uptime stats info</li>
-	<li>change configuration from here</li>
-	<li>reset stats</li>
-</ul>
 
 <a href="/" class="btn primary">back to list</a>

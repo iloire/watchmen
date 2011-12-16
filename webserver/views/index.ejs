@@ -3,7 +3,10 @@
 		<th>HOST+URL</th>
 		<th>Enabled</th>
 		<th>Ping interval</th>
+		<th>Response limit</th>
+		<th>AVG Response time</th>
 		<th>Last failure</th>
+		<th>Last warning</th>
 		<th>Last ok</th>
 		<th></th>
 	</thead>
@@ -32,9 +35,22 @@
 				<%=(host.urls[u].ping_interval || host.ping_interval)%> secs.
 			</td>
 			<td>
+				<%=(host.urls[u].warning_if_takes_more_than || host.warning_if_takes_more_than)%> ms.
+			</td>
+			<td>
+				<%=host.urls[u].avg_response_time%> ms.
+			</td>
+			<td>
 			<%if (host.urls[u].lastfailure) {%>
 				<span class="failure">
 				<time class="timeago" datetime="<%=new Date(parseFloat(host.urls[u].lastfailure)).toISOString()%>"><%=new Date(parseFloat(host.urls[u].lastfailure)).toISOString()%></time>
+				</span>
+			<%}%>
+			</td>
+			<td>
+			<%if (host.urls[u].lastwarning) {%>
+				<span class="warning">
+				<time class="timeago" datetime="<%=new Date(parseFloat(host.urls[u].lastwarning)).toISOString()%>"><%=new Date(parseFloat(host.urls[u].lastwarning)).toISOString()%></time>
 				</span>
 			<%}%>
 			</td>

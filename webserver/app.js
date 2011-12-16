@@ -40,9 +40,14 @@ app.get('/log', function(req, res){
 		
 		multi.exec(function(err, replies) {
 			for (i=0;i<replies.length;i++){
-				logs.push  (JSON.parse(replies[i]));
+				if (!replies[i]){
+					redis.lrem ($(host, url, 'events'), 1, timestamps[i]) //event has expired. removing from list.
+				}
+				else{
+					logs.push  (JSON.parse(replies[i]));
+				}
 			}
-			res.render('entry_logs', {title: 'Logs for ' + host + ' ' + url, logs: logs});
+			res.render('entry_logs', {title: host + ' ' + url, logs: logs});
 		});
 	});
 	
@@ -57,6 +62,9 @@ app.get('/', function(req, res){
 		for (var u=0;u<hosts[i].urls.length;u++){
 			multi.get ($(hosts[i].host, hosts[i].urls[u].url, 'lastfailure'));
 			multi.get ($(hosts[i].host, hosts[i].urls[u].url, 'lastok'));
+			multi.get ($(hosts[i].host, hosts[i].urls[u].url, 'lastwarning'));
+			multi.get ($(hosts[i].host, hosts[i].urls[u].url, 'avg_response_time'));
+			
 		}
 	}
 	
@@ -72,9 +80,13 @@ app.get('/', function(req, res){
 					counter++;
 					hosts[i].urls[u].lastok = replies[counter];
 					counter++;
+					hosts[i].urls[u].lastwarning = replies[counter];
+					counter++;
+					hosts[i].urls[u].avg_response_time = replies[counter];
+					counter++;
 				}
 			}
-			res.render('index', {title:'test', hosts: hosts});
+			res.render('index', {title:'List of hosts', hosts: hosts});
 		}
 	});
 	
