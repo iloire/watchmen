@@ -14,12 +14,13 @@
 	for (var i=0; i<hosts.length;i++){
 		var host = hosts[i];
 		for (var u=0;u<hosts[i].urls.length;u++){
+			var disabled = (host.urls[u].enabled || host.enabled) == false
 			%>
 			<tr>
 			<td><a href="http://<%=host.host%><%=host.urls[u].url%>" target="_blank"><%=host.host%><%=host.urls[u].url%></a></td>
 			<td>
 			<%
-			if (host.urls[u].enabled == false){
+			if (disabled){
 				%>
 				<span class="label important">DISABLED</span>
 				<%

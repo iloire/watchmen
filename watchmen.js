@@ -205,7 +205,7 @@ function query_url(url_conf){
 				
 				//compute avg response time
 				url_conf.avg_response_time = ((url_conf.avg_response_time || 0) * (url_conf.responses || 0) + elapsed_time) / ((url_conf.responses || 0) + 1)
-				url_conf.responses ++;
+				url_conf.responses = (url_conf.responses + 1 || 1);
 
 				log_ok (url_info + ' responded OK! (' + elapsed_time + ' milliseconds)')
 				log_event_to_redis (url_conf, 'ok' , '', url_conf.avg_response_time)
