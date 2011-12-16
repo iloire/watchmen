@@ -75,7 +75,7 @@ function processRequest (url_conf, callback){
 		});
 	
 		response.on('end', function() {
-			var timeDiff = (new Date() - startTime) / 1000;
+			var timeDiff = (new Date() - startTime);
 			callback(null, body, response, timeDiff)
 		});
 		
@@ -101,16 +101,21 @@ function log_warning (str){ sys.puts (str.cyan.bold) }
 
 function $() { return Array.prototype.slice.call(arguments).join(':') }
 
-function log_event_to_redis (url, event_type, msg){
+function log_event_to_redis (url_conf, event_type, msg, avg_response_time){ //event_type: 'ok', 'failure', 'warning'
 	var timestamp = new Date().getTime();
-	if (event_type == 'failure')
-		redis.set($(url.host.host, url.url, 'lastfailure'), timestamp); //easy access to last failure
-	else
-		redis.set($(url.host.host, url.url, 'lastok'), timestamp); //easy access to last successful ping
+	var expiration = 60 * 60 * 24 * 7; //in seconds
+	redis.setex($(url_conf.host.host, url_conf.url, 'last' + event_type), expiration, timestamp); //easy access to last event of each type
 
 	if (msg){
-		redis.lpush($(url.host.host, url.url, 'events'), timestamp); //prepend to list of events
-		redis.set($(url.host.host, url.url, 'event', timestamp), JSON.stringify({event: event_type, timestamp: timestamp, msg: msg})); //add event details
+		redis.lpush($(url_conf.host.host, url_conf.url, 'events'), timestamp); //prepend to list of events
+		redis.setex($(url_conf.host.host, url_conf.url, 'event', timestamp), //key
+						expiration,
+						JSON.stringify({event: event_type, timestamp: timestamp, msg: msg})); //value
+	}
+	
+	if (avg_response_time){
+		console.log (avg_response_time)
+		redis.set($(url_conf.host.host, url_conf.url, 'avg_response_time'), avg_response_time); 
 	}
 }
 
@@ -188,8 +193,22 @@ function query_url(url_conf){
 				url_conf.down_timestamp = undefined //reset downtime
 			}
 			else{ //site up as normal
-				log_ok (url_info + ' responded OK! (' + elapsed_time + ' secs)')
-				log_event_to_redis (url_conf, 'ok' , '')
+				//check for response time
+				var limit = url_conf.warning_if_takes_more_than || host_conf.warning_if_takes_more_than;
+				if (limit){
+					if (elapsed_time > (limit)){
+						var info = 'Request for ' + url_info + ' took too much: ' + elapsed_time + ' milliseconds. Limit=' + limit + ' milliseconds'
+						log_warning (info)
+						log_event_to_redis (url_conf, 'warning' , info)
+					}
+				} 
+				
+				//compute avg response time
+				url_conf.avg_response_time = ((url_conf.avg_response_time || 0) * (url_conf.responses || 0) + elapsed_time) / ((url_conf.responses || 0) + 1)
+				url_conf.responses ++;
+
+				log_ok (url_info + ' responded OK! (' + elapsed_time + ' milliseconds)')
+				log_event_to_redis (url_conf, 'ok' , '', url_conf.avg_response_time)
 			}
 		}
 		
