@@ -17,7 +17,7 @@
 			var disabled = (host.urls[u].enabled || host.enabled) == false
 			%>
 			<tr>
-			<td><a href="http://<%=host.host%><%=host.urls[u].url%>" target="_blank"><%=host.host%><%=host.urls[u].url%></a></td>
+			<td><a href="http://<%=host.host%>:<%=host.port%><%=host.urls[u].url%>" target="_blank"><%=host.host%>:<%=host.port%><%=host.urls[u].url%></a></td>
 			<td>
 			<%
 			if (disabled){
