@@ -6,7 +6,7 @@
 	- when site is down, ping interval, in seconds, until site is backup again
 
 */
-var one_minute = 10 //you can set this to other value for testing the service in dev env.
+var one_minute = 60 //you can set this to other value for testing the service in dev env.
 
 exports.hosts = 
 	[
@@ -18,6 +18,7 @@ exports.hosts =
 			failed_ping_interval: one_minute, //minutes
 			enabled: true,
 			alert_to: ['ivan@iloire.com'], 
+			warning_if_takes_more_than: 700, //miliseconds
 			urls : [
 				{
 					method: 'get', 
@@ -40,6 +41,7 @@ exports.hosts =
 			port:80, 
 			ping_interval: one_minute,
 			failed_ping_interval: one_minute,
+			warning_if_takes_more_than: 700, //miliseconds
 			enabled: true,
 			urls : [
 				{
@@ -61,6 +63,7 @@ exports.hosts =
 			port:80, 
 			ping_interval: one_minute,
 			failed_ping_interval: one_minute,
+			warning_if_takes_more_than: 700, //miliseconds
 			enabled: true,
 			alert_to: ['ajax@aspphotogallery.net'], //you can include a different email recipient per host
 			urls : [
@@ -89,6 +92,7 @@ exports.hosts =
 			port:80, 
 			ping_interval: one_minute,
 			failed_ping_interval: one_minute,
+			warning_if_takes_more_than: 900, //miliseconds
 			enabled: true,
 			urls : [
 				{
@@ -104,6 +108,7 @@ exports.hosts =
 			host: 'socialmadrid11.com', 
 			port:80, 
 			ping_interval: one_minute,
+			warning_if_takes_more_than: 600, //miliseconds
 			failed_ping_interval: one_minute,
 			enabled: true,
 			urls : [
@@ -202,6 +207,7 @@ exports.hosts =
 			port:80, 
 			ping_interval: one_minute,
 			failed_ping_interval: one_minute,
+			warning_if_takes_more_than: 900, //miliseconds
 			enabled: true,
 			alert_to:['ivan@iloire.com'],
 			urls : [
@@ -220,6 +226,7 @@ exports.hosts =
 			ping_interval: one_minute,
 			failed_ping_interval: one_minute,
 			enabled: true,
+			warning_if_takes_more_than: 900, //miliseconds
 			alert_to:['ivan@iloire.com'],
 			urls : [
 				{
@@ -252,7 +259,6 @@ exports.hosts =
 				}
 			]
 		}
-		
 	]
 
 exports.logging = {
