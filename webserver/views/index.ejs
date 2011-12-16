@@ -39,7 +39,7 @@
 				<%=(host.urls[u].warning_if_takes_more_than || host.warning_if_takes_more_than)%> ms.
 			</td>
 			<td>
-				<%=host.urls[u].avg_response_time%> ms.
+				<%=Math.round(host.urls[u].avg_response_time)%> ms.
 			</td>
 			<td>
 			<%if (host.urls[u].lastfailure) {%>
