@@ -114,7 +114,6 @@ function log_event_to_redis (url_conf, event_type, msg, avg_response_time){ //ev
 	}
 	
 	if (avg_response_time){
-		console.log (avg_response_time)
 		redis.set($(url_conf.host.host, url_conf.url, 'avg_response_time'), avg_response_time); 
 	}
 }
