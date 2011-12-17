@@ -2,9 +2,9 @@
 	<thead>
 		<th>HOST+URL</th>
 		<th>Enabled</th>
-		<th>Ping interval</th>
-		<th>Response limit</th>
-		<th>AVG Response time</th>
+		<th class = "{sorter: 'digit'}">Ping interval (sec)</th>
+		<th class = "{sorter: 'digit'}">Response limit (ms)</th>
+		<th class = "{sorter: 'digit'}">AVG Response time (ms)</th>
 		<th>Last failure</th>
 		<th>Last warning</th>
 		<th>Last ok</th>
@@ -33,13 +33,13 @@
 			%>
 			</td>
 			<td>
-				<%=(host.urls[u].ping_interval || host.ping_interval)%> secs.
+				<%=(host.urls[u].ping_interval || host.ping_interval)%>
 			</td>
 			<td>
-				<%=(host.urls[u].warning_if_takes_more_than || host.warning_if_takes_more_than)%> ms.
+				<%=(host.urls[u].warning_if_takes_more_than || host.warning_if_takes_more_than) || "-"%>
 			</td>
 			<td>
-				<%=Math.round(host.urls[u].avg_response_time)%> ms.
+				<%=Math.round(host.urls[u].avg_response_time) || "-"%>
 			</td>
 			<td>
 			<%if (host.urls[u].lastfailure) {%>
