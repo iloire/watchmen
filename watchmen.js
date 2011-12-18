@@ -103,7 +103,7 @@ function $() { return Array.prototype.slice.call(arguments).join(':') }
 
 function log_event_to_redis (url_conf, event_type, msg, avg_response_time){ //event_type: 'ok', 'failure', 'warning'
 	var timestamp = new Date().getTime();
-	var expiration = 60 * 60 * 24 * 7; //in seconds
+	var expiration = (event_type == 'warning') ? 60 * 60 * 24 * 2 : 60 * 60 * 24 * 7; //in seconds
 	redis.setex($(url_conf.host.host, url_conf.url, 'last' + event_type), expiration, timestamp); //easy access to last event of each type
 
 	if (msg){
