@@ -1,25 +1,43 @@
 <h1><%=title%></h1>
 
-<%if (logs.length) {%>
+<h2>Critical</h2>
+<%if (logs_critical.length) {%>
 	<ul>
 	<%
-	for (var i=0; i<logs.length;i++){
+	for (var i=0; i<logs_critical.length;i++){
 		%>
 		<li>
-		<time class="timeago" datetime="<%=new Date(parseFloat(logs[i].timestamp)).toISOString()%>"><%=new Date(parseFloat(logs[i].timestamp)).toISOString()%></time>:
-		<%if (logs[i].event =='failure'){%>
-			<span class="failure"><%=logs[i].msg%></span></li>
-		<%} else if (logs[i].event =='warning'){%>
-			<span class="warning"><%=logs[i].msg%></span></li>
+		<time class="timeago" datetime="<%=new Date(parseFloat(logs_critical[i].timestamp)).toISOString()%>"><%=new Date(parseFloat(logs_critical[i].timestamp)).toISOString()%></time>:
+		<%if (logs_critical[i].event =='failure'){%>
+			<span class="failure"><%=logs_critical[i].msg%></span>
 		<%} else {%>
-			<span class="ok"><%=logs[i].msg%></span></li>
+			<span class="ok"><%=logs_critical[i].msg%></span>
 		<%}%>
+		</li>
 		<%
 	}
 	%>
 	</ul>
 <% } else {%>
-	<p>No failure logs found</p>
+	<p>No critical logs found</p>
+<%}%>
+
+<h2>Warning</h2>
+<%if (logs_warning.length) {%>
+	<ul>
+	<%
+	for (var i=0; i<logs_warning.length;i++){
+		%>
+		<li>
+		<time class="timeago" datetime="<%=new Date(parseFloat(logs_warning[i].timestamp)).toISOString()%>"><%=new Date(parseFloat(logs_warning[i].timestamp)).toISOString()%></time>:
+		<span class="warning"><%=logs_warning[i].msg%></span>
+		</li>
+		<%
+	}
+	%>
+	</ul>
+<% } else {%>
+	<p>No warning logs found</p>
 <%}%>
 
 <a href="/" class="btn primary">back to list</a>

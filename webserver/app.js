@@ -30,7 +30,9 @@ function $() { return Array.prototype.slice.call(arguments).join(':') }
 app.get('/log', function(req, res){
 	var host = req.query ['host'], url = req.query ['url']
 
-	var logs = [];
+	var logs_warning = [];
+	var logs_critical = [];
+	
 	redis.lrange ($(host, url, 'events'), 0, 100, function(err, timestamps) {
 		var multi = redis.multi()
 		for (i=0;i<timestamps.length;i++)	{
@@ -44,10 +46,15 @@ app.get('/log', function(req, res){
 					redis.lrem ($(host, url, 'events'), 1, timestamps[i]) //event has expired. removing from list.
 				}
 				else{
-					logs.push  (JSON.parse(replies[i]));
+					var _event = JSON.parse(replies[i]);
+					if (_event.event == 'warning'){
+						logs_warning.push  (_event);
+					}
+					else
+						logs_critical.push  (_event);
 				}
 			}
-			res.render('entry_logs', {title: host + ' ' + url, logs: logs});
+			res.render('entry_logs', {title: host + ' ' + url, logs_warning: logs_warning, logs_critical: logs_critical});
 		});
 	});
 	

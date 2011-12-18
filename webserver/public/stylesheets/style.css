@@ -3,6 +3,12 @@ body {
   font: 14px "Lucida Grande", Helvetica, Arial, sans-serif;
 }
 
+table th, table td { /*overwrite bootstrap style*/
+	padding: 5px 5px 9px;
+	line-height: 18px;
+	text-align: left;
+}
+
 a {
   color: #00B7FF;
 }
