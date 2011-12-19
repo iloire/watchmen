@@ -5,10 +5,14 @@
   - If site is down, you will get a notification. Once the service is up again you get another notification (just email transport protocol for now by using postmark). You define notifications recipients per url, host or application level.
 
 # Screenshots
+
+## watchmen daemon running: 
 ![watchmen daemon](https://github.com/iloire/WatchMen/raw/master/screenshots/watchmen_daemon01.png)
 
+## list of hosts: 
 ![List of hosts](https://github.com/iloire/WatchMen/raw/master/screenshots/list_hosts.png)
 
+## host downtime and warning details:
 ![Host downtime and warning details](https://github.com/iloire/WatchMen/raw/master/screenshots/host_details01.png)
 
 ## Configuration
