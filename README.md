@@ -100,10 +100,9 @@
   - First release.
 
 ## TODO
- - Google chart in url uptime history
+ - Google charts
  - Uptime stats info
  - Change configuration from control panel
  - Reset stats from control panel
  - Create NPM package 
  - Regular expressions support
- - Warning if request takes more than xx miliseconds
