@@ -9,6 +9,8 @@
 
 ![List of hosts](https://github.com/iloire/WatchMen/raw/master/screenshots/list_hosts.png)
 
+![Host downtime and warning details](https://github.com/iloire/WatchMen/raw/master/screenshots/host_details01.png)
+
 ## Configuration
   
   Edit config.js:
