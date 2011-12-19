@@ -4,6 +4,8 @@
   - You can check for a) certain status code or b) a certain text in the response stream.
   - If site is down, you will get a notification. Once the service is up again you get another notification (just email transport protocol for now by using postmark). You define notifications recipients per url, host or application level.
 
+There is a <a href="http://letsnode.com/example-of-what-node-is-really-good-at" target="_blank">related blog post about watchmen here</a>.
+
 # Screenshots
 
 ## watchmen daemon running: 
