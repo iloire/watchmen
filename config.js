@@ -190,8 +190,8 @@ exports.hosts =
 			port:8080, 
 			ping_interval: one_minute,
 			failed_ping_interval: one_minute,
-			alert_to: ['ivan@iloire.com','iloire@gmail.com'],
-			enabled: true,
+			alert_to: ['ivan@iloire.com'],
+			enabled: false,
 			urls : [
 				{
 					method: 'get', 
@@ -202,8 +202,26 @@ exports.hosts =
 		}
 		,
 		{
-			name:'Idibay', 
+			name:'Idibay direct', 
 			host: 'direct.idibay.com', 
+			port:80, 
+			ping_interval: one_minute,
+			failed_ping_interval: one_minute,
+			warning_if_takes_more_than: 900, //miliseconds
+			enabled: true,
+			alert_to:['ivan@iloire.com'],
+			urls : [
+				{
+					method: 'get',
+					url : '/', 
+					expected: {statuscode: 200, contains: 'Mundo Idibay'}
+				}
+			]
+		}
+		,
+		{
+			name:'Idibay', 
+			host: 'www.idibay.com', 
 			port:80, 
 			ping_interval: one_minute,
 			failed_ping_interval: one_minute,
