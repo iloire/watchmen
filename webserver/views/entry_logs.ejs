@@ -1,43 +1,6 @@
 <h1><%=title%></h1>
 
-<h2>Critical</h2>
-<%if (logs_critical.length) {%>
-	<ul>
-	<%
-	for (var i=0; i<logs_critical.length;i++){
-		%>
-		<li>
-		<time class="timeago" datetime="<%=new Date(parseFloat(logs_critical[i].timestamp)).toISOString()%>"><%=new Date(parseFloat(logs_critical[i].timestamp)).toISOString()%></time>:
-		<%if (logs_critical[i].event =='failure'){%>
-			<span class="failure"><%=logs_critical[i].msg%></span>
-		<%} else {%>
-			<span class="ok"><%=logs_critical[i].msg%></span>
-		<%}%>
-		</li>
-		<%
-	}
-	%>
-	</ul>
-<% } else {%>
-	<p>No critical logs found</p>
-<%}%>
-
-<h2>Warning</h2>
-<%if (logs_warning.length) {%>
-	<ul>
-	<%
-	for (var i=0; i<logs_warning.length;i++){
-		%>
-		<li>
-		<time class="timeago" datetime="<%=new Date(parseFloat(logs_warning[i].timestamp)).toISOString()%>"><%=new Date(parseFloat(logs_warning[i].timestamp)).toISOString()%></time>:
-		<span class="warning"><%=logs_warning[i].msg%></span>
-		</li>
-		<%
-	}
-	%>
-	</ul>
-<% } else {%>
-	<p>No warning logs found</p>
-<%}%>
+<%-partial ('partial/display_logs_list', {logs:logs_critical, log_type:'Critical'})%>
+<%-partial ('partial/display_logs_list', {logs:logs_warning, log_type:'Warning'})%>
 
 <a href="/" class="btn primary">back to list</a>

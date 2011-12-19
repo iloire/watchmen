@@ -1,0 +1,23 @@
+<h2><%=log_type%></h2>
+<%if (logs.length) {%>
+	<table>
+	<%
+	for (var i=0; i<logs.length;i++){
+		var log = logs[i];
+		%>
+		<tr>
+			<td>
+			<%=new Date(log.timestamp).toUTCString()%> - 
+			(<time class="timeago" datetime="<%=new Date(parseFloat(log.timestamp)).toISOString()%>"><%=new Date(parseFloat(log.timestamp)).toISOString()%></time>)
+			</td>
+			<td>
+				<span class="<%=log.event%>"><%=log.msg%></span>
+			</td>
+		</tr>
+		<%
+	}
+	%>
+	</table>
+<% } else {%>
+	<p>No <%=log_type%> logs found</p>
+<%}%>
