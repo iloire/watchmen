@@ -4,6 +4,11 @@
   - You can check for a) certain status code or b) a certain text in the response stream.
   - If site is down, you will get a notification. Once the service is up again you get another notification (just email transport protocol for now by using postmark). You define notifications recipients per url, host or application level.
 
+# Screenshots
+![watchmen daemon](https://github.com/iloire/WatchMen/raw/master/screenshots/watchmen_daemon.png_)
+
+![List of hosts](https://github.com/iloire/WatchMen/raw/master/screenshots/list_hosts.png_)
+
 ## Configuration
   
   Edit config.js:
@@ -17,6 +22,8 @@
 			ping_interval: one_minute, //set ping interval (in seconds)
 			failed_ping_interval: one_minute, //set ping interval if site is down (in seconds)
 			enabled: true, //enables/disables this host
+			alert_to: ['ivan@iloire.com'], //emails to alert if site goes down.
+			warning_if_takes_more_than: 700, //miliseconds. alert if request takes more than this
 			urls : [
 				{
 					method: 'get', 
@@ -56,14 +63,14 @@
 ## History
 
 **0.5**
-  
+
   - Added expiration time to event records
   - Stores avg response time for each url.
   - Warns if response time > limit.
   - Multiple recipients in notifications.
   - Removed "retry_in" option. Watchmen works in a smarter way now.
   - REDIS backend.
-  - Web server control panel to display reports (express.js app using REDIS backend).
+  - **Web UI to display reports** (express.js app using REDIS backend).
 
 **0.4**
 
