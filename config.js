@@ -110,7 +110,7 @@ exports.hosts =
 			ping_interval: one_minute,
 			warning_if_takes_more_than: 600, //miliseconds
 			failed_ping_interval: one_minute,
-			enabled: true,
+			enabled: false,
 			urls : [
 				{
 					method: 'get', 
