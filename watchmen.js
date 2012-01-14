@@ -1,7 +1,7 @@
 /*
-Watchmen, and HTTP nonitor for node.js
+Watchmen, and HTTP monitor for node.js
 
-Copyright (c) 2011 Ivan Loire (twitter: @ivanloire)
+Copyright (c) 2011 Ivan Loire (twitter: @ivanloire) www.iloire.com
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
