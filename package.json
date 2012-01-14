@@ -1,0 +1,21 @@
+{
+  "author": "Iván Loire <ivan@iloire.com> (http://iloire.com/)",
+  "name": "watchmen",
+  "description": "A Node.js HTTP monitor",
+  "version": "0.5.0",
+  "homepage": "http://letsnode.com",
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/iloire/WatchMen.git"
+  },
+  "engines": {
+    "node": ">=0.4.0"
+  },
+  "dependencies": {
+    "colors": ">=0.6.0",
+    "ejs": ">=0.6.1",
+    "express": ">=2.5.6",
+    "redis": ">=0.7.1"
+  },
+  "devDependencies": {}
+}
