@@ -17,6 +17,19 @@ There is a <a href="http://letsnode.com/example-of-what-node-is-really-good-at" 
 ## host downtime and warning details:
 ![Host downtime and warning details](https://github.com/iloire/WatchMen/raw/master/screenshots/host_details01.png)
 
+## Installation
+
+Watchmen depends on the following modules:
+
+ - [colors](https://github.com/Marak/colors.js)
+ - [ejs](https://github.com/visionmedia/ejs)
+ - [express](https://github.com/visionmedia/express)
+ - [node_redis](https://github.com/mranney/node_redis)
+
+Make sure you install those dependencies by issuing the command:
+
+		$ npm install
+
 ## Configuration
   
   Edit config.js:
