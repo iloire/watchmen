@@ -22,6 +22,10 @@ table tr.disabled a {
 	color:gray !important;
 }
 
+table.events td.msg{
+	width:70%;
+}
+
 a {
   color: #00B7FF;
 }

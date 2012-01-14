@@ -1,6 +1,6 @@
 <h3><%=log_type%></h3>
 <%if (logs.length) {%>
-	<table>
+	<table class="events">
 	<%
 	for (var i=0; i<logs.length;i++){
 		var log = logs[i];
@@ -10,7 +10,7 @@
 			<%=new Date(log.timestamp).toUTCString()%> - 
 			(<time class="timeago" datetime="<%=new Date(parseFloat(log.timestamp)).toISOString()%>"><%=new Date(parseFloat(log.timestamp)).toISOString()%></time>)
 			</td>
-			<td>
+			<td class="msg">
 				<span class="<%=log.event%>"><%=log.msg%></span>
 			</td>
 		</tr>
