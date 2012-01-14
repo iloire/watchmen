@@ -83,9 +83,15 @@ Make sure you install those dependencies by issuing the command:
 
 ## History
 
+**0.6**
+
+  - Added current status info (site is up or down) to database.
+  - Added icons to display status (disable, error or ok).
+  - TableSorter jQuery plugin orders by status by default.
+
 **0.5**
 
-  - Added expiration time to event records
+  - Added expiration time to event records.
   - Stores avg response time for each url.
   - Warns if response time > limit.
   - Multiple recipients in notifications.
