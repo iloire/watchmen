@@ -31,7 +31,19 @@
 	<script>
 	$(document).ready(function() {
 	  $("time.timeago").timeago();
-	  $("table").tablesorter({ sortList: [[1,0]] });
+	  $("table").tablesorter({ sortList: [[0,0]],
+		  textExtraction:function(s){
+          	if($(s).find('img').length == 0) return $(s).text();
+			var alt = $(s).find('img').attr('alt');
+			
+			//force our custom order based on alt (error, first, disabled last)
+			if (alt == 'error') return 0;
+			if (alt == 'ok') return 1;
+			if (alt == 'disabled') return 2;
+			
+          	return $(s).find('img').attr('alt');
+    		}
+		 });
 	});
 	</script>
   </body>
