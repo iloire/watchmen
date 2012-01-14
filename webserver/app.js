@@ -122,7 +122,12 @@ app.get('/', function(req, res){
 					counter++;
 					hosts[i].urls[u].avg_response_time = replies[counter];
 					counter++;
-					hosts[i].urls[u].status = replies[counter];
+					
+					if (hosts[i].urls[u].enabled==false || hosts[i].enabled==false)
+						hosts[i].urls[u].status = null; //mark as disabled
+					else
+						hosts[i].urls[u].status = replies[counter];
+
 					counter++;
 				}
 			}
