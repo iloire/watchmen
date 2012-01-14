@@ -106,7 +106,10 @@ function log_event_to_redis (url_conf, event_type, msg, avg_response_time){ //ev
 	var expiration = (event_type == 'warning') ? 60 * 60 * 24 * 2 : 60 * 60 * 24 * 7; //in seconds
 	redis.setex($(url_conf.host.host, url_conf.url, 'last' + event_type), expiration, timestamp); //easy access to last event of each type
 
-	if (msg){
+	//record state (up or down)
+	redis.set($(url_conf.host.host, url_conf.url, 'status'), (event_type == 'failure') ? '0' : '1');
+	
+	if (msg){ //have some msg to record
 		redis.lpush($(url_conf.host.host, url_conf.url, 'events'), timestamp); //prepend to list of events
 		redis.setex($(url_conf.host.host, url_conf.url, 'event', timestamp), //key
 						expiration,
