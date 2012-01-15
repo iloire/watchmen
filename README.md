@@ -81,6 +81,10 @@ Make sure you install those dependencies by issuing the command:
 
 		$ forever start watchmen.js
 
+  e) **Run the web app to display status reports**
+
+		$ forever start webserver/app.js 3000 (where 3000 is the port you want to use).
+
 ## History
 
 **0.6**
