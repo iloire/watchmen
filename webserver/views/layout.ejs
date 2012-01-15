@@ -2,7 +2,7 @@
 <html>
   <head>
     <title>watchmen, http monitor for node.js - <%= title %></title>
-	<link rel="stylesheet" href="http://twitter.github.com/bootstrap/1.4.0/bootstrap.min.css">
+    <link rel='stylesheet' href='/stylesheets/bootstrap.min.css' />	
     <link rel='stylesheet' href='/stylesheets/style.css' />
     <link rel='stylesheet' href='/stylesheets/tablesorterblue/style.css' />
 	<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js" type="text/javascript"></script>
@@ -15,6 +15,9 @@
 	        <div class="container-fluid">
 	          <h3><a href="/">watchmen <small>node.js http monitor</small></a></h3>
 				<ul class="nav secondary-nav">
+					<li>
+						<a target="_blank" href="/">last update: <span id="last_update"></span></a>
+			    	</li>
 			    	<li class="dropdown">
 			    		<a target="_blank" href="https://github.com/iloire/WatchMen">Github source code</a>
 					</li>
@@ -29,21 +32,27 @@
     <%- body %>
 	</div>
 	<script>
-	$(document).ready(function() {
+	function config (){
 	  $("time.timeago").timeago();
-	  $("table").tablesorter({ sortList: [[0,0]],
+	  //$("table").trigger("sorton"); 
+	}
+	
+	$(document).ready(function() {
+	  $("table").tablesorter({ 
 		  textExtraction:function(s){
           	if($(s).find('img').length == 0) return $(s).text();
 			var alt = $(s).find('img').attr('alt');
-			
+
 			//force our custom order based on alt (error, first, disabled last)
 			if (alt == 'error') return 0;
 			if (alt == 'ok') return 1;
 			if (alt == 'disabled') return 2;
-			
+
           	return $(s).find('img').attr('alt');
     		}
 		 });
+		
+		config();
 	});
 	</script>
   </body>

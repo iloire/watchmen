@@ -81,9 +81,8 @@ app.get('/log', function(req, res){
 						logs_critical.push  (_event);
 				}
 			}
+
 			var status = replies[replies.length-1];
-			
-			console.log (status)
 			
 			res.render('entry_logs', {title: host + ' ' + url, status : status, logs_warning: logs_warning, logs_critical: logs_critical});
 		});
@@ -120,7 +119,7 @@ app.get('/', function(req, res){
 					counter++;
 					hosts[i].urls[u].lastwarning = replies[counter];
 					counter++;
-					hosts[i].urls[u].avg_response_time = replies[counter];
+					hosts[i].urls[u].avg_response_time = Math.round(replies[counter]) || "-";
 					counter++;
 					
 					if (hosts[i].urls[u].enabled==false || hosts[i].enabled==false)
@@ -131,7 +130,14 @@ app.get('/', function(req, res){
 					counter++;
 				}
 			}
-			res.render('index', {title:'List of hosts', hosts: hosts});
+
+			if (req.query["json"]){
+				var headers = {'Content-type' : 'application/json;charset=utf8'}
+				res.writeHead(200, headers)
+				res.end(JSON.stringify(hosts));
+			}
+			else
+				res.render('index', {title:'List of hosts', hosts: hosts});
 		}
 	});
 	

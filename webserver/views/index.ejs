@@ -1,16 +1,13 @@
-<table>
+<table >
 	<thead>
-		<th></th>
-		<th>HOST+URL</th>
-		<!--
-		<th>Enabled</th>
-		-->
+		<th>Status</th>
+		<th width="250">HOST+URL</th>
 		<th width="50" class = "{sorter: 'digit'}">Ping (sec)</th>
 		<th width="80" class = "{sorter: 'digit'}">Response limit (ms)</th>
 		<th width="100" class = "{sorter: 'digit'}">AVG Response time (ms)</th>
-		<th>Last failure</th>
-		<th>Last warning</th>
-		<th>Last ok</th>
+		<th class="error">Last failure</th>
+		<th class="warning">Last warning</th>
+		<th class="ok">Last ok</th>
 		<th></th>
 	</thead>
 <%
@@ -19,33 +16,20 @@
 		for (var u=0;u<hosts[i].urls.length;u++){
 			var disabled = (host.urls[u].enabled || host.enabled) == false
 			var status = "disabled"
-				if (host.urls[u].status==1){
-					status = "ok"
-				}else if (host.urls[u].status==0){
-					status = "error"
-				}
-				%>
-		<tr class="<%=status%>">
-			<td>
-				<img class="status_icon" src="/images/<%=status%>.png" alt="<%=status%>" />
-			</td>
-			<td><a href="http://<%=host.host%>:<%=host.port%><%=host.urls[u].url%>" target="_blank"><%=host.host%>:<%=host.port%><%=host.urls[u].url%></a></td>
-			<!--
-			<td>
-			<%
-			if (disabled){
-				%>
-				<span class="label important">DISABLED</span>
-				<%
+			if (host.urls[u].status==1){
+				status = "ok"
+			}else if (host.urls[u].status==0){
+				status = "error"
 			}
-			else{
-				%>
-				<span class="label success">ENABLED</span>
-				<%
-			}
-			%>
+%>
+		<tr class="<%=status%>" id="item<%=i%>_<%=u%>">
+			<td>
+				<div class="icon">&nbsp;
+				</div>
 			</td>
-			-->
+			<td>
+				<a class="hosturl" href="http://<%=host.host%>:<%=host.port%><%=host.urls[u].url%>" target="_blank" title="<%=host.name%> <%=host.host%>:<%=host.port%> <%=host.urls[u].url%>"><%=host.name%> <%=host.urls[u].url%></a>
+			</td>
 			<td>
 				<%=(host.urls[u].ping_interval || host.ping_interval)%>
 			</td>
@@ -53,7 +37,9 @@
 				<%=(host.urls[u].warning_if_takes_more_than || host.warning_if_takes_more_than) || "-"%>
 			</td>
 			<td>
-				<%=Math.round(host.urls[u].avg_response_time) || "-"%>
+				<span class="avgresponse">
+				<%=host.urls[u].avg_response_time %>
+				</span>
 			</td>
 			<td>
 			<%if (host.urls[u].lastfailure) {%>
@@ -77,7 +63,7 @@
 			<%}%>
 			</td>
 			<td>
-			<a class="btn small" href="/log?url=<%=encodeURIComponent(host.urls[u].url)%>&host=<%=encodeURIComponent(host.host)%>">details</a>
+			<a class="btn primary" href="/log?url=<%=encodeURIComponent(host.urls[u].url)%>&host=<%=encodeURIComponent(host.host)%>">details</a>
 			</td>
 			<%
 		}
@@ -87,3 +73,61 @@
 	}
 %>
 </table>
+
+<script>
+	var interval=5000; //ms
+	
+	function getTimeTag (val){
+		if (!val) return "-";
+		var date = new Date(parseFloat(val));
+		var str = date.toISOString();
+		var hours = date.getHours();
+		var min = date.getMinutes();
+		if (min<10)
+			min = '0' + min;
+		return hours + ":" + min + " (<time class='timeago' datetime='" + str + "'>" + str + "</time>)"
+	}
+	
+	function updateValue(id, val, do_transition_effect){
+		if (val && ($(id).html()!=val)){
+			if (do_transition_effect) 
+				$(id).hide();
+
+			$(id).html(val);
+
+			if (do_transition_effect) 
+				$(id).fadeIn();
+		}
+	}
+	
+	function Refresh(){		
+		$.ajax({ url: '/?json=true', data: {}, dataType: 'json', success: function (hosts) {
+				for(var i=0;i<hosts.length;i++){
+					for (var u=0;u<hosts[i].urls.length;u++){
+						updateValue('tr#item' + i + '_' + u + ' td span.avgresponse', hosts[i].urls[u].avg_response_time, true);
+						
+						updateValue('tr#item' + i + '_' + u + ' td span.warning', getTimeTag(hosts[i].urls[u].lastwarning));						
+						updateValue('tr#item' + i + '_' + u + ' td span.ok', getTimeTag(hosts[i].urls[u].lastok));
+						updateValue('tr#item' + i + '_' + u + ' td span.error', getTimeTag(hosts[i].urls[u].lasterror));
+						
+						if (hosts[i].urls[u].status==null){
+							updateValue('tr#item' + i + '_' + u).removeClass('error ok').addClass('disabled');
+						}
+						else if (hosts[i].urls[u].status==0){ //error
+							updateValue('tr#item' + i + '_' + u).removeClass('disabled ok').addClass('error');
+						}
+						else if (hosts[i].urls[u].status==1){
+							updateValue('tr#item' + i + '_' + u).removeClass('error disabled').addClass('ok');
+						}
+					}
+				}
+				$('#last_update').html(getTimeTag(new Date().getTime()));
+				config();
+				
+				setTimeout (Refresh, interval);
+			}
+		});	
+	}
+	
+	setTimeout (Refresh, interval);
+</script>

@@ -1,6 +1,10 @@
 body {
-  padding: 50px;
+  padding-top: 50px;
   font: 14px "Lucida Grande", Helvetica, Arial, sans-serif;
+}
+
+time{
+	font-size:0.9em;
 }
 
 table th, table td { /*overwrite bootstrap style*/
@@ -9,16 +13,40 @@ table th, table td { /*overwrite bootstrap style*/
 	text-align: left;
 }
 
+table tr td .icon {
+	width:40px;
+	height:40px;
+}
+
+/*error*/
 table tr.error {
 	background-color: #ffbfbf;
 	border:3px solid red;
 }
 
+table tr.error td div.icon {
+	background: #fff url("/images/error.png") left top no-repeat;	
+}
+
+/*ok*/
+table tr.ok {
+	
+}
+table tr.ok td div.icon {
+	background: #fff url("/images/ok.png") left top no-repeat;	
+}
+
+/*disabled*/
 table tr.disabled {
 	background-color: #f5f5f5;
 	color:gray !important;
 }
-table tr.disabled a {
+
+table tr.disabled td div.icon {
+	background: #fff url("/images/disabled.png") left top no-repeat;	
+}
+
+table tr.disabled a.hosturl {
 	color:gray !important;
 }
 

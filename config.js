@@ -185,13 +185,13 @@ exports.hosts =
 		}
 		,
 		{
-			name:'localhost_test', 
+			name:'localhost test', 
 			host: '127.0.0.1', 
 			port:8080, 
 			ping_interval: one_minute,
 			failed_ping_interval: one_minute,
 			alert_to: ['ivan@iloire.com'],
-			enabled: false,
+			enabled: true,
 			urls : [
 				{
 					method: 'get', 
