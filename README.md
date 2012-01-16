@@ -92,6 +92,7 @@ Make sure you install those dependencies by issuing the command:
 ## History
 
 **0.7**
+
   - **Targets node 0.6.x**
   - Added [knockoutjs](http://knockoutjs.com) for view model binding.
   - Auto **async refresh** main page.
