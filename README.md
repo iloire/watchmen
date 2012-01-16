@@ -92,10 +92,10 @@ Make sure you install those dependencies by issuing the command:
 ## History
 
 **0.7**
-
+  - **Targets node 0.6.x**
   - Added [knockoutjs](http://knockoutjs.com) for view model binding.
-  - Auto async refresh main page.
-  - Filter by name in main page.
+  - Auto **async refresh** main page.
+  - **Filter** by name in main page.
   - Added counter (hosts up and down).
   - UI Improvements.
   - Tablesorter sorts status and time tags.
