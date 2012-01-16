@@ -31,21 +31,8 @@ var colors = require('colors');
 
 var _redis = require("redis")
 var redis = _redis.createClient()
-
-/*write to file*/
-function log_to_file (file, str){
-	if (str){
-		var fs = require("fs");
-		fs.createWriteStream(config.logging.base_path + file, {
-		    flags: "a",
-		    encoding: "utf8",
-		    mode: 0666
-		}).write(str);
-	}
-}
  
 function processRequest (url_conf, callback){
-
 	// record start time
 	var startTime = new Date();
 	
@@ -63,7 +50,8 @@ function processRequest (url_conf, callback){
 	
 	client.addListener('error', function(connectionException){
 		callback(connectionException.errno || 'Error establishing connection' , null, null);
-		log_error ('Error: ' + connectionException)
+		return;
+		//log_error ('Error: ' + connectionException)
 	});
 	
 	request.on('response', function(response) {
@@ -77,16 +65,18 @@ function processRequest (url_conf, callback){
 		response.on('end', function() {
 			var timeDiff = (new Date() - startTime);
 			callback(null, body, response, timeDiff)
+			return;
 		});
 		
 		response.on('error', function(e) {
-			log_error ('Error on response :' + url_conf.host)
+			//log_error ('Error on response :' + url_conf.host)
 			callback(e.message, null, null, null)
+			return;
 		});
 	});
 	
 	request.on('error', function(e) {
-		log_error ('Error on request :' + url_conf.host)
+		log_error ('Error on request :' + url_conf.host.host + url_conf.url)
 		callback(e.message, null, null, null)
 	});
 	
@@ -104,24 +94,24 @@ function $() { return Array.prototype.slice.call(arguments).join(':') }
 function log_event_to_redis (url_conf, event_type, msg, avg_response_time){ //event_type: 'ok', 'failure', 'warning'
 	var timestamp = new Date().getTime();
 	var expiration = (event_type == 'warning') ? 60 * 60 * 24 * 2 : 60 * 60 * 24 * 7; //in seconds
-	redis.setex($(url_conf.host.host, url_conf.url, 'last' + event_type), expiration, timestamp); //easy access to last event of each type
+	redis.setex($(url_conf.host.host, url_conf.host.port, url_conf.url, 'last' + event_type), expiration, timestamp); //easy access to last event of each type
 
 	//record state (up or down)
-	redis.set($(url_conf.host.host, url_conf.url, 'status'), (event_type == 'failure') ? '0' : '1');
-	
+	redis.set($(url_conf.host.host, url_conf.host.port ,url_conf.url, 'status'), (event_type == 'failure') ? '0' : '1');
+		
 	if (msg){ //have some msg to record
-		redis.lpush($(url_conf.host.host, url_conf.url, 'events'), timestamp); //prepend to list of events
-		redis.setex($(url_conf.host.host, url_conf.url, 'event', timestamp), //key
+		redis.lpush($(url_conf.host.host, url_conf.host.port, url_conf.url, 'events'), timestamp); //prepend to list of events
+		redis.setex($(url_conf.host.host, url_conf.host.port, url_conf.url, 'event', timestamp), //key
 						expiration,
 						JSON.stringify({event: event_type, timestamp: timestamp, msg: msg})); //value
 	}
 	
 	if (avg_response_time){
-		redis.set($(url_conf.host.host, url_conf.url, 'avg_response_time'), avg_response_time); 
+		redis.set($(url_conf.host.host, url_conf.host.port, url_conf.url, 'avg_response_time'), avg_response_time); 
 	}
 }
 
-function sendEmail (to_list, subject, body){
+function sendEmail (to_list, subject, body, callback){
 	postmark.sendEmail(
 	{
 		'From' : config.notifications.postmark.From,
@@ -130,9 +120,9 @@ function sendEmail (to_list, subject, body){
 		'TextBody': body }, config.notifications.postmark.Api_key, function(err, data) {
 
 		if (err) {
-			log_error('Error sending email: ' + JSON.stringify(err))
+			callback (err, null);
 		} else {
-			log_ok('Email sent successfully to ' + to_list.join(','))
+			callback (null,'Email sent successfully to ' + to_list.join(','))
 		}
 	})
 }
@@ -158,22 +148,24 @@ function query_url(url_conf){
 
 			var info = url_info + ' down!. Error: ' + error + '. Retrying in ' + next_attempt_secs / 60 + ' minute(s)..';
 			log_error (info); //console log
-			if (config.logging.Enabled) //log to file
-				log_to_file(url_conf.host.name + '.log', info)
 			
 			if (!url_conf.down_timestamp){ //site down (first failure)
 				url_conf.down_timestamp = new Date()
 				if (config.notifications.Enabled){
 					sendEmail(
 						url_conf.alert_to || host_conf.alert_to || config.notifications.To,
-						url_info + ' is down!', url_info + ' is down!. Reason: ' + error);
+						url_info + ' is down!', url_info + ' is down!. Reason: ' + error, function (err, data){
+							if (err){
+								log_event_to_redis (url_conf, 'failure' , 'Error sending email: ' + JSON.stringify(err)) 
+							}
+						});
 				}
 				else{
 					log_info ('Notification disabled or not triggered this time');
 				}
-
-				log_event_to_redis (url_conf, 'failure' , error) //log to redis
 			}
+			
+			log_event_to_redis (url_conf, 'failure' , error) //log to redis
 		}
 		else { //site up. queue next ping
 			next_attempt_secs = url_conf.ping_interval || url_conf.host.ping_interval;
@@ -183,11 +175,12 @@ function query_url(url_conf){
 				if (config.notifications.Enabled){
 					sendEmail(
 						url_conf.alert_to || host_conf.alert_to || config.notifications.To,
-						url_info + ' is back up!', info);
+						url_info + ' is back up!', info, function(err, data){
+							if (err){
+								log_event_to_redis (url_conf, 'failure' , 'Error sending email: ' + JSON.stringify(err)) 
+							}
+						});
 				}
-
-				if (config.logging.Enabled)
-					log_to_file(url_conf.host.name + '.log', info)
 
 				log_warning (info)
 				log_event_to_redis (url_conf, 'ok' , 'site back up! downtime:' + (new Date() - url_conf.down_timestamp) / 1000 + ' seconds.')
@@ -243,8 +236,6 @@ for (var i=0; i<config.hosts.length;i++){
 		log_warning ('skipping host: ' + host.name + ' (disabled entry)...')
 	}
 }
-
-log_to_file('test.log', 'info')
 
 process.on('SIGINT', function () {
 	console.log('stopping watchmen..');
