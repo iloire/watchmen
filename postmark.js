@@ -19,20 +19,23 @@ function sendEmail (message, api_key, callback){
 		headers: postmark_headers,
 		port: 80 //ssl en 443
 	}, function(res) {
+		
 		res.setEncoding('utf8')
 		var data = ''
+		
 		res.on('data', function (chunk) {
 			data += chunk
 		})
 		
 		res.on('end', function() {
 			try {
+				//http://developer.postmarkapp.com/developer-build.html
 				var json = JSON.parse(data)
-				//console.log(json)
-				if (json.ErrorCode) {
-					callback(json, null)
-				} else {
+				if (res.statusCode==200) { //ok
 					callback(null, json)
+				}
+				else{ //error
+					callback (json,null)
 				}
 			} catch(e) {
 				callback(e.message, null)
