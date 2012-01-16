@@ -56,11 +56,14 @@ var ONE_DAY = ONE_HOUR * 24
 
 //url log detail
 app.get('/log', function(req, res){
-	var host = req.query ['host'], url = req.query ['url']
+	var host = req.query ['host'], url = req.query ['url'], port = req.query['port']
 	var oHost = null, oUrl=null;
 	for (i=0;i<config.hosts.length;i++) {
 		for (var u=0;u<config.hosts[i].urls.length;u++){
-			if ((config.hosts[i].host==host) && (config.hosts[i].urls[u].url==url)){
+			if ((config.hosts[i].host==host) && (config.hosts[i].port==port) && (config.hosts[i].urls[u].url==url)){
+				
+				console.log (oUrl);
+				
 				oUrl = config.hosts[i].urls[u];
 				oHost = config.hosts[i];
 				break;
@@ -72,19 +75,19 @@ app.get('/log', function(req, res){
 		var logs_warning = [];
 		var logs_critical = [];
 	
-		redis.lrange ($(host, url, 'events'), 0, 100, function(err, timestamps) {
+		redis.lrange ($(host, port, url, 'events'), 0, 100, function(err, timestamps) {
 			var multi = redis.multi()
 			for (i=0;i<timestamps.length;i++)	{
-				var key = $(host, url, 'event', timestamps[i]);
+				var key = $(host, port, url, 'event', timestamps[i]);
 				multi.get (key);
 			}
 		
-			multi.get ($(host, url, 'status'));
+			multi.get ($(host, port, url, 'status'));
 		
 			multi.exec(function(err, replies) {
 				for (i=0;i<(replies.length-1);i++){
 					if (!replies[i]){
-						redis.lrem ($(host, url, 'events'), 1, timestamps[i]) //event has expired. removing from list.
+						redis.lrem ($(host, port, url, 'events'), 1, timestamps[i]) //event has expired. removing from list.
 					}
 					else{
 						var _event = JSON.parse(replies[i]);
@@ -107,7 +110,7 @@ app.get('/log', function(req, res){
 					}
 				}
 
-				res.render('entry_logs', {title: host + ' ' + url + ' status history', status : status, 
+				res.render('entry_logs', {title: oHost.name + ' (' + host + ':' + port+ url + ') status history', status : status, 
 					logs_warning: logs_warning, logs_critical: logs_critical});
 			});
 		});
@@ -129,11 +132,11 @@ app.get('/getdata', function(req, res){
 	var multi = redis.multi()
 	for (var i=0; i<hosts.length;i++){
 		for (var u=0;u<hosts[i].urls.length;u++){
-			multi.get ($(hosts[i].host, hosts[i].urls[u].url, 'lastfailure'));
-			multi.get ($(hosts[i].host, hosts[i].urls[u].url, 'lastok'));
-			multi.get ($(hosts[i].host, hosts[i].urls[u].url, 'lastwarning'));
-			multi.get ($(hosts[i].host, hosts[i].urls[u].url, 'avg_response_time'));
-			multi.get ($(hosts[i].host, hosts[i].urls[u].url, 'status'));
+			multi.get ($(hosts[i].host, hosts[i].port, hosts[i].urls[u].url, 'lastfailure'));
+			multi.get ($(hosts[i].host, hosts[i].port, hosts[i].urls[u].url, 'lastok'));
+			multi.get ($(hosts[i].host, hosts[i].port, hosts[i].urls[u].url, 'lastwarning'));
+			multi.get ($(hosts[i].host, hosts[i].port, hosts[i].urls[u].url, 'avg_response_time'));
+			multi.get ($(hosts[i].host, hosts[i].port, hosts[i].urls[u].url, 'status'));
 		}
 	}
 	
@@ -185,23 +188,30 @@ app.get('/getdata', function(req, res){
 					hosts[i].urls[u].ping_interval = hosts[i].urls[u].ping_interval || hosts[i].ping_interval 
 					hosts[i].urls[u].warning_if_takes_more_than = hosts[i].urls[u].warning_if_takes_more_than || hosts[i].warning_if_takes_more_than || 0
 
+					//last failure
 					hosts[i].urls[u].lastfailure = ISODateOrEmpty(replies[counter]);
 					hosts[i].urls[u].lastfailuretime = extraTimeInfo(replies[counter])
-					
+
+					//last ok
 					counter++;
 					hosts[i].urls[u].lastok = ISODateOrEmpty(replies[counter]);
 					hosts[i].urls[u].lastoktime = extraTimeInfo(replies[counter])
+
+					//last warning
 					counter++;
 					hosts[i].urls[u].lastwarning = ISODateOrEmpty(replies[counter]);
 					hosts[i].urls[u].lastwarningtime = extraTimeInfo(replies[counter])
+					
+					//avg rsponse
 					counter++;
 					hosts[i].urls[u].avg_response_time = Math.round(replies[counter]) || "-";
-					counter++;
 					
+					//status
+					counter++;
 					if (hosts[i].urls[u].enabled==false || hosts[i].enabled==false)
 						hosts[i].urls[u].status = "disabled"; //mark as disabled
 					else
-						hosts[i].urls[u].status = replies[counter]==0 ? "error" : "ok" ; //will show green while collecting data
+						hosts[i].urls[u].status = (replies[counter]==0) ? "error" : "ok" ; //will show green while collecting data
 
 					counter++;
 				}
