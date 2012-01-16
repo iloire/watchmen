@@ -18,7 +18,7 @@ exports.hosts =
 			failed_ping_interval: one_minute, //minutes
 			enabled: true,
 			alert_to: ['ivan@iloire.com'], 
-			warning_if_takes_more_than: 700, //miliseconds
+			warning_if_takes_more_than: 1500, //miliseconds
 			urls : [
 				{
 					method: 'get', 
@@ -41,7 +41,7 @@ exports.hosts =
 			port:80, 
 			ping_interval: one_minute,
 			failed_ping_interval: one_minute,
-			warning_if_takes_more_than: 700, //miliseconds
+			warning_if_takes_more_than: 1200, //miliseconds
 			enabled: true,
 			urls : [
 				{
@@ -63,7 +63,7 @@ exports.hosts =
 			port:80, 
 			ping_interval: one_minute,
 			failed_ping_interval: one_minute,
-			warning_if_takes_more_than: 700, //miliseconds
+			warning_if_takes_more_than: 1300, //miliseconds
 			enabled: true,
 			alert_to: ['ajax@aspphotogallery.net'], //you can include a different email recipient per host
 			urls : [
@@ -74,12 +74,13 @@ exports.hosts =
 				},
 				{
 					method: 'get', 
-					url : '/mvcphotogallery', 
+					url : '/mvcphotogallery',
+					warning_if_takes_more_than: 500,
 					expected: {statuscode: 200, contains: 'Knockout'}
 				},
 				{
 					method: 'get',
-					enabled: false,
+					enabled: true,
 					url : '/demomvc', 
 					expected: {statuscode: 200, contains: 'Simple, sexy, FAST, ASP.NET MVC photo gallery'}
 				}
@@ -92,7 +93,7 @@ exports.hosts =
 			port:80, 
 			ping_interval: one_minute,
 			failed_ping_interval: one_minute,
-			warning_if_takes_more_than: 900, //miliseconds
+			warning_if_takes_more_than: 3000, //miliseconds
 			enabled: true,
 			urls : [
 				{
@@ -207,7 +208,7 @@ exports.hosts =
 			port:80, 
 			ping_interval: one_minute,
 			failed_ping_interval: one_minute,
-			warning_if_takes_more_than: 900, //miliseconds
+			warning_if_takes_more_than: 4000, //miliseconds
 			enabled: true,
 			alert_to:['ivan@iloire.com'],
 			urls : [
@@ -225,7 +226,7 @@ exports.hosts =
 			port:80, 
 			ping_interval: one_minute,
 			failed_ping_interval: one_minute,
-			warning_if_takes_more_than: 900, //miliseconds
+			warning_if_takes_more_than: 4000, //miliseconds
 			enabled: true,
 			alert_to:['ivan@iloire.com'],
 			urls : [
@@ -244,7 +245,7 @@ exports.hosts =
 			ping_interval: one_minute,
 			failed_ping_interval: one_minute,
 			enabled: true,
-			warning_if_takes_more_than: 900, //miliseconds
+			warning_if_takes_more_than: 1500, //miliseconds
 			alert_to:['ivan@iloire.com'],
 			urls : [
 				{
@@ -274,6 +275,73 @@ exports.hosts =
 					content_type : 'application/x-www-form-urlencoded', // application/json
 					url : '/cgi-bin/echo.pl', 
 					expected: {statuscode: 200, contains: 'your_name = Ivan'}
+				}
+			]
+		}
+		,
+		{
+			name:'Menéame', 
+			host: 'www.meneame.net', 
+			port:80, 
+			ping_interval: one_minute,
+			failed_ping_interval: one_minute,
+			warning_if_takes_more_than: 1500,
+			enabled: true,
+			urls : [
+				{
+					method: 'get',
+					url : '/', 
+					expected: {statuscode: 200, contains: 'Menéame'}
+				}
+			]
+		}
+		,
+		{
+			name:'node js', 
+			host: 'nodejs.org', 
+			port:80, 
+			ping_interval: one_minute,
+			failed_ping_interval: one_minute,
+			warning_if_takes_more_than: 1500,
+			enabled: true,
+			urls : [
+				{
+					method: 'get',
+					url : '/', 
+					expected: {statuscode: 200, contains: 'Node'}
+				}
+			]
+		}
+		,
+		{
+			name:'redis', 
+			host: 'redis.io', 
+			port:80, 
+			ping_interval: one_minute,
+			failed_ping_interval: one_minute,
+			warning_if_takes_more_than: 1500,
+			enabled: true,
+			urls : [
+				{
+					method: 'get',
+					url : '/', 
+					expected: {statuscode: 200, contains: 'Redis'}
+				}
+			]
+		}
+		,
+		{
+			name:'express', 
+			host: 'expressjs.com', 
+			port:80, 
+			ping_interval: one_minute,
+			failed_ping_interval: one_minute,
+			enabled: true,
+			urls : [
+				{
+					method: 'get',
+					url : '/', 
+					expected: {statuscode: 200, contains: 'High performance'}
 				}
 			]
 		}
