@@ -6,6 +6,10 @@
 
 There is a <a href="http://letsnode.com/example-of-what-node-is-really-good-at" target="_blank">related blog post about watchmen here</a>.
 
+# Demo
+
+You can see an online demo of how watchmen control panel looks <a href="http://letsnode.com:8084" target="_blank">here</a>.
+
 # Screenshots
 
 ## watchmen daemon running: 
