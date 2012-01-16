@@ -70,14 +70,7 @@ Make sure you install those dependencies by issuing the command:
 			}
 		} 
 
-  c) **Define logging options**
-
-		exports.logging = {
-			Enabled: true,
-			base_path : './logs' //use last "/"
-		}
-
-  d) **Run watchmen**
+  c) **Run watchmen**
 
 		$ node watchmen.js
 
@@ -85,11 +78,17 @@ Make sure you install those dependencies by issuing the command:
 
 		$ forever start watchmen.js
 
-  e) **Run the web app to display status reports**
+  d) **Run the web app to display status reports**
 
 		$ forever start webserver/app.js 3000 (where 3000 is the port you want to use).
 
 ## History
+
+**0.8**
+
+  - Removed logging to file.
+  - Bug fixing when storing event. Needed to add port to redis key to make it unique.
+  - Added callback when sending email to registered problems in delivery.
 
 **0.7**
 
