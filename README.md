@@ -6,6 +6,10 @@
 
 There is a <a href="http://letsnode.com/example-of-what-node-is-really-good-at" target="_blank">related blog post about watchmen here</a>.
 
+# Demo
+
+You can see an online demo of how watchmen control panel looks <a href="http://letsnode.com:8084" target="_blank">here</a>.
+
 # Screenshots
 
 ## watchmen daemon running: 
@@ -87,6 +91,16 @@ Make sure you install those dependencies by issuing the command:
 
 ## History
 
+**0.7**
+
+  - Added [knockoutjs](http://knockoutjs.com) for view model binding.
+  - Auto async refresh main page.
+  - Filter by name in main page.
+  - Added counter (hosts up and down).
+  - UI Improvements.
+  - Tablesorter sorts status and time tags.
+  - Added Google Analytics.
+
 **0.6**
 
   - Added current status info (site is up or down) to database.
@@ -125,6 +139,8 @@ Make sure you install those dependencies by issuing the command:
   - First release.
 
 ## TODO
+
+ - Security
  - Google charts
  - Uptime stats info
  - Change configuration from control panel

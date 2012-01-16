@@ -26,7 +26,7 @@ THE SOFTWARE.
 var config = require('./config.js')
 var http = require('http');
 var postmark= require('./postmark');
-var sys = require('sys');
+var sys = require('util');
 var colors = require('colors');
 
 var _redis = require("redis")
@@ -34,14 +34,14 @@ var redis = _redis.createClient()
 
 /*write to file*/
 function log_to_file (file, str){
-	var fs = require('fs');
-	fs.open(config.logging.base_path + file, 'a', 0666, function( e, id ) {
-	  fs.write( id, '\n' + new Date() + ' ' + str, null, 'utf8', function(){
-	    fs.close(id, function(){
-	      //console.log('file closed');
-	    });
-	  });
-	});
+	if (str){
+		var fs = require("fs");
+		fs.createWriteStream(config.logging.base_path + file, {
+		    flags: "a",
+		    encoding: "utf8",
+		    mode: 0666
+		}).write(str);
+	}
 }
  
 function processRequest (url_conf, callback){
@@ -244,6 +244,7 @@ for (var i=0; i<config.hosts.length;i++){
 	}
 }
 
+log_to_file('test.log', 'info')
 
 process.on('SIGINT', function () {
 	console.log('stopping watchmen..');

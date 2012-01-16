@@ -1,89 +1,75 @@
-<table>
+<script id='urlTemplate' type="text/x-jquery-tmpl">
+    <tr class="${status}">
+		<td class="icon">
+			<span>${status}</span>
+		</td>
+		<td class="hosturl">
+			<a target="_blank" href="http://${host.host}:${host.port}${url}">
+				${host.name} ${url}
+			</a>
+		</td>
+
+		<td>${ping_interval}</td>
+
+		<td>${warning_if_takes_more_than}</td>
+
+		<td class="avgresponse">
+			${avg_response_time}
+		</td>
+		<td>
+			{{if (lastfailuretime)}}
+			<span class="error">
+				${lastfailuretime} <br /><time class='timeago' datetime='${lastfailure}'>${lastfailure}</time>
+			</span>
+			{{/if}}
+		</td>
+		<td>
+			{{if (lastwarningtime)}}
+			<span class="warning">
+				${lastwarningtime} <br /><time class='timeago' datetime='${lastwarning}'>${lastwarning}</time>
+			</span>
+			{{/if}}
+		</td>
+		<td>
+			{{if (lastoktime)}}
+			<span class="ok">
+				${lastoktime} <br /><time class='timeago' datetime='${lastok}'>${lastok}</time>
+			</span>
+			{{/if}}
+		</td>
+		<td>
+			<a class="btn primary" href="/log?url=${url}&host=${host.host}">details</a>
+		</td>
+    </tr>
+</script>
+
+<div class="filter">
+	filter : <input placeholder="filter by host name" data-bind="value: filter, valueUpdate: 'afterkeydown'" />
+</div>
+
+<div class="overview">
+	<span class="up" data-bind="text: hostsUp"></span>
+	<span class="down" data-bind="text: hostsDown"></span>
+</div>
+
+<table >
 	<thead>
 		<th></th>
 		<th>HOST+URL</th>
-		<!--
-		<th>Enabled</th>
-		-->
 		<th width="50" class = "{sorter: 'digit'}">Ping (sec)</th>
 		<th width="80" class = "{sorter: 'digit'}">Response limit (ms)</th>
-		<th width="100" class = "{sorter: 'digit'}">AVG Response time (ms)</th>
-		<th>Last failure</th>
-		<th>Last warning</th>
-		<th>Last ok</th>
-		<th></th>
-	</thead>
-<%
-	for (var i=0; i<hosts.length;i++){
-		var host = hosts[i];
-		for (var u=0;u<hosts[i].urls.length;u++){
-			var disabled = (host.urls[u].enabled || host.enabled) == false
-			var status = "disabled"
-				if (host.urls[u].status==1){
-					status = "ok"
-				}else if (host.urls[u].status==0){
-					status = "error"
-				}
-				%>
-		<tr class="<%=status%>">
-			<td>
-				<img class="status_icon" src="/images/<%=status%>.png" alt="<%=status%>" />
-			</td>
-			<td><a href="http://<%=host.host%>:<%=host.port%><%=host.urls[u].url%>" target="_blank"><%=host.host%>:<%=host.port%><%=host.urls[u].url%></a></td>
-			<!--
-			<td>
-			<%
-			if (disabled){
-				%>
-				<span class="label important">DISABLED</span>
-				<%
-			}
-			else{
-				%>
-				<span class="label success">ENABLED</span>
-				<%
-			}
-			%>
-			</td>
-			-->
-			<td>
-				<%=(host.urls[u].ping_interval || host.ping_interval)%>
-			</td>
-			<td>
-				<%=(host.urls[u].warning_if_takes_more_than || host.warning_if_takes_more_than) || "-"%>
-			</td>
-			<td>
-				<%=Math.round(host.urls[u].avg_response_time) || "-"%>
-			</td>
-			<td>
-			<%if (host.urls[u].lastfailure) {%>
-				<span class="error">
-				<time class="timeago" datetime="<%=new Date(parseFloat(host.urls[u].lastfailure)).toISOString()%>"><%=new Date(parseFloat(host.urls[u].lastfailure)).toISOString()%></time>
-				</span>
-			<%}%>
-			</td>
-			<td>
-			<%if (host.urls[u].lastwarning) {%>
-				<span class="warning">
-				<time class="timeago" datetime="<%=new Date(parseFloat(host.urls[u].lastwarning)).toISOString()%>"><%=new Date(parseFloat(host.urls[u].lastwarning)).toISOString()%></time>
-				</span>
-			<%}%>
-			</td>
-			<td>
-			<%if (host.urls[u].lastok) {%>
-				<span class="ok">
-					<time class="timeago" datetime="<%=new Date(parseFloat(host.urls[u].lastok)).toISOString()%>"><%=new Date(parseFloat(host.urls[u].lastok)).toISOString()%></time>
-				</span>
-			<%}%>
-			</td>
-			<td>
-			<a class="btn small" href="/log?url=<%=encodeURIComponent(host.urls[u].url)%>&host=<%=encodeURIComponent(host.host)%>">details</a>
-			</td>
-			<%
-		}
-		%>
-		</tr>
-		<%
-	}
-%>
+		<th width="150" class = "{sorter: 'digit'}">AVG Response time (ms)</th>
+		<th width="150" class="error">Last failure</th>
+		<th width="150" class="warning">Last warning</th>
+		<th width="150" class="ok">Last ok</th>
+		<th width="100"></th>
+	</thead>	
+	<tbody id="items" data-bind='template: {name:"urlTemplate", foreach: filteredUrls}'>
+	</tbody>
 </table>
+
+<script>
+$(document).ready(function() {
+	Refresh();
+});
+</script>

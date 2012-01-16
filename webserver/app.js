@@ -51,48 +51,79 @@ app.configure('production', function(){
 
 function $() { return Array.prototype.slice.call(arguments).join(':') } 
 
+var ONE_HOUR = 1000 * 60 * 60
+var ONE_DAY = ONE_HOUR * 24
+
 //url log detail
 app.get('/log', function(req, res){
 	var host = req.query ['host'], url = req.query ['url']
-
-	var logs_warning = [];
-	var logs_critical = [];
-	
-	redis.lrange ($(host, url, 'events'), 0, 100, function(err, timestamps) {
-		var multi = redis.multi()
-		for (i=0;i<timestamps.length;i++)	{
-			var key = $(host, url, 'event', timestamps[i]);
-			multi.get (key);
-		}
-		
-		multi.get ($(host, url, 'status'));
-		
-		multi.exec(function(err, replies) {
-			for (i=0;i<(replies.length-1);i++){
-				if (!replies[i]){
-					redis.lrem ($(host, url, 'events'), 1, timestamps[i]) //event has expired. removing from list.
-				}
-				else{
-					var _event = JSON.parse(replies[i]);
-					if (_event.event == 'warning'){
-						logs_warning.push  (_event);
-					}
-					else
-						logs_critical.push  (_event);
-				}
+	var oHost = null, oUrl=null;
+	for (i=0;i<config.hosts.length;i++) {
+		for (var u=0;u<config.hosts[i].urls.length;u++){
+			if ((config.hosts[i].host==host) && (config.hosts[i].urls[u].url==url)){
+				oUrl = config.hosts[i].urls[u];
+				oHost = config.hosts[i];
+				break;
 			}
-			var status = replies[replies.length-1];
-			
-			console.log (status)
-			
-			res.render('entry_logs', {title: host + ' ' + url, status : status, logs_warning: logs_warning, logs_critical: logs_critical});
+		}
+	}
+	
+	if (oUrl && oHost){
+		var logs_warning = [];
+		var logs_critical = [];
+	
+		redis.lrange ($(host, url, 'events'), 0, 100, function(err, timestamps) {
+			var multi = redis.multi()
+			for (i=0;i<timestamps.length;i++)	{
+				var key = $(host, url, 'event', timestamps[i]);
+				multi.get (key);
+			}
+		
+			multi.get ($(host, url, 'status'));
+		
+			multi.exec(function(err, replies) {
+				for (i=0;i<(replies.length-1);i++){
+					if (!replies[i]){
+						redis.lrem ($(host, url, 'events'), 1, timestamps[i]) //event has expired. removing from list.
+					}
+					else{
+						var _event = JSON.parse(replies[i]);
+						if (_event.event == 'warning'){
+							logs_warning.push  (_event);
+						}
+						else
+							logs_critical.push  (_event);
+					}
+				}
+
+				if ((oUrl.enabled == false) || (oHost.enabled == false)){
+					status="disabled"
+				}
+				else {
+					if (replies[replies.length-1]==1){
+						status="ok";
+					}else{
+						status="error";
+					}
+				}
+
+				res.render('entry_logs', {title: host + ' ' + url + ' status history', status : status, 
+					logs_warning: logs_warning, logs_critical: logs_critical});
+			});
 		});
-	});
+	}
+	else{
+		res.end ('host/url not found')
+	}
 	
 });
 
 //list of hosts and url's
 app.get('/', function(req, res){
+	res.render('index', {title: 'watchmen'});
+});
+
+app.get('/getdata', function(req, res){
 	var hosts=config.hosts
 	
 	var multi = redis.multi()
@@ -106,6 +137,42 @@ app.get('/', function(req, res){
 		}
 	}
 	
+	function round (val){
+		if (val<10)
+			val = '0' + val;
+		return val;
+	}
+	
+	function extraTimeInfo (ndate){
+		if (!ndate) return "";
+		var today = new Date()
+		var date = new Date(parseFloat(ndate))
+		
+		var diff = new Date(Math.abs(today-date));
+		var strInfo = "";
+
+		if (diff > ONE_DAY){
+			strInfo = date.getDate() + "/" + (date.getMonth() + 1) + "/" + date.getFullYear() + " "
+		}
+
+		var str = date.toISOString();
+		var hours = date.getHours();
+		var min = date.getMinutes();
+		var sec = "";
+
+		min = ':' + round (min);
+		if (diff < ONE_HOUR){
+			sec = ':' + round (date.getSeconds());
+		}
+
+		return strInfo + hours + min + sec
+
+	}
+		
+	function ISODateOrEmpty (date){
+		return date ? new Date(parseFloat(date)).toISOString() : "";
+	}
+	
 	multi.exec(function(err, replies) {
 		if (err){
 			res.end ('something went wrong!'); //todo: err handling
@@ -114,27 +181,37 @@ app.get('/', function(req, res){
 			var counter=0
 			for (i=0;i<hosts.length;i++) {
 				for (var u=0;u<hosts[i].urls.length;u++){
-					hosts[i].urls[u].lastfailure = replies[counter];
+					//config 
+					hosts[i].urls[u].ping_interval = hosts[i].urls[u].ping_interval || hosts[i].ping_interval 
+					hosts[i].urls[u].warning_if_takes_more_than = hosts[i].urls[u].warning_if_takes_more_than || hosts[i].warning_if_takes_more_than || 0
+
+					hosts[i].urls[u].lastfailure = ISODateOrEmpty(replies[counter]);
+					hosts[i].urls[u].lastfailuretime = extraTimeInfo(replies[counter])
+					
 					counter++;
-					hosts[i].urls[u].lastok = replies[counter];
+					hosts[i].urls[u].lastok = ISODateOrEmpty(replies[counter]);
+					hosts[i].urls[u].lastoktime = extraTimeInfo(replies[counter])
 					counter++;
-					hosts[i].urls[u].lastwarning = replies[counter];
+					hosts[i].urls[u].lastwarning = ISODateOrEmpty(replies[counter]);
+					hosts[i].urls[u].lastwarningtime = extraTimeInfo(replies[counter])
 					counter++;
-					hosts[i].urls[u].avg_response_time = replies[counter];
+					hosts[i].urls[u].avg_response_time = Math.round(replies[counter]) || "-";
 					counter++;
 					
 					if (hosts[i].urls[u].enabled==false || hosts[i].enabled==false)
-						hosts[i].urls[u].status = null; //mark as disabled
+						hosts[i].urls[u].status = "disabled"; //mark as disabled
 					else
-						hosts[i].urls[u].status = replies[counter];
+						hosts[i].urls[u].status = replies[counter]==0 ? "error" : "ok" ; //will show green while collecting data
 
 					counter++;
 				}
 			}
-			res.render('index', {title:'List of hosts', hosts: hosts});
+
+			var headers = {'Content-type' : 'application/json;charset=utf8'}
+			res.writeHead(200, headers)
+			res.end(JSON.stringify(hosts));
 		}
-	});
-	
+	});	
 });
 
 var port = parseInt(process.argv[2], 10) || 3000
