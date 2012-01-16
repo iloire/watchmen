@@ -35,14 +35,12 @@ var redis = _redis.createClient()
 /*write to file*/
 function log_to_file (file, str){
 	if (str){
-		var fs = require('fs');
-		fs.open(config.logging.base_path + file, 'a', 0666, function( e, id ) {
-		  fs.write( id, '\n' + new Date() + ' ' + str, null, 'utf8', function(){
-		    fs.close(id, function(){
-		      //console.log('file closed');
-		    });
-		  });
-		});
+		var fs = require("fs");
+		fs.createWriteStream(config.logging.base_path + file, {
+		    flags: "a",
+		    encoding: "utf8",
+		    mode: 0666
+		}).write(str);
 	}
 }
  
