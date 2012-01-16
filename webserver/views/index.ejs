@@ -1,133 +1,75 @@
+<script id='urlTemplate' type="text/x-jquery-tmpl">
+    <tr class="${status}">
+		<td class="icon">
+			<span>${status}</span>
+		</td>
+		<td class="hosturl">
+			<a target="_blank" href="http://${host.host}:${host.port}${url}">
+				${host.name} ${url}
+			</a>
+		</td>
+
+		<td>${ping_interval}</td>
+
+		<td>${warning_if_takes_more_than}</td>
+
+		<td class="avgresponse">
+			${avg_response_time}
+		</td>
+		<td>
+			{{if (lastfailuretime)}}
+			<span class="error">
+				${lastfailuretime} <br /><time class='timeago' datetime='${lastfailure}'>${lastfailure}</time>
+			</span>
+			{{/if}}
+		</td>
+		<td>
+			{{if (lastwarningtime)}}
+			<span class="warning">
+				${lastwarningtime} <br /><time class='timeago' datetime='${lastwarning}'>${lastwarning}</time>
+			</span>
+			{{/if}}
+		</td>
+		<td>
+			{{if (lastoktime)}}
+			<span class="ok">
+				${lastoktime} <br /><time class='timeago' datetime='${lastok}'>${lastok}</time>
+			</span>
+			{{/if}}
+		</td>
+		<td>
+			<a class="btn primary" href="/log?url=${url}&host=${host.host}">details</a>
+		</td>
+    </tr>
+</script>
+
+<div class="filter">
+	filter : <input placeholder="filter by host name" data-bind="value: filter, valueUpdate: 'afterkeydown'" />
+</div>
+
+<div class="overview">
+	<span class="up" data-bind="text: hostsUp"></span>
+	<span class="down" data-bind="text: hostsDown"></span>
+</div>
+
 <table >
 	<thead>
-		<th>Status</th>
-		<th width="250">HOST+URL</th>
+		<th></th>
+		<th>HOST+URL</th>
 		<th width="50" class = "{sorter: 'digit'}">Ping (sec)</th>
 		<th width="80" class = "{sorter: 'digit'}">Response limit (ms)</th>
-		<th width="100" class = "{sorter: 'digit'}">AVG Response time (ms)</th>
-		<th class="error">Last failure</th>
-		<th class="warning">Last warning</th>
-		<th class="ok">Last ok</th>
-		<th></th>
-	</thead>
-<%
-	for (var i=0; i<hosts.length;i++){
-		var host = hosts[i];
-		for (var u=0;u<hosts[i].urls.length;u++){
-			var disabled = (host.urls[u].enabled || host.enabled) == false
-			var status = "disabled"
-			if (host.urls[u].status==1){
-				status = "ok"
-			}else if (host.urls[u].status==0){
-				status = "error"
-			}
-%>
-		<tr class="<%=status%>" id="item<%=i%>_<%=u%>">
-			<td>
-				<div class="icon">&nbsp;
-				</div>
-			</td>
-			<td>
-				<a class="hosturl" href="http://<%=host.host%>:<%=host.port%><%=host.urls[u].url%>" target="_blank" title="<%=host.name%> <%=host.host%>:<%=host.port%> <%=host.urls[u].url%>"><%=host.name%> <%=host.urls[u].url%></a>
-			</td>
-			<td>
-				<%=(host.urls[u].ping_interval || host.ping_interval)%>
-			</td>
-			<td>
-				<%=(host.urls[u].warning_if_takes_more_than || host.warning_if_takes_more_than) || "-"%>
-			</td>
-			<td>
-				<span class="avgresponse">
-				<%=host.urls[u].avg_response_time %>
-				</span>
-			</td>
-			<td>
-			<%if (host.urls[u].lastfailure) {%>
-				<span class="error">
-				<time class="timeago" datetime="<%=new Date(parseFloat(host.urls[u].lastfailure)).toISOString()%>"><%=new Date(parseFloat(host.urls[u].lastfailure)).toISOString()%></time>
-				</span>
-			<%}%>
-			</td>
-			<td>
-			<%if (host.urls[u].lastwarning) {%>
-				<span class="warning">
-				<time class="timeago" datetime="<%=new Date(parseFloat(host.urls[u].lastwarning)).toISOString()%>"><%=new Date(parseFloat(host.urls[u].lastwarning)).toISOString()%></time>
-				</span>
-			<%}%>
-			</td>
-			<td>
-			<%if (host.urls[u].lastok) {%>
-				<span class="ok">
-					<time class="timeago" datetime="<%=new Date(parseFloat(host.urls[u].lastok)).toISOString()%>"><%=new Date(parseFloat(host.urls[u].lastok)).toISOString()%></time>
-				</span>
-			<%}%>
-			</td>
-			<td>
-			<a class="btn primary" href="/log?url=<%=encodeURIComponent(host.urls[u].url)%>&host=<%=encodeURIComponent(host.host)%>">details</a>
-			</td>
-			<%
-		}
-		%>
-		</tr>
-		<%
-	}
-%>
+		<th width="150" class = "{sorter: 'digit'}">AVG Response time (ms)</th>
+		<th width="150" class="error">Last failure</th>
+		<th width="150" class="warning">Last warning</th>
+		<th width="150" class="ok">Last ok</th>
+		<th width="100"></th>
+	</thead>	
+	<tbody id="items" data-bind='template: {name:"urlTemplate", foreach: filteredUrls}'>
+	</tbody>
 </table>
 
 <script>
-	var interval=5000; //ms
-	
-	function getTimeTag (val){
-		if (!val) return "-";
-		var date = new Date(parseFloat(val));
-		var str = date.toISOString();
-		var hours = date.getHours();
-		var min = date.getMinutes();
-		if (min<10)
-			min = '0' + min;
-		return hours + ":" + min + " (<time class='timeago' datetime='" + str + "'>" + str + "</time>)"
-	}
-	
-	function updateValue(id, val, do_transition_effect){
-		if (val && ($(id).html()!=val)){
-			if (do_transition_effect) 
-				$(id).hide();
-
-			$(id).html(val);
-
-			if (do_transition_effect) 
-				$(id).fadeIn();
-		}
-	}
-	
-	function Refresh(){		
-		$.ajax({ url: '/?json=true', data: {}, dataType: 'json', success: function (hosts) {
-				for(var i=0;i<hosts.length;i++){
-					for (var u=0;u<hosts[i].urls.length;u++){
-						updateValue('tr#item' + i + '_' + u + ' td span.avgresponse', hosts[i].urls[u].avg_response_time, true);
-						
-						updateValue('tr#item' + i + '_' + u + ' td span.warning', getTimeTag(hosts[i].urls[u].lastwarning));						
-						updateValue('tr#item' + i + '_' + u + ' td span.ok', getTimeTag(hosts[i].urls[u].lastok));
-						updateValue('tr#item' + i + '_' + u + ' td span.error', getTimeTag(hosts[i].urls[u].lasterror));
-						
-						if (hosts[i].urls[u].status==null){
-							updateValue('tr#item' + i + '_' + u).removeClass('error ok').addClass('disabled');
-						}
-						else if (hosts[i].urls[u].status==0){ //error
-							updateValue('tr#item' + i + '_' + u).removeClass('disabled ok').addClass('error');
-						}
-						else if (hosts[i].urls[u].status==1){
-							updateValue('tr#item' + i + '_' + u).removeClass('error disabled').addClass('ok');
-						}
-					}
-				}
-				$('#last_update').html(getTimeTag(new Date().getTime()));
-				config();
-				
-				setTimeout (Refresh, interval);
-			}
-		});	
-	}
-	
-	setTimeout (Refresh, interval);
+$(document).ready(function() {
+	Refresh();
+});
 </script>

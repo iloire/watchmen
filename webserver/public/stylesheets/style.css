@@ -3,47 +3,91 @@ body {
   font: 14px "Lucida Grande", Helvetica, Arial, sans-serif;
 }
 
+.filter{
+	padding:8px;
+	float:left;
+}
+
+/*overview*/
+.overview {
+	padding:15px;
+	float:right;
+	font-size:1.5em;
+}
+
+.overview span {
+	color:white;
+	display:inline;
+	padding:5px 12px;
+	border-radius: 5px;
+}
+
+.overview .up{
+	background-color:green;
+}
+.overview .down{
+	background-color:red;
+}
+
 time{
-	font-size:0.9em;
+	font-size:0.8em;
+	color:gray;
 }
 
 table th, table td { /*overwrite bootstrap style*/
 	padding: 5px;
 	line-height: 18px;
 	text-align: left;
+	vertical-align:middle;
 }
 
-table tr td .icon {
-	width:40px;
-	height:40px;
+table tbody tr td.icon {
+	width:30px !important;
+	height:30px !important;
+}
+
+table tbody tr td.icon span {display:none;}
+table tbody tr td.avgresponse {font-weight:bold;;}
+
+table .headerSortUp, table .headerSortDown {
+	background-color: #f5f5f5;
+	text-shadow: none;
+	border-width:1px 1px 0px 1px;
+	border-style:solid;
+	border-color:#c2c2c2;
 }
 
 /*error*/
-table tr.error {
-	background-color: #ffbfbf;
-	border:3px solid red;
+table tbody tr.error * {
+	font-weight: bold;
+	color:red;
 }
 
-table tr.error td div.icon {
-	background: #fff url("/images/error.png") left top no-repeat;	
+table tbody tr.error td.icon {
+	background: transparent url("/images/red.png") 5px 5px no-repeat;	
 }
 
 /*ok*/
-table tr.ok {
-	
+table tbody tr.ok td.hosturl a {
+	color:green;
 }
-table tr.ok td div.icon {
-	background: #fff url("/images/ok.png") left top no-repeat;	
+table tbody tr.ok td.icon {
+	background: transparent url("/images/green.png") 5px 5px no-repeat;	
+}
+
+/*warning*/
+table tr.warning td.icon {
+	background: transparent url("/images/yellow.png") 5px 5px no-repeat;	
 }
 
 /*disabled*/
-table tr.disabled {
+table tr.disabled, table tr.disabled td.hosturl a {
 	background-color: #f5f5f5;
 	color:gray !important;
 }
 
-table tr.disabled td div.icon {
-	background: #fff url("/images/disabled.png") left top no-repeat;	
+table tr.disabled td.icon {
+	background: transparent url("/images/disabled.png") 5px 5px no-repeat;	
 }
 
 table tr.disabled a.hosturl {
