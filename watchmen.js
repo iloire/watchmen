@@ -22,67 +22,15 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
 
 */
-
 var config = require('./config.js')
-var http = require('http');
 var postmark= require('./postmark');
 var sys = require('util');
 var colors = require('colors');
 
 var _redis = require("redis")
 var redis = _redis.createClient()
- 
-function processRequest (url_conf, callback){
-	// record start time
-	var startTime = new Date();
-	
-	var headers = {
-	    'Host': url_conf.host.host
-	};
-	
-	if (url_conf.method == 'post'){
-		headers['Content-Type'] = url_conf.content_type
-		headers['Content-Length'] = JSON.stringify(url_conf.input_data || '').length
-	}
-	
-	var client = http.createClient(url_conf.host.port || 80, url_conf.host.host);
-	var request = client.request(url_conf.method, url_conf.url, headers);
-	
-	client.addListener('error', function(connectionException){
-		callback(connectionException.errno || 'Error establishing connection' , null, null);
-		return;
-		//log_error ('Error: ' + connectionException)
-	});
-	
-	request.on('response', function(response) {
-		response.setEncoding('utf-8');
-		var body = '';
-		
-		response.on('data', function(chunk) {
-			body += chunk;
-		});
-	
-		response.on('end', function() {
-			var timeDiff = (new Date() - startTime);
-			callback(null, body, response, timeDiff)
-			return;
-		});
-		
-		response.on('error', function(e) {
-			//log_error ('Error on response :' + url_conf.host)
-			callback(e.message, null, null, null)
-			return;
-		});
-	});
-	
-	request.on('error', function(e) {
-		log_error ('Error on request :' + url_conf.host.host + url_conf.url)
-		callback(e.message, null, null, null)
-	});
-	
-	request.write(JSON.stringify(url_conf.input_data) || '');
-	request.end();
-}
+
+var request = require ('./request')
 
 function log_info (str){ sys.puts (str) }
 function log_ok (str){ sys.puts (str.green) }
@@ -129,8 +77,8 @@ function sendEmail (to_list, subject, body, callback){
 
 function query_url(url_conf){
 	var host_conf = url_conf.host
-	var url_info = host_conf.host + ':'+ host_conf.port  + url_conf.url + ' [' + url_conf.method + ']'
-	processRequest(url_conf, function(request_err, body, response, elapsed_time){
+	var url_info = host_conf.name + ' - ' + host_conf.host + ':'+ host_conf.port  + url_conf.url + ' [' + url_conf.method + ']'
+	request.processRequest(url_conf, function(request_err, body, response, elapsed_time){
 		var error, next_attempt_secs
 		if (!request_err){ //request completed successfully
 			if (response.statusCode != url_conf.expected.statuscode){
@@ -225,7 +173,7 @@ for (var i=0; i<config.hosts.length;i++){
 				host.urls[u].host = host
 				var ping = host.urls[u].ping_interval || host.ping_interval
 				log_info (' -- queuing "' + host.urls[u].url + '".. ping every ' + ping + ' seconds...')
-				setTimeout (query_url, ping * 1000, host.urls[u]);
+				query_url(host.urls[u]);
 			}
 			else{
 				log_warning (' -- skipping url: ' + host.name + host.urls[u].url + ' (disabled entry)...')
