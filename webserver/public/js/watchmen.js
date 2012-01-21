@@ -6,7 +6,6 @@ var viewModel = {
 
 viewModel.filteredUrls = ko.dependentObservable(function() {
 	var filter = this.filter().toLowerCase();
-
 	if(!filter) {
 		return this.urls();
 	} else {
@@ -23,7 +22,13 @@ viewModel.hostsUp = ko.dependentObservable(function() {
 	    if(item.status == 'ok')
 	        return true;
 	}).length;
+}, viewModel);
 
+viewModel.hostsTotal = ko.dependentObservable(function() {
+	return ko.utils.arrayFilter(this.filteredUrls(), function(item) { 
+		if(item.status != 'disabled')
+			return true;
+	}).length;
 }, viewModel);
 
 viewModel.hostsDown = ko.dependentObservable(function() {
@@ -34,37 +39,21 @@ viewModel.hostsDown = ko.dependentObservable(function() {
 
 }, viewModel);
 
-var interval=1500; //ms
-
-function round (val){
-	if (val<10)
-		val = '0' + val;
-	return val;
-}
-
-function getTimeTag (val){
-	if (!val) return "-";
-	var date = new Date(parseFloat(val));
-	var str = date.toISOString();
-	var hours = date.getHours();
-	var min = round(date.getMinutes());
-	var sec = round(date.getSeconds());
-	return hours + ":" + min + ':' +sec ; // + " <time class='timeago' datetime='" + str + "'>" + str + "</time>"
-}
+var interval=2500; //ms
 
 function Refresh(){		
-	$.ajax({ url: '/getdata', data: {}, dataType: 'json', success: function (hosts) {
+	$.ajax({ url: '/getdata', data: {}, dataType: 'json', success: function (data) {
 			var urls = [];
-			for(var i=0;i<hosts.length;i++){
-				for (var u=0;u<hosts[i].urls.length;u++){
-					var url = hosts[i].urls[u];
-					url.host = hosts[i];
+			for(var i=0;i<data.hosts.length;i++){
+				for (var u=0;u<data.hosts[i].urls.length;u++){
+					var url = data.hosts[i].urls[u];
+					url.host = data.hosts[i];
 					urls.push (url);
 				}
 			}
 			viewModel.urls (urls);
 			$("table").trigger("update");
-			viewModel.lastupdate(getTimeTag(new Date().getTime()))
+			viewModel.lastupdate(data.timestamp)
   			$("time.timeago").timeago();
 
 			setTimeout (Refresh, interval);

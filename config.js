@@ -7,13 +7,15 @@
 
 */
 var one_minute = 60 //you can set this to other value for testing the service in dev env.
+var performance_test = false //set to true if you want a bulk config file to be used for testing instead of the following list of hosts
 
-exports.hosts = 
+var hosts = 
 	[
 		{
 			name:'VitaminasDev', 
 			host: 'www.vitaminasdev.com', 
 			port:80,
+			timeout:10000,
 			ping_interval: one_minute, //seconds
 			failed_ping_interval: one_minute, //minutes
 			enabled: true,
@@ -39,6 +41,7 @@ exports.hosts =
 			name:'iloire.com', 
 			host: 'www.iloire.com', 
 			port:80, 
+			timeout:5000,
 			ping_interval: one_minute,
 			failed_ping_interval: one_minute,
 			warning_if_takes_more_than: 1200, //miliseconds
@@ -61,6 +64,7 @@ exports.hosts =
 			name:'ASP Photo Gallery', 
 			host: 'www.aspphotogallery.net', 
 			port:80, 
+			timeout:5000,
 			ping_interval: one_minute,
 			failed_ping_interval: one_minute,
 			warning_if_takes_more_than: 1300, //miliseconds
@@ -91,6 +95,7 @@ exports.hosts =
 			name:'CachiruloValley', 
 			host: 'cachirulovalley.com', 
 			port:80, 
+			timeout:10000,
 			ping_interval: one_minute,
 			failed_ping_interval: one_minute,
 			warning_if_takes_more_than: 3000, //miliseconds
@@ -125,6 +130,7 @@ exports.hosts =
 			name:'letsnode.com', 
 			host: 'letsnode.com', 
 			port:80, 
+			timeout:10000,
 			ping_interval: one_minute,
 			failed_ping_interval: one_minute,
 			enabled: true,
@@ -140,10 +146,11 @@ exports.hosts =
 		{
 			name:'letsnode.com frelancer service', 
 			host: 'letsnode.com', 
-			port:8080, 
+			port:8080,
+			timeout:10000,
 			ping_interval: one_minute,
 			failed_ping_interval: one_minute,
-			enabled: true,
+			enabled: false,
 			urls : [
 				{
 					method: 'get', 
@@ -155,11 +162,12 @@ exports.hosts =
 		,
 		{
 			name:'letsnode.com directory web', 
-			host: 'letsnode.com', 
-			port:8081, 
+			host: 'letsnode.com',
+			port:8081,
+			timeout:10000,
 			ping_interval: one_minute,
 			failed_ping_interval: one_minute,
-			enabled: true,
+			enabled: false,
 			urls : [
 				{
 					method: 'get', 
@@ -170,9 +178,10 @@ exports.hosts =
 		}
 		,
 		{
-			name:'google.com', 
-			host: 'www.google.com', 
-			port:80, 
+			name:'google.com',
+			host: 'www.google.com',
+			port:80,
+			timeout:10000,
 			ping_interval: one_minute,
 			failed_ping_interval: one_minute,
 			enabled: false,
@@ -192,24 +201,25 @@ exports.hosts =
 			ping_interval: one_minute,
 			failed_ping_interval: one_minute,
 			alert_to: ['ivan@iloire.com'],
-			enabled: true,
+			enabled: false,
 			urls : [
 				{
 					method: 'get', 
 					url : '/', 
-					expected: {statuscode: 200, contains: 'blog about node'}
+					expected: {statuscode: 200, contains: ''}
 				}
 			]
 		}
 		,
 		{
 			name:'Idibay direct', 
-			host: 'direct.idibay.com', 
-			port:80, 
+			host: 'direct.idibay.com',
+			port:80,
+			timeout:10000,
 			ping_interval: one_minute,
 			failed_ping_interval: one_minute,
 			warning_if_takes_more_than: 4000, //miliseconds
-			enabled: true,
+			enabled: false,
 			alert_to:['ivan@iloire.com'],
 			urls : [
 				{
@@ -223,11 +233,12 @@ exports.hosts =
 		{
 			name:'Idibay', 
 			host: 'www.idibay.com', 
-			port:80, 
+			port:80,
+			timeout:10000,
 			ping_interval: one_minute,
 			failed_ping_interval: one_minute,
 			warning_if_takes_more_than: 4000, //miliseconds
-			enabled: true,
+			enabled: false,
 			alert_to:['ivan@iloire.com'],
 			urls : [
 				{
@@ -241,10 +252,11 @@ exports.hosts =
 		{
 			name:'Cuéntica', 
 			host: 'www.cuentica.com', 
-			port:80, 
+			port:80,
+			timeout:10000,
 			ping_interval: one_minute,
 			failed_ping_interval: one_minute,
-			enabled: true,
+			enabled: false,
 			warning_if_takes_more_than: 1500, //miliseconds
 			alert_to:['ivan@iloire.com'],
 			urls : [
@@ -282,11 +294,12 @@ exports.hosts =
 		{
 			name:'Menéame', 
 			host: 'www.meneame.net', 
-			port:80, 
+			port:80,
+			timeout:10000,
 			ping_interval: one_minute,
 			failed_ping_interval: one_minute,
 			warning_if_takes_more_than: 1500,
-			enabled: true,
+			enabled: false,
 			urls : [
 				{
 					method: 'get',
@@ -299,11 +312,12 @@ exports.hosts =
 		{
 			name:'node js', 
 			host: 'nodejs.org', 
-			port:80, 
+			port:80,
+			timeout:10000,
 			ping_interval: one_minute,
 			failed_ping_interval: one_minute,
 			warning_if_takes_more_than: 1500,
-			enabled: true,
+			enabled: false,
 			urls : [
 				{
 					method: 'get',
@@ -316,11 +330,12 @@ exports.hosts =
 		{
 			name:'redis', 
 			host: 'redis.io', 
-			port:80, 
+			port:80,
+			timeout:10000,
 			ping_interval: one_minute,
 			failed_ping_interval: one_minute,
 			warning_if_takes_more_than: 1500,
-			enabled: true,
+			enabled: false,
 			urls : [
 				{
 					method: 'get',
@@ -334,9 +349,10 @@ exports.hosts =
 			name:'express', 
 			host: 'expressjs.com', 
 			port:80, 
+			timeout:10000,
 			ping_interval: one_minute,
 			failed_ping_interval: one_minute,
-			enabled: true,
+			enabled: false,
 			urls : [
 				{
 					method: 'get',
@@ -346,9 +362,55 @@ exports.hosts =
 			]
 		}
 	]
+	
+exports.hosts = function(config_hosts){
+	if (performance_test)
+	{
+		var words = [
+			'google', 'yahoo', 'node', 'business', 'internet', 'hi', 'domain', 
+			'test', 'sale', 'bed', 'monitor', 'computer', 'java', 'usa',
+			'pc', 'linux', 'windows', 'microsoft', 'mouse', 'animal', 'zoo',
+			'mobile', 'platform', 'lake', 'spain', 'zaragoza', 'table', 'rusia',
+			'brazil', 'olimpiadas', 'money', 'winter', 'films', 'movies', 'spanish', 'bar',
+			'runner','magazine','audio', 'video', 'cup', 'charger', 'mykeys', 'twitter',
+			'php', 'python', 'camera', 'house', 'bad', 'nscoder', 'mvc', 'screen',
+			'24h', 'harbor', 'mail', 'important', 'hungry', 'pizza',
+			'fiesta', 'tuberia', 'boat'
+		]
+
+		function createHost (domain){
+			return {
+				name : domain, 
+				host: domain, 
+				port: '80',
+				enabled :true,
+				urls : [ { url: '/', method : 'get' }],
+				ping_interval : one_minute,
+				failed_ping_interval : one_minute / 2,
+				warning_if_takes_more_than :500
+			}
+		}
+
+		var hosts = [];
+
+		for (var i=0; i<words.length;i++){
+			hosts.push (createHost (words[i] + '.com'));
+			hosts.push (createHost (words[i] + '.net'));
+			hosts.push (createHost (words[i] + '.org'));
+
+			hosts.push (createHost (words[i] + '.com'));
+			hosts.push (createHost (words[i] + '.net'));
+			hosts.push (createHost (words[i] + '.org'));
+		}
+		return hosts;
+	}
+	else{
+		return config_hosts;
+	}
+}(hosts);
 
 exports.notifications = {
-	Enabled: true, //if disabled, no email will be sent (just console messages)
+	Enabled: false, //if disabled, no email will be sent (just console messages)
 	To: ['ivan@iloire.com'], //default notification list if no alert_to is specified for host or url
 	postmark : {
 		From: 'ivan@iloire.com',

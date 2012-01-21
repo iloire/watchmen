@@ -28,6 +28,9 @@ body {
 .overview .down{
 	background-color:red;
 }
+.overview .total{
+	background-color:gray;
+}
 
 time{
 	font-size:0.8em;
@@ -104,7 +107,7 @@ a {
 
 .error, .failure {color:red;}
 .ok{color:green;}
-.warning{color:orange;}
+.warning, .warnings{color:orange;}
 
 img.status_icon{
 	max-width:35px;

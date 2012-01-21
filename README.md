@@ -82,7 +82,17 @@ Make sure you install those dependencies by issuing the command:
 
 		$ forever start webserver/app.js 3000 (where 3000 is the port you want to use).
 
+  You can also run the tests by using
+
+		$ node test/runtests.js
+
 ## History
+
+**0.9**
+
+  - Major refactor, improved performance.
+  - Added tests and mocked objects for testing.
+  - Separate files for request, utils and watchmen library.
 
 **0.8**
 
