@@ -9,6 +9,8 @@
 var one_minute = 60 //you can set this to other value for testing the service in dev env.
 var performance_test = false //set to true if you want a bulk config file to be used for testing instead of the following list of hosts
 
+exports.database = { port: 1216, host : '127.0.0.1', db: 'watchmen' }
+	
 var hosts = 
 	[
 		{

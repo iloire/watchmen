@@ -26,8 +26,9 @@ THE SOFTWARE.
 //var config = require('./config.js')
 var config = require('./config.js')
 
-var _redis = require("redis")
-var redis = _redis.createClient()
+var redis = require("redis").createClient(config.database.port, config.database.host);
+redis.select (config.database.db);
+
 var watchmen = require ('./lib/watchmen')
 
 /*main*/

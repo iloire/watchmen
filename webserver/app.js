@@ -25,12 +25,12 @@ THE SOFTWARE.
 
 var express = require('express');
 var app = module.exports = express.createServer();
+var config = require('../config')
 
-var _redis = require("redis")
-var redis = _redis.createClient()
+var redis = require("redis").createClient(config.database.port, config.database.host);
+redis.select (config.database.db);
 
 var util = require('../lib/util')
-var config = require('../config')
 var watchmen = require('../lib/watchmen')
 
 app.configure(function(){
@@ -149,7 +149,10 @@ app.get('/getdata', function(req, res){
 
 var port = parseInt(process.argv[2], 10) || 3000
 app.listen(port);
-console.log("watchmen server listening on port %d in %s mode", app.address().port, app.settings.env);
+if (app.address())
+	console.log("watchmen server listening on port %d in %s mode", app.address().port, app.settings.env);
+else
+	console.log ('something went wrong... couldn\'t listen to port?')
 
 process.on('SIGINT', function () {
 	console.log('stopping web server.. bye!');
