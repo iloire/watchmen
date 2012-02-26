@@ -4,7 +4,7 @@
 			<span>${status}</span>
 		</td>
 		<td class="hosturl">
-			<a target="_blank" href="http://${host.host}:${host.port}${url}">
+			<a target="_blank" href="${host.protocol || 'http'}://${host.host}:${host.port}${url}">
 				${host.name} ${url}
 			</a>
 		</td>
