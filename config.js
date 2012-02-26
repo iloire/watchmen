@@ -132,6 +132,31 @@ var hosts =
 		}
 		,
 		{
+			name:'Directorio CachiruloValley', 
+			host: 'directorio.cachirulovalley.com', 
+			port:80, 
+			timeout:10000,
+			ping_interval: 3 * one_minute,
+			failed_ping_interval: one_minute,
+			warning_if_takes_more_than: 3000, //miliseconds
+			enabled: true,
+			urls : [
+				{
+					method: 'get', 
+					url : '/', 
+					expected: {statuscode: 200, contains: ''}
+				}
+				,
+				{
+					method: 'get', 
+					url : '/directory', 
+					expected: {statuscode: 200, contains: ''}
+				}				
+			]
+		}
+		,
+
+		{
 			name:'SocialMadrid', 
 			host: 'socialmadrid11.com', 
 			port:80, 
