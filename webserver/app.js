@@ -105,17 +105,17 @@ app.get('/log', function(req, res){
 							logs_critical.push (events[i])
 						}
 					}
-			
+					var url_status = '';
 					if ((oUrl.enabled == false) || (oHost.enabled == false)){
-						status="disabled"
+						url_status="disabled"
 					}
 					else {
-						status = (data==1) ? "ok": "error";
+						url_status = (data==1) ? "ok": "error";
 					}
 					res.render('entry_logs', 
 					{
 						title: oHost.name + ' (' + host + ':' + port+ url + ') status history', 
-						status : status, 
+						url_status : url_status, 
 						logs_warning: logs_warning, 
 						logs_critical: logs_critical
 					});
