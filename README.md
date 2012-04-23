@@ -58,7 +58,6 @@ Make sure you install those dependencies by issuing the command:
 				}
 			]
 		}
-  
   b) **Define Postmark and notifications settings:**
 
 		exports.notifications = {
@@ -72,7 +71,7 @@ Make sure you install those dependencies by issuing the command:
 
   c) **Run watchmen**
 
-		$ node watchmen.js
+		$ node server.js
 
   or more probably you would want to use **forever** to run it in the background
 
@@ -85,6 +84,29 @@ Make sure you install those dependencies by issuing the command:
   You can also run the tests by using
 
 		$ node test/runtests.js
+
+## Redis database schema
+
+    host:port:url:status: (hash): json object representing the status of that particular service:
+    
+      - elapsed_time
+      - status
+      - avg_response_time
+      - lastok
+      - down_time: set timestamp when site is down.
+
+    <host>:<port>:<url>:events:error (list) : list of errors for that particular url (contains entries as json objects)
+
+    <host>:<port>:<url>:events:warning (list) : list of warnings for that particular url (contains entries as json objects)
+
+    <host>:<port>:<url>:<day_timestamp>:errors_by_minute: (sorted set): list of minutes for that particular day where there was any error. With this we can easily calculate downtime by counting how many minutes flagged with errro contains a particular day.
+
+    <host>:<port>:<url>:<day_timestamp>:warning_by_minute: (sorted set): (idem with warnings)
+
+    <host>:<port>:<url>:<day_timestamp>:avg_response_time: (sorted set): list of warnings per minute for this day. item: minute_time_stamp, score: avg_response_time
+
+    <host>:<port>:<url>:<day_timestamp>:avg_response_time:counter (int): number of request in this particular minute (used to calculate response time avg per minute)
+
 
 ## History
 

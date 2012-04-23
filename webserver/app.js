@@ -26,16 +26,17 @@ THE SOFTWARE.
 var express = require('express');
 var app = module.exports = express.createServer();
 var config = require('../config')
-
 var redis = require("redis").createClient(config.database.port, config.database.host);
 redis.select (config.database.db);
 
 var util = require('../lib/util')
 var watchmen = require('../lib/watchmen')
+var reports = require('../lib/reports')
 
 app.configure(function(){
   app.set('views', __dirname + '/views');
   app.set('view engine', 'ejs');
+  app.register('.html', require("ejs")); //register .html extension with ejs view render
   app.use(express.bodyParser());
   app.use(express.methodOverride());
   app.use(app.router);
@@ -50,100 +51,27 @@ app.configure('production', function(){
   app.use(express.errorHandler()); 
 });
 
-function $() { return Array.prototype.slice.call(arguments).join(':') } 
-
-function getEvents (url_conf, host, max, callback){
-	var events = []
-	var key = $(host.host, host.port, url_conf.url, 'events')
-	redis.lrange (key, 0, max, function(err, timestamps) {
-		var multi = redis.multi()
-		for (i=0;i<timestamps.length;i++)	{
-			key = $(host.host, host.port, url_conf.url, 'event', timestamps[i])
-			multi.hgetall (key);
-		}
-		
-		multi.exec(function(err, replies) {
-			for (i=0;i<(replies.length-1);i++){
-				if (!replies[i]){
-					redis.lrem ($(host, port, url, 'events'), 1, timestamps[i]) //event has expired. removing from list.
-				}
-				else{
-					events.push (replies[i]);
-				}
-			}
-			callback (events);
-		});
-	});		
-}
-
 //url log detail
 app.get('/log', function(req, res){
-	var host = req.query ['host'], url = req.query ['url'], port = req.query['port']
-	var oHost = null, oUrl=null;
-	for (i=0;i<config.hosts.length;i++) {
-		for (var u=0;u<config.hosts[i].urls.length;u++){
-			if ((config.hosts[i].host==host) && (config.hosts[i].port==port) && (config.hosts[i].urls[u].url==url)){
-				oUrl = config.hosts[i].urls[u];
-				oHost = config.hosts[i];
-				break;
-			}
+	var max = 100;
+	reports.get_reports_by_host (redis, req.query['url'], req.query['host'], req.query['port'], function (err, data){
+		if (err){
+			return res.end(err)
 		}
-	}
-	
-	if (oUrl && oHost){
-		var logs_warning = [], logs_critical = [];
-	
-		getEvents (oUrl, oHost, 100, function (events){
-			var key = $(oHost.host, oHost.port, oUrl.url, 'status');
-			redis.hget(key, 'status', function(err, data){
-				if (!err){
-					for (var i=0;i<events.length;i++){
-						if (data.event_type == "warning"){
-							logs_warning.push (events[i])
-						}
-						else{
-							logs_critical.push (events[i])
-						}
-					}
-					var url_status = '';
-					if ((oUrl.enabled == false) || (oHost.enabled == false)){
-						url_status="disabled"
-					}
-					else {
-						url_status = (data==1) ? "ok": "error";
-					}
-					res.render('entry_logs', 
-					{
-						title: oHost.name + ' (' + host + ':' + port+ url + ') status history', 
-						url_status : url_status, 
-						logs_warning: logs_warning, 
-						logs_critical: logs_critical
-					});
-				}
-				else{
-					console.log (err)
-					res.end ('Error (see console)')
-				}
-			})
-		});
-	}
-	else{
-		res.end ('host/url not found')
-	}
+		console.log(data);
+		res.render("entry_logs.html", data);
+	})
 });
 
 //list of hosts and url's
 app.get('/', function(req, res){
-	res.render('index', {title: 'watchmen'});
+	res.render('index.html', {title: 'watchmen'});
 });
-
 
 
 app.get('/getdata', function(req, res){
 	watchmen.get_hosts(redis, config.hosts, function (err, hosts){
-		var headers = {'Content-type' : 'application/json;charset=utf8'}
-		res.writeHead(200, headers)
-		res.end(JSON.stringify({hosts:hosts, timestamp: util.extraTimeInfo(new Date().getTime())}));
+		return res.json ({hosts:hosts, timestamp: util.extraTimeInfo(new Date().getTime())})
 	})
 });
 

@@ -6,7 +6,7 @@
 	- when site is down, ping interval, in seconds, until site is backup again
 
 */
-var one_minute = 60 //you can set this to other value for testing the service in dev env.
+var one_minute = 6 //you can set this to other value for testing the service in dev env.
 var performance_test = false //set to true if you want a bulk config file to be used for testing instead of the following list of hosts
 
 exports.database = { port: 1216, host : '127.0.0.1', db: 'watchmen' }
@@ -121,7 +121,7 @@ var hosts =
 			ping_interval: one_minute,
 			failed_ping_interval: one_minute,
 			warning_if_takes_more_than: 3000, //miliseconds
-			enabled: true,
+			enabled: false,
 			urls : [
 				{
 					method: 'get', 
@@ -139,7 +139,7 @@ var hosts =
 			ping_interval: 3 * one_minute,
 			failed_ping_interval: one_minute,
 			warning_if_takes_more_than: 3000, //miliseconds
-			enabled: true,
+			enabled: false,
 			urls : [
 				{
 					method: 'get', 
@@ -180,7 +180,7 @@ var hosts =
 			timeout:10000,
 			ping_interval: one_minute,
 			failed_ping_interval: one_minute,
-			enabled: true,
+			enabled: false,
 			urls : [
 				{
 					method: 'get', 
@@ -248,7 +248,7 @@ var hosts =
 			ping_interval: one_minute,
 			failed_ping_interval: one_minute,
 			alert_to: ['ivan@iloire.com'],
-			enabled: false,
+			enabled: true,
 			urls : [
 				{
 					method: 'get', 

@@ -33,7 +33,7 @@ var watchmen = require ('./lib/watchmen')
 
 /*main*/
 watchmen.log_info ('\nstarting watchmen...')
-watchmen.log_info ('reading configuration and queuing hosts for pinging...')
+watchmen.log_info ('reading configuration and queuing hosts...')
 
 var initial_delay=0;
 for (var i=0; i<config.hosts.length;i++){
