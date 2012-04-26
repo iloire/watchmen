@@ -104,6 +104,12 @@ watchmen.on('service_ok', function(service, request_response){
 
 watchmen.start();
 
+process.on('uncaughtException', function(err) {
+	console.log ('uncaughtException');
+  console.log(err);
+});
+
+
 process.on('SIGINT', function () {
 	console.log('stopping watchmen..');
 	redis.quit();
