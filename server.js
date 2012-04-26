@@ -23,40 +23,86 @@ THE SOFTWARE.
 
 */
 
-//var config = require('./config.js')
-var config = require('./config.js')
+var config = require('./config')
+	, util = require('util')
+	, request = require ('./lib/request')
+	, email_service = require ('./lib/email')
 
 var redis = require("redis").createClient(config.database.port, config.database.host);
 redis.select (config.database.db);
 
-var watchmen = require ('./lib/watchmen')
+var services = []
+var hosts = require('./config/hosts');
 
-/*main*/
-watchmen.log_info ('\nstarting watchmen...')
-watchmen.log_info ('reading configuration and queuing hosts...')
-
-var initial_delay=0;
-for (var i=0; i<config.hosts.length;i++){
-	var host = config.hosts[i];
-	if (host.enabled != false){
-		watchmen.log_info ('monitoring ' + host.name + ':')
-		for (var u=0;u<config.hosts[i].urls.length;u++){
-			initial_delay++;
-			if (host.urls[u].enabled != false){
-				host.urls[u].host = host
-				var ping = host.urls[u].ping_interval || host.ping_interval
-				watchmen.log_info (' -- queuing "' + host.urls[u].url + '".. ping every ' + ping + ' seconds...')
-				setTimeout (watchmen.processUrl, initial_delay * 400, host.urls[u], redis);
-			}
-			else{
-				watchmen.log_warning (' -- skipping url: ' + host.name + host.urls[u].url + ' (disabled entry)...')
-			}
-		}
-	}
-	else{
-		watchmen.log_warning ('skipping host: ' + host.name + ' (disabled entry)...')
+for (var i=0; i<hosts.length;i++){
+	for (var u=0;u<hosts[i].urls.length;u++){
+		hosts[i].urls[u].host = hosts[i]
+		hosts[i].urls[u].url_info = hosts[i].name + ' - ' + hosts[i].host + ':'+ hosts[i].port  + hosts[i].urls[u].url + ' [' + hosts[i].urls[u].method + ']'
+		services.push (hosts[i].urls[u]);
 	}
 }
+
+function log_info (str){ util.puts (str) }
+
+function log_ok (str){ util.puts (str.green) }
+
+function log_error (str){ util.puts (str.red) }
+
+function log_warning (str){ util.puts (str.cyan.bold) }
+
+var WatchMen = require ('./lib/watchmen').WatchMen
+var watchmen = new WatchMen(services, redis, request.processRequest);
+
+watchmen.on('service_error', function(service, request_response){
+	var url_info = request_response.url_conf.url_info;
+
+	var info = url_info + ' down!. Error: ' + request_response.error + '. Retrying in ' 
+		+ request_response.next_attempt_secs / 60 + ' minute(s)..';
+
+	log_error (info); 
+
+	if (request_response.previous_state.status != 1 && config.notifications.Enabled){
+		email_service.sendEmail(
+			service.alert_to || service.host.alert_to || config.notifications.To,
+			url_info + ' is down!', url_info + ' is down!. Reason: ' + error, function (err, data){
+				if (err){
+					console.error (url_info + ': error sending email: ' + JSON.stringify(err));
+				}
+			});
+	}
+	else{
+		log_info ('Notification disabled or not triggered this time (site down) for ' + url_info);
+	}
+})
+
+watchmen.on('service_warning', function(service, request_response){
+	console.log('WARNING --------------');
+	console.log(service);
+})
+
+watchmen.on('service_back', function(service, request_response){
+	var url_info = 'this.get_url_info (params.url_conf.host, params.url_conf)'
+	if (config.notifications.Enabled){
+		email_service.sendEmail(
+			service.alert_to || service.host.alert_to || config.notifications.To,
+			url_info + ' ' +  service.msg, function(err, data){
+				if (err){
+					console.error (url_info + ': error sending email: ' + JSON.stringify(err));
+				}
+			});
+	}
+	else{
+		log_info ('Notification disabled or not triggered this time (site back) for ' + url_info);
+	}
+})
+
+watchmen.on('service_ok', function(service, request_response){
+	var url_info = 'this.get_url_info (params.url_conf.host, params.url_conf)'
+	log_ok (url_info + ' responded OK! (' + request_response.elapsed_time + ' milliseconds, avg: ' 
+			+ request_response.avg_response_time + ')')
+})
+
+watchmen.start();
 
 process.on('SIGINT', function () {
 	console.log('stopping watchmen..');

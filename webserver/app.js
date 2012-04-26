@@ -70,7 +70,7 @@ app.get('/', function(req, res){
 
 
 app.get('/getdata', function(req, res){
-	watchmen.get_hosts(redis, config.hosts, function (err, hosts){
+	reports.get_hosts(redis, config.hosts, function (err, hosts){
 		return res.json ({hosts:hosts, timestamp: util.extraTimeInfo(new Date().getTime())})
 	})
 });

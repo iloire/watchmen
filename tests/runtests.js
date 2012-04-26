@@ -1,9 +1,9 @@
-var watchmen = require ('../lib/watchmen.js')
-var util = require ('../lib/util.js')
-var reports = require ('../lib/reports.js')
-var config = require ('../config.js')
-var async = require ('async')
-var assert = require ('assert')
+var watchmen_lib = require ('../lib/watchmen.js')
+	, util = require ('../lib/util.js')
+	, reports = require ('../lib/reports.js')
+	, config = require ('../config.js')
+	, async = require ('async')
+	, assert = require ('assert');
 
 var redis = require("redis").createClient(config.database.port, config.database.host);
 redis.select (config.database.db);
@@ -18,6 +18,17 @@ function printCurrentTest() {
 
 var request_mocked = require ('./lib/request_mocked')
 var timestamp = util.pad_date_to_minute_str(new Date().getTime());
+
+var services = []
+var hosts = require('../config/hosts');
+for (var i=0; i<hosts.length;i++){
+	for (var u=0;u<hosts[i].urls.length;u++){
+		hosts[i].urls[u].host = hosts[i]
+		services.push (hosts[i].urls[u]);
+	}
+}
+
+var watchmen = new watchmen_lib.WatchMen(services, redis, request_mocked.processRequest);
 
 var tests = [
 	function setup_tests(callback){
@@ -43,10 +54,12 @@ var tests = [
 		
 		request_mocked.mocked_response = {error: 'error', body : null, response : null, timeDiff : 0};
 	
-		watchmen.query_url(url, redis, request_mocked.processRequest, config, timestamp, function(err, request_status){
-			assert.ok (!err)
+		watchmen.query_url(url, timestamp, function(err, request_status){
+			assert.ok (!err, err)
 			assert.equal (request_status.status, 0)
 			assert.equal (request_status.next_attempt_secs, url.failed_ping_interval);
+			assert.ok (request_status.url_conf, JSON.stringify(request_status))
+			assert.equal (request_status.url_conf.url_info)
 
 			//check status
 			redis.hgetall ($(url.host.host, url.host.port, url.url, 'status'), function (err,status){
@@ -86,6 +99,7 @@ var tests = [
 			});
 		})
 	}
+	
 	,
 	function test_response_ok (callback){
 		printCurrentTest();
@@ -103,7 +117,7 @@ var tests = [
 
 		request_mocked.mocked_response = {error: null, body : 'hola', response : {statusCode: 200}, timeDiff : 300};
 
-		watchmen.query_url(url, redis, request_mocked.processRequest, config, timestamp, function(err, data){
+		watchmen.query_url(url, timestamp, function(err, data){
 			assert.ok (!err, err)
 
 			assert.equal (data.status, 1)
@@ -112,6 +126,7 @@ var tests = [
 			assert.ok (data.elapsed_time, 'Elapsed time not found')
 			assert.equal (data.next_attempt_secs, url.ping_interval);
 			assert.ok (!data.down_timestamp, data.down_timestamp)
+			assert.ok (!data.error);
 			
 			redis.hgetall ($(url.host.host, url.host.port, url.url, 'status'), function (err, data){
 				assert.ok (!err)
@@ -174,10 +189,11 @@ var tests = [
 
 		request_mocked.mocked_response = {error: null, body : 'hola', response : {statusCode: 200}, timeDiff : 500};
 				
-		watchmen.query_url(url, redis, request_mocked.processRequest, config, timestamp, function(err, data){
+		watchmen.query_url(url, timestamp, function(err, data){
 			assert.ok (!err)
 
 			assert.equal (data.status, 1)
+			assert.ok (!data.error);
 			assert.equal (data.msg,null)
 			assert.equal (data.next_attempt_secs, 60)
 			assert.ok (data.elapsed_time, 'Elapsed time not found')
@@ -244,10 +260,12 @@ var tests = [
 
 		request_mocked.mocked_response = {error: null, body : 'hola', response : {statusCode: 301}, timeDiff : 0};
 				
-		watchmen.query_url(url, redis, request_mocked.processRequest, config, timestamp, function(err, data){
+		watchmen.query_url(url, timestamp, function(err, data){
 			assert.ok (!err)
 			assert.equal (data.status, 0)
+			assert.ok (data.error);
 			assert.equal (data.next_attempt_secs, url.failed_ping_interval);
+			
 			redis.hgetall ($(url.host.host, url.host.port, url.url, 'status'), function (err,data){
 				assert.ok (!err)
 				assert.ok (!data.lastwarning)
@@ -290,7 +308,7 @@ var tests = [
 
 										//reports module should give this exactly same information
 										reports.get_reports_by_host(redis, url.url, url.host.host, url.host.port, function (err, reports){
-											assert.ok(!err);
+											assert.ok(!err, err);
 											assert.equal(reports.logs_warning.length, 0);
 											assert.equal(reports.logs_critical.length, 1);
 											assert.equal(reports.logs_success.length, 0);
@@ -308,6 +326,7 @@ var tests = [
 			});
 		})
 	}
+	
 	,
 	function test_response_ok_with_warning (callback){ //site is dns.resolve4(name, callback);, got warning
 		printCurrentTest();
@@ -328,9 +347,10 @@ var tests = [
 
 		request_mocked.mocked_response = {error: null, body : 'hola', response : {statusCode: 200}, timeDiff : 700};
 				
-		watchmen.query_url(url, redis, request_mocked.processRequest, config, timestamp, function(err, data){
+		watchmen.query_url(url, timestamp, function(err, data){
 			assert.ok (!err)
 			assert.equal (data.status, 1)
+			assert.ok (!data.error);
 			assert.equal (data.next_attempt_secs, url.ping_interval);
 			assert.equal (data.down_time, 25);
 
@@ -404,9 +424,10 @@ var tests = [
 
 		request_mocked.mocked_response = {error: null, body : '', response : {statusCode: 200}, timeDiff : 0};
 				
-		watchmen.query_url(url, redis, request_mocked.processRequest, config, timestamp, function(err, data){
+		watchmen.query_url(url, timestamp, function(err, data){
 			assert.ok (!err)
 			assert.equal (data.status, 0)
+			assert.ok (data.error);
 			assert.equal (data.next_attempt_secs, 70);
 			redis.hgetall ($(url.host.host, url.host.port, url.url, 'status'), function (err,data){
 				
@@ -454,7 +475,7 @@ var tests = [
 
 		request_mocked.mocked_response = {error: null, body : '', response : {statusCode: 200}, timeDiff : 0};
 
-		watchmen.query_url(url, redis, request_mocked.processRequest, config, timestamp, function(err, status){
+		watchmen.query_url(url, timestamp, function(err, status){
 			assert.ok (!err)
 			assert.equal (status.status, 0)
 			assert.equal (status.next_attempt_secs, 30);
@@ -472,6 +493,7 @@ var tests = [
 			})
 		})
 	}
+
 	,
 	function test_avg_next_minute (callback){
 		printCurrentTest();
@@ -486,7 +508,7 @@ var tests = [
 		timestamp = timestamp + (1000 * 10); //jump to next minute
 		request_mocked.mocked_response = {error: null, body : '', response : {statusCode: 200}, timeDiff : 300};
 				
-		watchmen.query_url(url, redis, request_mocked.processRequest, config, timestamp, function(err, status){
+		watchmen.query_url(url, timestamp, function(err, status){
 			assert.ok (!err)
 			assert.equal (status.status, 1)
 			assert.equal (status.next_attempt_secs, 4);
@@ -502,11 +524,13 @@ var tests = [
 			})
 		})
 	}
+	
 	,
 	function test_display_hosts (callback){
 
 		printCurrentTest();
-		watchmen.get_hosts(redis, config.hosts, function(err, hosts){
+
+		reports.get_hosts(redis, require('../config/hosts'), function(err, hosts){
 			assert.equal (hosts.length, 20);
 
 			for (var i = 0, l = hosts.length; i < l ;  i++) {
@@ -526,7 +550,7 @@ var tests = [
 					body : url.expected ? url.expected.contains : "", 
 					response : {statusCode: url.expected ? url.expected.statuscode :200},
 					timeDiff : 0};
-				watchmen.query_url(url, redis, request_mocked.processRequest, config, timestamp, function(err, data){
+				watchmen.query_url(url, timestamp, function(err, data){
 					callback(err, data);
 				});
 			}
@@ -543,11 +567,11 @@ var tests = [
 				return urls;
 			}
 
-			var urls = get_urls_from_hosts(config.hosts);
+			var urls = get_urls_from_hosts(require('../config/hosts'));
 			
 			async.map (urls, process_mocked_call, function (err, results){
 				for (var i=0;i<results.length;i++) {
-					assert.ok (results[i].status, JSON.stringify(results[i]));
+					assert.ok (results[i].status);
 				}
 				callback(null,null);
 			});
@@ -560,6 +584,7 @@ var tests = [
 			callback(null,null);
 		});
 	}	
+	
 ]
 
 function series(tests, callback) {
