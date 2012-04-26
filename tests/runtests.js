@@ -56,7 +56,7 @@ var tests = [
 	
 		watchmen.query_url(url, timestamp, function(err, request_status){
 			assert.ok (!err, err)
-			assert.equal (request_status.status, 0)
+			assert.equal (request_status.status, "error")
 			assert.equal (request_status.next_attempt_secs, url.failed_ping_interval);
 			assert.ok (request_status.url_conf, JSON.stringify(request_status))
 			assert.equal (request_status.url_conf.url_info)
@@ -69,14 +69,14 @@ var tests = [
 				assert.ok (!status.lastsuccess)
 				assert.equal (status.lasterror, timestamp)
 				assert.equal (status.down_timestamp, timestamp);
-				assert.equal (status.status,0)
+				assert.equal (status.status, "error")
 
 				//one event
 				redis.lrange ($(url.host.host, url.host.port, url.url, 'events','error'), 0, 100, function(err, events) {
 					assert.ok (!err)
 					assert.equal (events.length, 1)
 					var event_obj = JSON.parse(events[0])
-					assert.equal (event_obj.event_type, 'error')
+					assert.equal (event_obj.status, 'error')
 					
 					//one error
 					redis.scard ($(url.host.host, url.host.port, url.url, util.get_day_date_str(timestamp), 'error_by_minute'), function(err, number_values){
@@ -120,7 +120,7 @@ var tests = [
 		watchmen.query_url(url, timestamp, function(err, data){
 			assert.ok (!err, err)
 
-			assert.equal (data.status, 1)
+			assert.equal (data.status, "success")
 			assert.equal (data.msg,null);
 			assert.equal (data.next_attempt_secs, 60);
 			assert.ok (data.elapsed_time, 'Elapsed time not found')
@@ -135,7 +135,7 @@ var tests = [
 				assert.ok (data.lastsuccess)
 				assert.equal (data.lasterror)
 				
-				assert.equal (data.status,1)
+				assert.equal (data.status,"success")
 				assert.equal (data.avg_response_time, 300)
 
 				redis.lrange ($(url.host.host, url.host.port, url.url, 'events','error'), 0, 100, function(err, events) {
@@ -192,7 +192,7 @@ var tests = [
 		watchmen.query_url(url, timestamp, function(err, data){
 			assert.ok (!err)
 
-			assert.equal (data.status, 1)
+			assert.equal (data.status, "success")
 			assert.ok (!data.error);
 			assert.equal (data.msg,null)
 			assert.equal (data.next_attempt_secs, 60)
@@ -207,7 +207,7 @@ var tests = [
 				assert.ok (data.lastsuccess)
 				assert.equal (data.lasterror)
 				
-				assert.equal (data.status,1)
+				assert.equal (data.status, "success")
 				assert.equal (data.avg_response_time, 400) //the avg between 300 and 500
 
 				redis.lrange ($(url.host.host, url.host.port, url.url, 'events','error'), 0, 100, function(err, events) {
@@ -262,7 +262,7 @@ var tests = [
 				
 		watchmen.query_url(url, timestamp, function(err, data){
 			assert.ok (!err)
-			assert.equal (data.status, 0)
+			assert.equal (data.status, "error")
 			assert.ok (data.error);
 			assert.equal (data.next_attempt_secs, url.failed_ping_interval);
 			
@@ -273,13 +273,13 @@ var tests = [
 				assert.ok (data.lasterror)
 				assert.equal (data.down_timestamp, timestamp);
 				assert.equal (data.avg_response_time, 400) //the avg still 400
-				assert.equal (data.status, 0)
+				assert.equal (data.status, "error")
 
 				redis.lrange ($(url.host.host, url.host.port, url.url, 'events','error'), 0, 100, function(err, events) {
 					assert.ok (!err)
 					assert.equal (events.length, 1)
 					var event_obj = JSON.parse(events[0])
-					assert.equal (event_obj.event_type, 'error')
+					assert.equal (event_obj.status, 'error')
 					assert.ok (event_obj.msg.indexOf('status code')>-1)
 
 					redis.lrange ($(url.host.host, url.host.port, url.url, 'events','success'), 0, 100, function(err, events) {
@@ -349,7 +349,7 @@ var tests = [
 				
 		watchmen.query_url(url, timestamp, function(err, data){
 			assert.ok (!err)
-			assert.equal (data.status, 1)
+			assert.equal (data.status, "success")
 			assert.ok (!data.error);
 			assert.equal (data.next_attempt_secs, url.ping_interval);
 			assert.equal (data.down_time, 25);
@@ -359,7 +359,7 @@ var tests = [
 				assert.ok (data.lastwarning)
 				assert.ok (data.lastsuccess)
 				assert.ok (data.lasterror)
-				assert.equal (data.status, 1)
+				assert.equal (data.status, "success")
 				assert.equal (data.avg_response_time, 500)
 				assert.ok (!data.down_timestamp);
 
@@ -426,7 +426,7 @@ var tests = [
 				
 		watchmen.query_url(url, timestamp, function(err, data){
 			assert.ok (!err)
-			assert.equal (data.status, 0)
+			assert.equal (data.status, "error")
 			assert.ok (data.error);
 			assert.equal (data.next_attempt_secs, 70);
 			redis.hgetall ($(url.host.host, url.host.port, url.url, 'status'), function (err,data){
@@ -437,7 +437,7 @@ var tests = [
 				assert.ok (data.lasterror)
 				assert.equal (data.down_timestamp, timestamp);
 				assert.equal (data.avg_response_time, 500)
-				assert.equal (data.status,0)
+				assert.equal (data.status, "error")
 				
 				redis.lrange ($(url.host.host, url.host.port, url.url, 'events','error'), 0, 100, function(err, timestamps) {
 					assert.ok (!err)
@@ -477,7 +477,7 @@ var tests = [
 
 		watchmen.query_url(url, timestamp, function(err, status){
 			assert.ok (!err)
-			assert.equal (status.status, 0)
+			assert.equal (status.status, "error")
 			assert.equal (status.next_attempt_secs, 30);
 			assert.equal (status.down_timestamp, (timestamp - 1000));
 
@@ -510,7 +510,7 @@ var tests = [
 				
 		watchmen.query_url(url, timestamp, function(err, status){
 			assert.ok (!err)
-			assert.equal (status.status, 1)
+			assert.equal (status.status, "success")
 			assert.equal (status.next_attempt_secs, 4);
 
 			reports.get_reports_by_host(redis, url.url, url.host.host, url.host.port, function (err, reports){
