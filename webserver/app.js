@@ -1,7 +1,6 @@
 var express = require('express');
 var watchmen = require('../lib/watchmen');
 var app = express.createServer();
-var config = require('../config');
 var storage_factory = require ('../lib/storage/storage_factory');
 var storage = storage_factory.get_storage_instance();
 

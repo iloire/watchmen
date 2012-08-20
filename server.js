@@ -1,4 +1,4 @@
-var config = require('./config');
+var config = require('./config/general');
 var util = require('util');
 var email_service = require ('./lib/email');
 var services_manager = require ('./lib/services');
