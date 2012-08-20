@@ -1,8 +1,8 @@
 /*
-	ping_interval (host or url level): 
+	ping_interval (host or url level):
 	- ping interval, in seconds.
-	
-	failed_ping_interval (host or url level): 
+
+	failed_ping_interval (host or url level):
 	- when site is down, ping interval, in seconds, until site is backup again
 
 */
@@ -10,9 +10,9 @@ var one_minute = 6 //you can set this to other value for testing the service in 
 var performance_test = false //set to true if you want a bulk config file to be used for testing instead of the following list of hosts
 
 exports.database = { port: 1216, host : '127.0.0.1', db: 'watchmen' }
-	
+
 	/*
-var hosts = 
+var hosts =
 	[
 		{
 			name:'Apple HTTPS',
@@ -35,35 +35,35 @@ var hosts =
 		}
 		,
 		{
-			name:'VitaminasDev', 
-			host: 'www.vitaminasdev.com', 
+			name:'VitaminasDev',
+			host: 'www.vitaminasdev.com',
 			port:80,
 			timeout:10000,
 			ping_interval: one_minute, //seconds
 			failed_ping_interval: one_minute, //minutes
 			enabled: true,
-			alert_to: ['ivan@iloire.com'], 
+			alert_to: ['ivan@iloire.com'],
 			warning_if_takes_more_than: 1500, //miliseconds
 			urls : [
 				{
-					method: 'get', 
-					url : '/', 
+					method: 'get',
+					url : '/',
 					expected: {statuscode: 200, contains: 'noticias'} ,
 				},
 				{
-					method: 'get', 
-					url : '/Home/Contacto', 
+					method: 'get',
+					url : '/Home/Contacto',
 					expected: {statuscode: 200, contains: 'encantados'},
 					ping_interval:200, //overwrite ping and retry intervals for this url
 					failed_ping_interval: one_minute/2
 				}
 			]
 		}
-		,	
+		,
 		{
-			name:'iloire.com', 
-			host: 'www.iloire.com', 
-			port:80, 
+			name:'iloire.com',
+			host: 'www.iloire.com',
+			port:80,
 			timeout:5000,
 			ping_interval: one_minute,
 			failed_ping_interval: one_minute,
@@ -71,22 +71,22 @@ var hosts =
 			enabled: true,
 			urls : [
 				{
-					method: 'get', 
-					url : '/', 
-					expected: {statuscode: 200, contains: 'vitaminas'} 
+					method: 'get',
+					url : '/',
+					expected: {statuscode: 200, contains: 'vitaminas'}
 				},
 				{
-					method: 'get', 
-					url : '/en', 
-					expected: {statuscode: 200, contains: 'Freelance'} 
+					method: 'get',
+					url : '/en',
+					expected: {statuscode: 200, contains: 'Freelance'}
 				},
 			]
 		}
 		,
 		{
-			name:'ASP Photo Gallery', 
-			host: 'www.aspphotogallery.net', 
-			port:80, 
+			name:'ASP Photo Gallery',
+			host: 'www.aspphotogallery.net',
+			port:80,
 			timeout:5000,
 			ping_interval: one_minute,
 			failed_ping_interval: one_minute,
@@ -95,12 +95,12 @@ var hosts =
 			alert_to: ['ajax@aspphotogallery.net'], //you can include a different email recipient per host
 			urls : [
 				{
-					method: 'get', 
-					url : '/', 
+					method: 'get',
+					url : '/',
 					expected: {statuscode: 200, contains: 'fast and responsive'}
 				},
 				{
-					method: 'get', 
+					method: 'get',
 					url : '/mvcphotogallery',
 					warning_if_takes_more_than: 500,
 					expected: {statuscode: 200, contains: 'Knockout'}
@@ -108,16 +108,16 @@ var hosts =
 				{
 					method: 'get',
 					enabled: true,
-					url : '/demomvc', 
+					url : '/demomvc',
 					expected: {statuscode: 200, contains: 'Simple, sexy, FAST, ASP.NET MVC photo gallery'}
 				}
 			]
 		}
 		,
 		{
-			name:'CachiruloValley', 
-			host: 'cachirulovalley.com', 
-			port:80, 
+			name:'CachiruloValley',
+			host: 'cachirulovalley.com',
+			port:80,
 			timeout:10000,
 			ping_interval: one_minute,
 			failed_ping_interval: one_minute,
@@ -125,17 +125,17 @@ var hosts =
 			enabled: false,
 			urls : [
 				{
-					method: 'get', 
-					url : '/', 
+					method: 'get',
+					url : '/',
 					expected: {statuscode: 200, contains: ''}
 				}
 			]
 		}
 		,
 		{
-			name:'Directorio CachiruloValley', 
-			host: 'directorio.cachirulovalley.com', 
-			port:80, 
+			name:'Directorio CachiruloValley',
+			host: 'directorio.cachirulovalley.com',
+			port:80,
 			timeout:10000,
 			ping_interval: 3 * one_minute,
 			failed_ping_interval: one_minute,
@@ -143,57 +143,57 @@ var hosts =
 			enabled: false,
 			urls : [
 				{
-					method: 'get', 
-					url : '/', 
+					method: 'get',
+					url : '/',
 					expected: {statuscode: 200, contains: ''}
 				}
 				,
 				{
-					method: 'get', 
-					url : '/directory', 
+					method: 'get',
+					url : '/directory',
 					expected: {statuscode: 200, contains: ''}
-				}				
+				}
 			]
 		}
 		,
 
 		{
-			name:'SocialMadrid', 
-			host: 'socialmadrid11.com', 
-			port:80, 
+			name:'SocialMadrid',
+			host: 'socialmadrid11.com',
+			port:80,
 			ping_interval: one_minute,
 			warning_if_takes_more_than: 600, //miliseconds
 			failed_ping_interval: one_minute,
 			enabled: false,
 			urls : [
 				{
-					method: 'get', 
-					url : '/', 
+					method: 'get',
+					url : '/',
 					expected: {statuscode: 302, contains: ''}
 				}
 			]
 		}
 		,
 		{
-			name:'letsnode.com', 
-			host: 'letsnode.com', 
-			port:80, 
+			name:'letsnode.com',
+			host: 'letsnode.com',
+			port:80,
 			timeout:10000,
 			ping_interval: one_minute,
 			failed_ping_interval: one_minute,
 			enabled: false,
 			urls : [
 				{
-					method: 'get', 
-					url : '/', 
+					method: 'get',
+					url : '/',
 					expected: {statuscode: 200, contains: 'A blog about node.js and express.js'}
 				}
 			]
 		}
 		,
 		{
-			name:'letsnode.com frelancer service', 
-			host: 'letsnode.com', 
+			name:'letsnode.com frelancer service',
+			host: 'letsnode.com',
 			port:8080,
 			timeout:10000,
 			ping_interval: one_minute,
@@ -201,15 +201,15 @@ var hosts =
 			enabled: false,
 			urls : [
 				{
-					method: 'get', 
-					url : '/', 
+					method: 'get',
+					url : '/',
 					expected: {statuscode: 200, contains: 'journey'}
 				}
 			]
 		}
 		,
 		{
-			name:'letsnode.com directory web', 
+			name:'letsnode.com directory web',
 			host: 'letsnode.com',
 			port:8081,
 			timeout:10000,
@@ -218,8 +218,8 @@ var hosts =
 			enabled: false,
 			urls : [
 				{
-					method: 'get', 
-					url : '/', 
+					method: 'get',
+					url : '/',
 					expected: {statuscode: 200, contains: 'directory'}
 				}
 			]
@@ -235,32 +235,32 @@ var hosts =
 			enabled: false,
 			urls : [
 				{
-					method: 'get', 
-					url : '/', 
+					method: 'get',
+					url : '/',
 					expected: {statuscode: 302, contains: ''}
 				}
 			]
 		}
 		,
 		{
-			name:'localhost test', 
-			host: '127.0.0.1', 
-			port:8080, 
+			name:'localhost test',
+			host: '127.0.0.1',
+			port:8080,
 			ping_interval: one_minute,
 			failed_ping_interval: one_minute,
 			alert_to: ['ivan@iloire.com'],
 			enabled: true,
 			urls : [
 				{
-					method: 'get', 
-					url : '/', 
+					method: 'get',
+					url : '/',
 					expected: {statuscode: 200, contains: ''}
 				}
 			]
 		}
 		,
 		{
-			name:'Idibay direct', 
+			name:'Idibay direct',
 			host: 'direct.idibay.com',
 			port:80,
 			timeout:10000,
@@ -272,15 +272,15 @@ var hosts =
 			urls : [
 				{
 					method: 'get',
-					url : '/', 
+					url : '/',
 					expected: {statuscode: 200, contains: 'Mundo Idibay'}
 				}
 			]
 		}
 		,
 		{
-			name:'Idibay', 
-			host: 'www.idibay.com', 
+			name:'Idibay',
+			host: 'www.idibay.com',
 			port:80,
 			timeout:10000,
 			ping_interval: one_minute,
@@ -291,15 +291,15 @@ var hosts =
 			urls : [
 				{
 					method: 'get',
-					url : '/', 
+					url : '/',
 					expected: {statuscode: 200, contains: 'Mundo Idibay'}
 				}
 			]
 		}
 		,
 		{
-			name:'Cuéntica', 
-			host: 'www.cuentica.com', 
+			name:'Cuéntica',
+			host: 'www.cuentica.com',
 			port:80,
 			timeout:10000,
 			ping_interval: one_minute,
@@ -310,38 +310,38 @@ var hosts =
 			urls : [
 				{
 					method: 'get',
-					url : '/', 
+					url : '/',
 					expected: {statuscode: 200, contains: 'Cuéntica'}
 				}
 			]
 		}
 		,
 		{
-			name:'form post test', 
-			host: 'hroch486.icpf.cas.cz', 
-			port:80, 
+			name:'form post test',
+			host: 'hroch486.icpf.cas.cz',
+			port:80,
 			ping_interval: one_minute,
 			failed_ping_interval: one_minute,
 			enabled: false,
 			urls : [
 				{
 					method: 'get',
-					url : '/formpost.html', 
+					url : '/formpost.html',
 					expected: {statuscode: 200, contains: 'Test Form -- POST method'}
 				},
 				{
 					method: 'post',
-					input_data : 'your_name=Ivan&fruit=Banana', 
+					input_data : 'your_name=Ivan&fruit=Banana',
 					content_type : 'application/x-www-form-urlencoded', // application/json
-					url : '/cgi-bin/echo.pl', 
+					url : '/cgi-bin/echo.pl',
 					expected: {statuscode: 200, contains: 'your_name = Ivan'}
 				}
 			]
 		}
 		,
 		{
-			name:'Menéame', 
-			host: 'www.meneame.net', 
+			name:'Menéame',
+			host: 'www.meneame.net',
 			port:80,
 			timeout:10000,
 			ping_interval: one_minute,
@@ -351,15 +351,15 @@ var hosts =
 			urls : [
 				{
 					method: 'get',
-					url : '/', 
+					url : '/',
 					expected: {statuscode: 200, contains: 'Menéame'}
 				}
 			]
 		}
 		,
 		{
-			name:'node js', 
-			host: 'nodejs.org', 
+			name:'node js',
+			host: 'nodejs.org',
 			port:80,
 			timeout:10000,
 			ping_interval: one_minute,
@@ -369,15 +369,15 @@ var hosts =
 			urls : [
 				{
 					method: 'get',
-					url : '/', 
+					url : '/',
 					expected: {statuscode: 200, contains: 'Node'}
 				}
 			]
 		}
 		,
 		{
-			name:'redis', 
-			host: 'redis.io', 
+			name:'redis',
+			host: 'redis.io',
 			port:80,
 			timeout:10000,
 			ping_interval: one_minute,
@@ -387,16 +387,16 @@ var hosts =
 			urls : [
 				{
 					method: 'get',
-					url : '/', 
+					url : '/',
 					expected: {statuscode: 200, contains: 'Redis'}
 				}
 			]
 		}
 		,
 		{
-			name:'express', 
-			host: 'expressjs.com', 
-			port:80, 
+			name:'express',
+			host: 'expressjs.com',
+			port:80,
 			timeout:10000,
 			ping_interval: one_minute,
 			failed_ping_interval: one_minute,
@@ -404,7 +404,7 @@ var hosts =
 			urls : [
 				{
 					method: 'get',
-					url : '/', 
+					url : '/',
 					expected: {statuscode: 200, contains: 'High performance'}
 				}
 			]
@@ -417,7 +417,7 @@ exports.hosts = function(config_hosts){
 	if (performance_test)
 	{
 		var words = [
-			'google', 'yahoo', 'node', 'business', 'internet', 'hi', 'domain', 
+			'google', 'yahoo', 'node', 'business', 'internet', 'hi', 'domain',
 			'test', 'sale', 'bed', 'monitor', 'computer', 'java', 'usa',
 			'pc', 'linux', 'windows', 'microsoft', 'mouse', 'animal', 'zoo',
 			'mobile', 'platform', 'lake', 'spain', 'zaragoza', 'table', 'rusia',
@@ -430,8 +430,8 @@ exports.hosts = function(config_hosts){
 
 		function createHost (domain){
 			return {
-				name : domain, 
-				host: domain, 
+				name : domain,
+				host: domain,
 				port: '80',
 				enabled :true,
 				urls : [ { url: '/', method : 'get' }],
@@ -467,4 +467,4 @@ exports.notifications = {
 		From: 'ivan@iloire.com',
 		Api_key : 'your-postmark-key-here'
 	}
-} 
+};

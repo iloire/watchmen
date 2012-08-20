@@ -2,7 +2,7 @@
   "author": "Iván Loire <ivan@iloire.com> (http://iloire.com/)",
   "name": "watchmen",
   "scripts": {
-    "test": "node tests/runtests.js"
+    "test": "mocha -R list -b tests/*.mocha"
   },
   "description": "A Node.js HTTP monitor",
   "version": "0.9.0",
@@ -15,14 +15,13 @@
     "node": "0.6.x"
   },
   "dependencies": {
-    "colors": "0.6.x",
     "ejs": "0.7.x",
     "express": "2.5.x",
     "redis": "0.7.x",
-    "async": "0.1.x",
-    "request": "2.9.x"
+    "moment": "1.7.x"
   },
   "devDependencies": {
-    "assert": "0.4.x"
+    "assert": "0.4.x",
+    "mocha": "1.3.x"
   }
 }
