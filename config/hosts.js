@@ -1,4 +1,3 @@
-
 var one_minute = 20; //you can set this to other value for testing the service in dev env.
 
 module.exports =
@@ -177,7 +176,7 @@ module.exports =
 			timeout:10000,
 			ping_interval: one_minute,
 			failed_ping_interval: one_minute,
-			enabled: true,
+			enabled: false,
 			urls : [
 				{
 					method: 'get',
