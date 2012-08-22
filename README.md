@@ -13,11 +13,7 @@ You can see an online demo of how watchmen control panel looks <a href="http://l
 
 # Screenshots
 
-### list of hosts:
 ![List of hosts](https://github.com/iloire/WatchMen/raw/dev/screenshots/list_hosts_v010.png)
-
-### list of events (error, "site back" messages and warnings)
-![Host downtime and warning details](https://github.com/iloire/WatchMen/raw/dev/screenshots/host_details_v010.png)
 
 ## Installation
 
