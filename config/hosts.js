@@ -1,20 +1,42 @@
-var one_minute = 20; //you can set this to other value for testing the service in dev env.
+var one_tick = 20; //seconds
 
+//service name must be unique for a certain host.
+//host name must be unique
 module.exports =
 	[
+		{
+			name: 'iloire smtp',
+			host: 'mail.iloire.com',
+			port: 25,
+			ping_service_name: 'smtp',
+			timeout:10000,
+			ping_interval: one_tick, //seconds
+			failed_ping_interval: one_tick, //minutes
+			enabled: true,
+			alert_to: ['ivan@iloire.com'],
+			warning_if_takes_more_than: 1500, //miliseconds
+			services : [
+				{
+					name: 'mail server'
+				}
+			]
+		} ,
+
 		{
 			name:'Apple HTTPS',
 			host: 'www.apple.com',
 			port:443,
 			protocol: 'https',
+			ping_service_name: 'http',
 			timeout:10000,
-			ping_interval: one_minute, //seconds
-			failed_ping_interval: one_minute, //minutes
+			ping_interval: one_tick, //seconds
+			failed_ping_interval: one_tick, //minutes
 			enabled: true,
 			alert_to: ['ivan@iloire.com'],
 			warning_if_takes_more_than: 1500, //miliseconds
-			urls : [
+			services : [
 				{
+					name: 'home',
 					method: 'get',
 					url : '/',
 					expected: {statuscode: 200, contains: 'Apple Inc'}
@@ -25,24 +47,27 @@ module.exports =
 			name:'VitaminasDev',
 			host: 'www.vitaminasdev.com',
 			port:80,
+			ping_service_name: 'http',
 			timeout:10000,
-			ping_interval: one_minute, //seconds
-			failed_ping_interval: one_minute, //minutes
+			ping_interval: one_tick, //seconds
+			failed_ping_interval: one_tick, //minutes
 			enabled: true,
 			alert_to: ['ivan@iloire.com'],
 			warning_if_takes_more_than: 1500, //miliseconds
-			urls : [
+			services : [
 				{
+					name: 'home',
 					method: 'get',
 					url : '/',
 					expected: {statuscode: 200, contains: 'noticias'}
 				},
 				{
+					name: 'contact page',
 					method: 'get',
 					url : '/Home/Contacto',
 					expected: {statuscode: 200, contains: 'encantados'},
 					ping_interval:200, //overwrite ping and retry intervals for this url
-					failed_ping_interval: one_minute/2
+					failed_ping_interval: one_tick/2
 				}
 			]
 		} ,
@@ -50,18 +75,21 @@ module.exports =
 			name:'iloire.com',
 			host: 'www.iloire.com',
 			port:80,
+			ping_service_name: 'http',
 			timeout:5000,
-			ping_interval: one_minute,
-			failed_ping_interval: one_minute,
+			ping_interval: one_tick,
+			failed_ping_interval: one_tick,
 			warning_if_takes_more_than: 1500, //miliseconds
 			enabled: true,
-			urls : [
+			services : [
 				{
+					name: 'home',
 					method: 'get',
 					url : '/',
 					expected: {statuscode: 200, contains: 'vitaminas'}
 				},
 				{
+					name: 'english version',
 					method: 'get',
 					url : '/en',
 					expected: {statuscode: 200, contains: 'Freelance'}
@@ -72,25 +100,29 @@ module.exports =
 			name:'ASP Photo Gallery',
 			host: 'www.aspphotogallery.net',
 			port:80,
+			ping_service_name: 'http',
 			timeout:5000,
-			ping_interval: one_minute,
-			failed_ping_interval: one_minute,
+			ping_interval: one_tick,
+			failed_ping_interval: one_tick,
 			warning_if_takes_more_than: 1300, //miliseconds
 			enabled: true,
 			alert_to: ['ajax@aspphotogallery.net'], //you can include a different email recipient per host
-			urls : [
+			services : [
 				{
+					name: 'home',
 					method: 'get',
 					url : '/',
 					expected: {statuscode: 302}
 				},
 				{
+					name: 'mvcphotogallery',
 					method: 'get',
 					url : '/mvcphotogallery',
 					warning_if_takes_more_than: 800,
 					expected: {statuscode: 200, contains: 'Knockout'}
 				},
 				{
+					name: 'demomvc',
 					method: 'get',
 					enabled: true,
 					url : '/demomvc',
@@ -102,13 +134,15 @@ module.exports =
 			name:'CachiruloValley',
 			host: 'cachirulovalley.com',
 			port:80,
+			ping_service_name: 'http',
 			timeout:10000,
-			ping_interval: one_minute,
-			failed_ping_interval: one_minute,
+			ping_interval: one_tick,
+			failed_ping_interval: one_tick,
 			warning_if_takes_more_than: 3000, //miliseconds
 			enabled: true,
-			urls : [
+			services : [
 				{
+					name: 'home',
 					method: 'get',
 					url : '/',
 					expected: {statuscode: 200, contains: ''}
@@ -119,18 +153,21 @@ module.exports =
 			name:'Directorio CachiruloValley',
 			host: 'directorio.cachirulovalley.com',
 			port:80,
+			ping_service_name: 'http',
 			timeout:10000,
-			ping_interval: 3 * one_minute,
-			failed_ping_interval: one_minute,
+			ping_interval: 3 * one_tick,
+			failed_ping_interval: one_tick,
 			warning_if_takes_more_than: 3000, //miliseconds
 			enabled: true,
-			urls : [
+			services : [
 				{
+					name: 'home',
 					method: 'get',
 					url : '/',
 					expected: {statuscode: 200, contains: ''}
 				} ,
 				{
+					name: 'directory',
 					method: 'get',
 					url : '/directory',
 					expected: {statuscode: 200, contains: ''}
@@ -141,12 +178,14 @@ module.exports =
 			name:'letsnode.com',
 			host: 'letsnode.com',
 			port:80,
+			ping_service_name: 'http',
 			timeout:10000,
-			ping_interval: one_minute,
-			failed_ping_interval: one_minute,
+			ping_interval: one_tick,
+			failed_ping_interval: one_tick,
 			enabled: true,
-			urls : [
+			services : [
 				{
+					name: 'home',
 					method: 'get',
 					url : '/',
 					expected: {statuscode: 200, contains: 'A blog about node.js and express.js'}
@@ -157,12 +196,14 @@ module.exports =
 			name:'letsnode.com frelancer service',
 			host: 'letsnode.com',
 			port:8080,
+			ping_service_name: 'http',
 			timeout:10000,
-			ping_interval: one_minute,
-			failed_ping_interval: one_minute,
+			ping_interval: one_tick,
+			failed_ping_interval: one_tick,
 			enabled: false,
-			urls : [
+			services : [
 				{
+					name: 'home',
 					method: 'get',
 					url : '/',
 					expected: {statuscode: 200, contains: 'journey'}
@@ -173,12 +214,14 @@ module.exports =
 			name:'google.com',
 			host: 'www.google.com',
 			port:80,
+			ping_service_name: 'http',
 			timeout:10000,
-			ping_interval: one_minute,
-			failed_ping_interval: one_minute,
+			ping_interval: one_tick,
+			failed_ping_interval: one_tick,
 			enabled: false,
-			urls : [
+			services : [
 				{
+					name: 'home',
 					method: 'get',
 					url : '/',
 					expected: {statuscode: 302, contains: ''}
@@ -189,12 +232,14 @@ module.exports =
 			name:'localhost test',
 			host: '127.0.0.1',
 			port:8080,
-			ping_interval: one_minute,
-			failed_ping_interval: one_minute,
+			ping_service_name: 'http',
+			ping_interval: one_tick,
+			failed_ping_interval: one_tick,
 			alert_to: ['ivan@iloire.com'],
 			enabled: false,
-			urls : [
+			services : [
 				{
+					name: 'home',
 					method: 'get',
 					url : '/',
 					expected: {statuscode: 200, contains: ''}
@@ -205,14 +250,16 @@ module.exports =
 			name:'Idibay direct',
 			host: 'direct.idibay.com',
 			port:80,
+			ping_service_name: 'http',
 			timeout:10000,
-			ping_interval: one_minute,
-			failed_ping_interval: one_minute,
+			ping_interval: one_tick,
+			failed_ping_interval: one_tick,
 			warning_if_takes_more_than: 4000, //miliseconds
 			enabled: true,
 			alert_to:['ivan@iloire.com'],
-			urls : [
+			services : [
 				{
+					name: 'home',
 					method: 'get',
 					url : '/',
 					expected: {statuscode: 200, contains: 'Mundo Idibay'}
@@ -223,14 +270,16 @@ module.exports =
 			name:'Idibay',
 			host: 'www.idibay.com',
 			port:80,
+			ping_service_name: 'http',
 			timeout:10000,
-			ping_interval: one_minute,
-			failed_ping_interval: one_minute,
+			ping_interval: one_tick,
+			failed_ping_interval: one_tick,
 			warning_if_takes_more_than: 4000, //miliseconds
 			enabled: true,
 			alert_to:['ivan@iloire.com'],
-			urls : [
+			services : [
 				{
+					name: 'home',
 					method: 'get',
 					url : '/',
 					expected: {statuscode: 200, contains: 'Mundo Idibay'}
@@ -241,14 +290,16 @@ module.exports =
 			name:'Cuéntica',
 			host: 'www.cuentica.com',
 			port:80,
+			ping_service_name: 'http',
 			timeout:10000,
-			ping_interval: one_minute,
-			failed_ping_interval: one_minute,
+			ping_interval: one_tick,
+			failed_ping_interval: one_tick,
 			enabled: true,
 			warning_if_takes_more_than: 1500, //miliseconds
 			alert_to:['ivan@iloire.com'],
-			urls : [
+			services : [
 				{
+					name: 'home',
 					method: 'get',
 					url : '/',
 					expected: {statuscode: 200, contains: 'Cuéntica'}
@@ -259,16 +310,19 @@ module.exports =
 			name:'form post test',
 			host: 'hroch486.icpf.cas.cz',
 			port:80,
-			ping_interval: one_minute,
-			failed_ping_interval: one_minute,
+			ping_service_name: 'http',
+			ping_interval: one_tick,
+			failed_ping_interval: one_tick,
 			enabled: true,
-			urls : [
+			services : [
 				{
+					name: 'post',
 					method: 'get',
 					url : '/formpost.html',
 					expected: {statuscode: 200, contains: 'Test Form -- POST method'}
 				},
 				{
+					name: 'post with data',
 					method: 'post',
 					input_data : 'your_name=Ivan&fruit=Banana',
 					content_type : 'application/x-www-form-urlencoded', // application/json
@@ -281,13 +335,15 @@ module.exports =
 			name:'Menéame',
 			host: 'www.meneame.net',
 			port:80,
+			ping_service_name: 'http',
 			timeout:10000,
-			ping_interval: one_minute,
-			failed_ping_interval: one_minute,
+			ping_interval: one_tick,
+			failed_ping_interval: one_tick,
 			warning_if_takes_more_than: 2000,
 			enabled: true,
-			urls : [
+			services : [
 				{
+					name: 'home',
 					method: 'get',
 					url : '/',
 					expected: {statuscode: 200, contains: 'Menéame'}
@@ -298,13 +354,15 @@ module.exports =
 			name:'node js',
 			host: 'nodejs.org',
 			port:80,
+			ping_service_name: 'http',
 			timeout:10000,
-			ping_interval: one_minute,
-			failed_ping_interval: one_minute,
+			ping_interval: one_tick,
+			failed_ping_interval: one_tick,
 			warning_if_takes_more_than: 1500,
 			enabled: true,
-			urls : [
+			services : [
 				{
+					name: 'home',
 					method: 'get',
 					url : '/',
 					expected: {statuscode: 200, contains: 'Node'}
@@ -315,13 +373,15 @@ module.exports =
 			name:'redis',
 			host: 'redis.io',
 			port:80,
+			ping_service_name: 'http',
 			timeout:10000,
-			ping_interval: one_minute,
-			failed_ping_interval: one_minute,
+			ping_interval: one_tick,
+			failed_ping_interval: one_tick,
 			warning_if_takes_more_than: 1500,
 			enabled: true,
-			urls : [
+			services : [
 				{
+					name: 'home',
 					method: 'get',
 					url : '/',
 					expected: {statuscode: 200, contains: 'Redis'}
@@ -332,12 +392,14 @@ module.exports =
 			name:'express',
 			host: 'expressjs.com',
 			port:80,
+			ping_service_name: 'http',
 			timeout:10000,
-			ping_interval: one_minute,
-			failed_ping_interval: one_minute,
+			ping_interval: one_tick,
+			failed_ping_interval: one_tick,
 			enabled: true,
-			urls : [
+			services : [
 				{
+					name: 'home',
 					method: 'get',
 					url : '/',
 					expected: {statuscode: 200, contains: 'web application framework'}
