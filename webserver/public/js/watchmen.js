@@ -51,7 +51,7 @@ var watchmen_client = {
 		//------------------------------------------
 		if (display_data.services.length){
 			$("table.sorted").tablesorter({
-				headers: {7: {sorter: 'percent'}, 8: {sorter: false}},
+				headers: {8: {sorter: 'percent'}, 9: {sorter: false}},
 				sortList: self.currentSort
 			}).bind("sortEnd", function(sorter) {
 				self.currentSort = sorter.target.config.sortList;

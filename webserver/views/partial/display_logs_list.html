@@ -7,7 +7,10 @@
 		%>
 		<tr>
 			<td>
-			<time class="timeago" datetime="<%=new Date(parseFloat(log.timestamp)).toISOString()%>"><%=new Date(parseFloat(log.timestamp)).toISOString()%></time>
+			<time class="timeago" datetime="<%=dateformat(log.timestamp)%>">
+				<%=dateformat(log.timestamp, 'ago')%><br />
+				<%=dateformat(log.timestamp, 'MMM D YYYY, hh:mm')%>
+				</time>
 			</td>
 			<td>
 				<span class="<%=log.type%>"><%=log.msg%></span>

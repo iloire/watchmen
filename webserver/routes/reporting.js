@@ -6,9 +6,9 @@ module.exports.add_routes = function (app, storage){
 	//-------------------------------
 	app.get('/details', function(req, res){
 		var max = 100;
-		var host = req.query ['host'], url = req.query ['url'], port = req.query['port'];
+		var host = req.query ['host'], service_name = req.query ['service'];
 		var service = services_loader.load_services().filter(function(service){
-			return (service.host.host == host && service.url == url && service.host.port == port);
+			return (service.host.name === host && service.name === service_name);
 		});
 		if (!service.length){
 			return res.end('not found');

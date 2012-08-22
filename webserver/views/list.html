@@ -3,15 +3,15 @@
 <table class="table sorted table-striped table-condensed">
 	<thead>
 		<th width="30"></th>
+		<th width="80">Ping type</th>
 		<th>Service</th>
 		<th width="10%"><span title="Average response time (milliseconds)">AVG res. (ms)</span></th>
 		<th width="70">outages</th>
-		<th width="15%">last outage</th>
+		<th width="14%">last outage</th>
 		<th width="80">warnings</th>
-		<th width="15%">last warning</th>
-		<th width="15%">uptime</th>
-
-		<th width="100"></th>
+		<th width="14%">last warning</th>
+		<th width="14%">uptime</th>
+		<th width="60"></th>
 	</thead>
 	<tbody>
 
@@ -22,9 +22,13 @@
 			<span>{{data.status}}</span>
 		</td>
 
+		<td style="text-align:center">
+			{{ping_service_name}}
+		</td>
+
 		<td class="hosturl">
 			<a target="_blank" href="{{host.protocol}}://{{host.host}}:{{host.port}}{{url}}">
-				{{host.name}} {{url}}
+				{{host.name}} / {{name}}
 			</a>
 			<br />
 			<span title="ping interval: {{ping_interval}} seconds" class="label">{{ping_interval}}</span>
@@ -32,7 +36,7 @@
 			<span title="response limit (warning): {{warning_if_takes_more_than}} milliseconds" class="label label-warning">{{warning_if_takes_more_than}}</span>
 			{{/if}}
 
-			<span title="successful responses count: {{ok_responses_count}}" class="label label-success">{{data.ok_responses_count}}</span>
+			<span title="{{data.ok_responses_count}} successful responses" class="label label-success">{{data.ok_responses_count}}</span>
 
 			<br />
 
@@ -88,11 +92,10 @@
 		</td>
 
 		<td>
-			<a class="btn primary" href="/details?url={{url}}&host={{host.host}}&port={{host.port}}">details</a>
+			<a class="btn primary" href="/details?service={{name}}&host={{host.name}}">details</a>
 		</td>
 	</tr>
 	{{/each}}
-
 	</tbody>
 </table>
 </script>
