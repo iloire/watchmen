@@ -14,7 +14,7 @@ There is a <a href="http://letsnode.com/example-of-what-node-is-really-good-at" 
 
 You can see an online demo of how watchmen control panel looks <a href="http://letsnode.com:8084" target="_blank">here</a>.
 
-![List of hosts](https://github.com/iloire/WatchMen/raw/dev/screenshots/list_hosts_v010.png)
+![List of hosts](https://github.com/iloire/WatchMen/raw/1.x/screenshots/list_hosts_v010.png)
 
 ## Installation
 
