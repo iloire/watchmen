@@ -156,7 +156,7 @@ Run the tests with mocha:
 
 ## History
 
-**1.0apha1 Major changes and improvements**
+**1.0.alpha1 Major changes and improvements**
 
 - Storages are now plugable. Redis storage is used by default but you can create your own : couchdb, mongodb, text file, etc (see lib/storage).
 - Ping services are now plugable. For now we have http and smtp (smtp is just checking tcp connection right now). You can create your own or improve the existent ones easily.
@@ -228,6 +228,12 @@ Run the tests with mocha:
 **0.1**
 
 - First release.
+
+## Contributors
+
+- Iván Loire (@ivanloire)
+- Odenius (https://github.com/Odenius)
+- Nibbler999 (https://github.com/Nibbler999)
 
 ## TODO
 
