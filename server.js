@@ -1,5 +1,5 @@
 var config = require('./config/general');
-var email_service = require ('./lib/email');
+var email_service = require ('./lib/notifications/email/email');
 var storage_factory = require ('./lib/storage/storage_factory');
 var services = require ('./lib/services').load_services();
 
@@ -20,8 +20,7 @@ watchmen.on('service_error', function(service, state){
 
 	console.log (info);
 
-
-	if (state.prev_state.status != 1 && config.notifications.enabled){
+	if (state.prev_state.status === 'success' && config.notifications.enabled){
 		email_service.sendEmail(
 				service.alert_to,
 				service.url_info + ' is down!',
