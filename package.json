@@ -2,7 +2,7 @@
   "author": "Iván Loire <ivan@iloire.com> (http://iloire.com/)",
   "name": "watchmen",
   "scripts": {
-    "test": "mocha -R list -b test/*.mocha"
+    "test": "redis-server test/redis.conf;mocha -R list -b test/*.mocha;kill `cat test/redis.pid`"
   },
   "description": "A Node.js HTTP monitor",
   "version": "0.9.0",

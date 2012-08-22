@@ -5,8 +5,8 @@ var mocked_ping_service = require ('./lib/mock/request_mocked');
 
 describe('redis storage', function(){
 
-	var redis_options = require('../config/storage').options.redis;
-	var redis_storage = new redis_storage_class(redis_options);
+	//use redis_storage with testing environment
+	var redis_storage = new redis_storage_class({port: 6666, host: '127.0.0.1', db: 0});
 	var _watchmen = new watchmen(null, redis_storage);
 
 	var services = require ('../lib/services').load_services();
