@@ -1,7 +1,6 @@
 var watchmen = require ('../lib/watchmen');
-var ping_service = require ('./lib/request_mocked');
 var	assert = require ('assert');
-var storage_mocked = require ('./lib/storage_mocked');
+var storage_mocked = require ('./lib/mock/storage_mocked');
 
 describe('ping service', function(){
 
@@ -22,14 +21,17 @@ describe('ping service', function(){
 		expected : {statuscode: 200, contains: ''}
 	};
 
+	var mocked_ping_service = require ('./lib/mock/request_mocked');
+	service.ping_service = mocked_ping_service;
+
 	describe('bad request', function(){
 
 		var _watchmen = null;
 
 		before(function(done){
 			failed_request_timestamp = +new Date();
-			ping_service.mocked_response = {error: 'mocked 	error', body : null, response : null, timeDiff : 0};
-			_watchmen = new watchmen(null, new storage_mocked(null), ping_service);
+			mocked_ping_service.mocked_response = {error: 'mocked 	error', body : null, response : null, timeDiff : 0};
+			_watchmen = new watchmen(null, new storage_mocked(null));
 			done();
 		});
 
@@ -131,8 +133,8 @@ describe('ping service', function(){
 
 		before(function(done){
 			correct_request_timestamp = failed_request_timestamp + 60*1000; //one minute later
-			ping_service.mocked_response = {error: null, body : 'ok', response : {body: 'ok', statusCode: 200}, timeDiff : 300};
-			_watchmen = new watchmen(null, new storage_mocked(temp_status), ping_service);
+			mocked_ping_service.mocked_response = {error: null, body : 'ok', response : {body: 'ok', statusCode: 200}, timeDiff : 300};
+			_watchmen = new watchmen(null, new storage_mocked(temp_status));
 			done();
 		});
 
@@ -240,8 +242,8 @@ describe('ping service', function(){
 
 		before(function(done){
 			warning_request_timestamp = failed_request_timestamp + 2 * 60 * 1000; //one minute later
-			ping_service.mocked_response = {error: null, body : 'ok', response : {body: 'ok', statusCode: 200}, timeDiff : 22300};
-			_watchmen = new watchmen(null, new storage_mocked(temp_status), ping_service);
+			mocked_ping_service.mocked_response = {error: null, body : 'ok', response : {body: 'ok', statusCode: 200}, timeDiff : 22300};
+			_watchmen = new watchmen(null, new storage_mocked(temp_status));
 			done();
 		});
 

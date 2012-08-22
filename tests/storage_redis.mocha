@@ -1,20 +1,22 @@
 var	assert = require ('assert');
 var watchmen = require ('../lib/watchmen.js');
 var redis_storage_class = require('../lib/storage/providers/redis');
-var ping_service = require ('./lib/request_mocked');
+var mocked_ping_service = require ('./lib/mock/request_mocked');
 
 describe('redis storage', function(){
 
 	var redis_options = require('../config/storage').options.redis;
 	var redis_storage = new redis_storage_class(redis_options);
-	var _watchmen = new watchmen(null, redis_storage, ping_service);
+	var _watchmen = new watchmen(null, redis_storage);
 
 	var services = require ('../lib/services').load_services();
 	var service = services[0];
+	service.ping_service = mocked_ping_service; //assign mocked service
+
 	var temp_status = null;
 
 	before(function(done){
-		ping_service.mocked_response = {error: 'error', body : null, response : null, timeDiff : 0};
+		mocked_ping_service.mocked_response = {error: 'error', body : null, response : null, timeDiff : 0};
 		redis_storage.flush_database(function(){
 			_watchmen.ping({service:service}, function(err, request_status){
 				assert.ifError(err);
@@ -57,7 +59,7 @@ describe('redis storage', function(){
 			var services = require ('../lib/services').load_services();
 			redis_storage.report_all(services, function(err, data){
 				assert.ifError(err);
-				assert.equal (data.services.length, 24);
+				assert.equal (data.services.length, 25);
 				done();
 			});
 		});
@@ -87,7 +89,7 @@ describe('redis storage', function(){
 		describe('events', function(){
 
 			before(function(done){
-				ping_service.mocked_response = {body : 'Apple Inc', response : {statusCode: 200}, timeDiff : 200};
+				mocked_ping_service.mocked_response = {body : 'Apple Inc', response : {statusCode: 200}, timeDiff : 200};
 				_watchmen.ping({service:service}, function(err, request_status){
 					assert.ifError(err);
 					redis_storage.report_one(service, function(err, _service){

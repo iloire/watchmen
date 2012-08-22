@@ -7,7 +7,7 @@ describe('services', function(){
 	describe('reporting list', function(){
 		it('should load all services', function(done){
 			var services = require ('../lib/services').load_services();
-			assert.equal (services.length, 24);
+			assert.equal (services.length, 25);
 			done();
 		});
 
