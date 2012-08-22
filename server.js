@@ -1,13 +1,11 @@
 var config = require('./config/general');
 var email_service = require ('./lib/email');
 var storage_factory = require ('./lib/storage/storage_factory');
-var ping_service = require ('./lib/ping_services/http'); //http for now
-
 var services = require ('./lib/services').load_services();
 
 var WatchMen = require ('./lib/watchmen');
 var storage = storage_factory.get_storage_instance();
-var watchmen = new WatchMen(services, storage, ping_service);
+var watchmen = new WatchMen(services, storage);
 
 //----------------------------------------------------
 // Subscribe to service events
@@ -16,12 +14,12 @@ watchmen.on('service_error', function(service, state){
 
 	/*
 	//Do here any additional stuff when you get an error
-
+	*/
 	var info = service.url_info + ' down!. Error: ' + state.error + '. Retrying in ' +
 			(parseInt(state.next_attempt_secs, 10) / 60) + ' minute(s)..';
 
 	console.log (info);
-	*/
+
 
 	if (state.prev_state.status != 1 && config.notifications.enabled){
 		email_service.sendEmail(
