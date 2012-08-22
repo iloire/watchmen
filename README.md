@@ -1,5 +1,7 @@
 # "watchmen", a service monitor for node.js
 
+![Travis-CI project status](https://secure.travis-ci.org/iloire/WatchMen.png?branch=1.x)
+
 - monitor service health (outages, uptime, response time warnings, avg. response time, etc) in your servers (`http`, `smtp`, etc).
 - use the database of your choice. Data **storages are pluggable**. At this time, only [redis](http://redis.io) storage is available, but it is pretty easy to create and plug your own. There are plans to support `couchdb` and `mongodb` in the short term.
 - **ping types are pluggable**. At this time, `http` (includes `https`) and `smtp` (tcp connection check) are available.
