@@ -3,6 +3,7 @@ var watchmen = require('../lib/watchmen');
 var app = express.createServer();
 var storage_factory = require ('../lib/storage/storage_factory');
 var storage = storage_factory.get_storage_instance();
+var moment = require ('moment');
 
 app.configure(function(){
   app.set('views', __dirname + '/views');
@@ -26,6 +27,21 @@ app.configure('production', function(){
 // Import routes
 //-----------------------------------------
 require('./routes/reporting').add_routes(app, storage);
+
+var helpers = {
+    dateformat : function (req, res) {
+    return function (date, format) {
+      if (format==='ago'){
+        return moment(date).fromNow();
+      }
+      else{
+        return moment(date).format(format || 'MMM D YYYY, hh:mm');
+      }
+    };
+  }
+};
+
+app.dynamicHelpers(helpers);
 
 //-----------------------------------------
 // Start server
