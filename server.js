@@ -24,7 +24,7 @@ watchmen.on('service_error', function(service, state){
 		email_service.sendEmail(
 				service.alert_to,
 				service.url_info + ' is down!',
-				service.url_info + ' is down!. Reason: ' + error
+				service.url_info + ' is down!. Reason: ' + state.error
 		);
 	}
 });
