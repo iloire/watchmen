@@ -11,7 +11,7 @@ module.exports =
 			ping_service_name: 'smtp',
 			timeout:10000,
 			ping_interval: one_tick, //seconds
-			failed_ping_interval: one_tick, //minutes
+			failed_ping_interval: one_tick / 3, //minutes
 			enabled: true,
 			alert_to: ['ivan@iloire.com'],
 			warning_if_takes_more_than: 1500, //miliseconds
@@ -30,7 +30,7 @@ module.exports =
 			ping_service_name: 'http',
 			timeout:10000,
 			ping_interval: one_tick, //seconds
-			failed_ping_interval: one_tick, //minutes
+			failed_ping_interval: one_tick / 3, //minutes
 			enabled: true,
 			alert_to: ['ivan@iloire.com'],
 			warning_if_takes_more_than: 1500, //miliseconds
@@ -50,7 +50,7 @@ module.exports =
 			ping_service_name: 'http',
 			timeout:10000,
 			ping_interval: one_tick, //seconds
-			failed_ping_interval: one_tick, //minutes
+			failed_ping_interval: one_tick / 3, //minutes
 			enabled: true,
 			alert_to: ['ivan@iloire.com'],
 			warning_if_takes_more_than: 1500, //miliseconds
@@ -67,7 +67,7 @@ module.exports =
 					url : '/Home/Contacto',
 					expected: {statuscode: 200, contains: 'encantados'},
 					ping_interval:200, //overwrite ping and retry intervals for this url
-					failed_ping_interval: one_tick/2
+					failed_ping_interval: one_tick / 3
 				}
 			]
 		} ,
@@ -78,7 +78,7 @@ module.exports =
 			ping_service_name: 'http',
 			timeout:5000,
 			ping_interval: one_tick,
-			failed_ping_interval: one_tick,
+			failed_ping_interval: one_tick / 3,
 			warning_if_takes_more_than: 1500, //miliseconds
 			enabled: true,
 			services : [
@@ -103,7 +103,7 @@ module.exports =
 			ping_service_name: 'http',
 			timeout:5000,
 			ping_interval: one_tick,
-			failed_ping_interval: one_tick,
+			failed_ping_interval: one_tick / 3,
 			warning_if_takes_more_than: 1300, //miliseconds
 			enabled: true,
 			alert_to: ['ajax@aspphotogallery.net'], //you can include a different email recipient per host
@@ -137,7 +137,7 @@ module.exports =
 			ping_service_name: 'http',
 			timeout:10000,
 			ping_interval: one_tick,
-			failed_ping_interval: one_tick,
+			failed_ping_interval: one_tick / 3,
 			warning_if_takes_more_than: 3000, //miliseconds
 			enabled: true,
 			services : [
@@ -156,7 +156,7 @@ module.exports =
 			ping_service_name: 'http',
 			timeout:10000,
 			ping_interval: 3 * one_tick,
-			failed_ping_interval: one_tick,
+			failed_ping_interval: one_tick / 3,
 			warning_if_takes_more_than: 3000, //miliseconds
 			enabled: true,
 			services : [
@@ -181,7 +181,7 @@ module.exports =
 			ping_service_name: 'http',
 			timeout:10000,
 			ping_interval: one_tick,
-			failed_ping_interval: one_tick,
+			failed_ping_interval: one_tick / 3,
 			enabled: true,
 			services : [
 				{
@@ -199,7 +199,7 @@ module.exports =
 			ping_service_name: 'http',
 			timeout:10000,
 			ping_interval: one_tick,
-			failed_ping_interval: one_tick,
+			failed_ping_interval: one_tick / 3,
 			enabled: false,
 			services : [
 				{
@@ -211,13 +211,31 @@ module.exports =
 			]
 		} ,
 		{
+			name:'mathrace demo',
+			host: 'letsnode.com',
+			port:8090,
+			ping_service_name: 'http',
+			timeout:10000,
+			ping_interval: one_tick,
+			failed_ping_interval: one_tick / 3,
+			enabled: true,
+			services : [
+				{
+					name: 'home',
+					method: 'get',
+					url : '/',
+					expected: {statuscode: 200, contains: 'Race'}
+				}
+			]
+		} ,
+		{
 			name:'google.com',
 			host: 'www.google.com',
 			port:80,
 			ping_service_name: 'http',
 			timeout:10000,
 			ping_interval: one_tick,
-			failed_ping_interval: one_tick,
+			failed_ping_interval: one_tick / 3,
 			enabled: false,
 			services : [
 				{
@@ -234,7 +252,7 @@ module.exports =
 			port:8080,
 			ping_service_name: 'http',
 			ping_interval: one_tick,
-			failed_ping_interval: one_tick,
+			failed_ping_interval: one_tick / 3,
 			alert_to: ['ivan@iloire.com'],
 			enabled: false,
 			services : [
@@ -253,7 +271,7 @@ module.exports =
 			ping_service_name: 'http',
 			timeout:10000,
 			ping_interval: one_tick,
-			failed_ping_interval: one_tick,
+			failed_ping_interval: one_tick / 3,
 			warning_if_takes_more_than: 4000, //miliseconds
 			enabled: true,
 			alert_to:['ivan@iloire.com'],
@@ -273,7 +291,7 @@ module.exports =
 			ping_service_name: 'http',
 			timeout:10000,
 			ping_interval: one_tick,
-			failed_ping_interval: one_tick,
+			failed_ping_interval: one_tick / 3,
 			warning_if_takes_more_than: 4000, //miliseconds
 			enabled: true,
 			alert_to:['ivan@iloire.com'],
@@ -293,7 +311,7 @@ module.exports =
 			ping_service_name: 'http',
 			timeout:10000,
 			ping_interval: one_tick,
-			failed_ping_interval: one_tick,
+			failed_ping_interval: one_tick / 3,
 			enabled: true,
 			warning_if_takes_more_than: 1500, //miliseconds
 			alert_to:['ivan@iloire.com'],
@@ -312,7 +330,7 @@ module.exports =
 			port:80,
 			ping_service_name: 'http',
 			ping_interval: one_tick,
-			failed_ping_interval: one_tick,
+			failed_ping_interval: one_tick / 3,
 			enabled: true,
 			services : [
 				{
@@ -338,7 +356,7 @@ module.exports =
 			ping_service_name: 'http',
 			timeout:10000,
 			ping_interval: one_tick,
-			failed_ping_interval: one_tick,
+			failed_ping_interval: one_tick / 3,
 			warning_if_takes_more_than: 2000,
 			enabled: true,
 			services : [
@@ -357,7 +375,7 @@ module.exports =
 			ping_service_name: 'http',
 			timeout:10000,
 			ping_interval: one_tick,
-			failed_ping_interval: one_tick,
+			failed_ping_interval: one_tick / 3,
 			warning_if_takes_more_than: 1500,
 			enabled: true,
 			services : [
@@ -376,7 +394,7 @@ module.exports =
 			ping_service_name: 'http',
 			timeout:10000,
 			ping_interval: one_tick,
-			failed_ping_interval: one_tick,
+			failed_ping_interval: one_tick / 3,
 			warning_if_takes_more_than: 1500,
 			enabled: true,
 			services : [
@@ -395,7 +413,7 @@ module.exports =
 			ping_service_name: 'http',
 			timeout:10000,
 			ping_interval: one_tick,
-			failed_ping_interval: one_tick,
+			failed_ping_interval: one_tick / 3,
 			enabled: true,
 			services : [
 				{
