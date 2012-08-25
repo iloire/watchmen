@@ -2,16 +2,16 @@
 
 <table class="table sorted table-striped table-condensed">
 	<thead>
-		<th width="30"></th>
+		<th width="40"></th>
 		<th width="80">Ping type</th>
 		<th>Service</th>
-		<th width="10%"><span title="Average response time (milliseconds)">AVG res. (ms)</span></th>
+		<th width="80"><span title="Average response time (milliseconds)">AVG res.</span></th>
 		<th width="70">outages</th>
 		<th width="14%">last outage</th>
-		<th width="80">warnings</th>
+		<th width="75">warnings</th>
 		<th width="14%">last warning</th>
-		<th width="14%">uptime</th>
-		<th width="60"></th>
+		<th width="10%">uptime</th>
+		<th width="90"></th>
 	</thead>
 	<tbody>
 
@@ -92,7 +92,7 @@
 		</td>
 
 		<td>
-			<a class="btn primary" href="/details?service={{name}}&host={{host.name}}">details</a>
+			<a class="btn primary" href="/details?service={{name}}&host={{host.name}}"><i class="icon-th-list"></i> details</a>
 		</td>
 	</tr>
 	{{/each}}

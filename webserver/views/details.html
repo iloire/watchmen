@@ -1,10 +1,12 @@
-<a style="float:right" href="/" class="btn primary">back to list</a>
+<a style="float:right" href="/" class="btn primary"><i class="icon-chevron-left"></i> back to list</a>
 
-<h2><%=title%></h2>
-
-<h2 class="<%=service.data.status%>"><img class="status_icon" src="/images/<%=service.data.status%>.png" alt="<%=service.data.status%>" /> <%=service.data.status%></h2>
-
-<div style="clear:both"></div>
+<h2>
+	<%=title%>
+	<small>
+	current status: <img class="status_icon" src="/images/<%=service.data.status%>.png" alt="<%=service.data.status%>" /> <%=service.data.status%>
+	</
+	</small>
+</h2>
 
 <div class="row-fluid">
 	<div class="span6">
@@ -15,4 +17,4 @@
 	</div>
 </div>
 
-<a href="/" class="btn primary">back to list</a>
+<a href="/" class="btn primary"><i class="icon-chevron-left"></i> back to list</a>
