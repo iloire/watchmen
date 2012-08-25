@@ -59,7 +59,7 @@ describe('redis storage', function(){
 			var services = require ('../lib/services').load_services();
 			redis_storage.report_all(services, function(err, data){
 				assert.ifError(err);
-				assert.equal (data.services.length, 25);
+				assert.equal (data.services.length, 26);
 				done();
 			});
 		});

@@ -7,13 +7,13 @@ describe('services', function(){
 	describe('reporting list', function(){
 		it('should load all services', function(done){
 			var services = require ('../lib/services').load_services();
-			assert.equal (services.length, 25);
+			assert.equal (services.length, 26);
 			done();
 		});
 
 		it('should load all enabled services', function(done){
 			var services_enabled = services.filter(function(item){return item.enabled;});
-			assert.equal (services_enabled.length, 22);
+			assert.equal (services_enabled.length, 23);
 			done();
 		});
 	});
