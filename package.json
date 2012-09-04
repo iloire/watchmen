@@ -2,10 +2,12 @@
   "author": "Iván Loire <ivan@iloire.com> (http://iloire.com/)",
   "name": "watchmen",
   "scripts": {
-    "test": "redis-server test/redis.conf;mocha -R list -b test/*.mocha;kill `cat test/redis.pid`"
+    "test": "redis-server test/redis.conf;mocha -R list -b test/*.mocha;kill `cat test/redis.pid`",
+    "start": "redis-server redis.conf; forever start server.js; forever start webserver/app.js 8084",
+    "stop": "forever stop server.js"
   },
   "description": "A Node.js HTTP monitor",
-  "version": "0.9.0",
+  "version": "1.0.0",
   "homepage": "http://letsnode.com",
   "repository": {
     "type": "git",
@@ -14,6 +16,13 @@
   "engines": {
     "node": "0.6.x"
   },
+  "keywords": [
+    "watchmen",
+    "service",
+    "monitor",
+    "ping"
+  ],
+  "license": "MIT",
   "dependencies": {
     "ejs": "0.7.x",
     "express": "2.5.x",
