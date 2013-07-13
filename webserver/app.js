@@ -12,7 +12,7 @@ app.configure(function(){
   app.use(express.bodyParser());
   app.use(express.methodOverride());
   app.use(app.router);
-	app.use(express.static(__dirname + '/public'));
+  app.use(express.static(__dirname + '/public'));
 });
 
 app.configure('development', function(){
@@ -49,11 +49,11 @@ app.dynamicHelpers(helpers);
 var port = parseInt(process.argv[2], 10) || 3000;
 app.listen(port);
 if (app.address())
-	console.log("watchmen server listening on port %d in %s mode", app.address().port, app.settings.env);
+  console.log("watchmen server listening on port %d in %s mode", app.address().port, app.settings.env);
 else
-	console.log ('something went wrong... couldn\'t listen to that port.');
+  console.log ('something went wrong... couldn\'t listen to that port.');
 
 process.on('SIGINT', function () {
-	console.log('stopping web server.. bye!');
-	process.exit(0);
+  console.log('stopping web server.. bye!');
+  process.exit(0);
 });
