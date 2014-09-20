@@ -198,19 +198,11 @@ watchmen.on('service_error', function(service, state){
 
 ```
 
-## Run watchmen
+# Running and stopping watchmen
 
-### Run the monitor server
+    $ npm start
+    $ npm stop
 
-    $ node server.js
-
-or more probably you would want to use **forever** to run it in the background
-
-    $ forever start server.js
-
-### Run the web app
-
-    $ forever start webserver/app.js 3000 #(where 3000 is the port you want to use).
 
 # Tests
 

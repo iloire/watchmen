@@ -3,8 +3,8 @@
   "name": "watchmen",
   "scripts": {
     "test": "redis-server test/redis.conf;mocha -R list -b test/*.mocha;kill `cat test/redis.pid`",
-    "start": "redis-server redis.conf; forever start server.js; forever start webserver/app.js 8084",
-    "stop": "forever stop server.js"
+    "start": "redis-server redis.conf; forever --minUptime 1000 --spinSleepTime 2000 start server.js; forever --minUptime 1000 --spinSleepTime 2000 start webserver/app.js 8084; forever list",
+    "stop": "forever stop server.js; forever stop webserver/app.js"
   },
   "description": "A Node.js HTTP monitor",
   "version": "1.0.0",
@@ -26,8 +26,9 @@
   "dependencies": {
     "ejs": "0.7.x",
     "express": "2.5.x",
-    "redis": "0.7.x",
-    "moment": "1.7.x"
+    "forever": "0.11.1",
+    "moment": "1.7.x",
+    "redis": "0.7.x"
   },
   "devDependencies": {
     "assert": "0.4.x",
