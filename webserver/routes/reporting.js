@@ -15,9 +15,10 @@ module.exports.add_routes = function (app, storage){
     }
 
     storage.report_one(service[0], function (err, service){
-      
+     
       res.render('details.html', {
         title: service.url_info,
+        service : service,
         status: service.data ? service.data.status : 'unavailable', // no data collected yet
         critical_events: service.data ? service.data.events.filter(function(item){return item.type == 'critical';}) : [],
         warning_events: service.data ? service.data.events.filter(function(item){return item.type == 'warning';}) : []

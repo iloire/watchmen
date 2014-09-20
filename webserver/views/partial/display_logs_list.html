@@ -1,4 +1,5 @@
 <h3><%=log_type%></h3>
+
 <%if (logs.length) {%>
   <table class="events table table-striped table-condensed">
   <%
@@ -7,9 +8,9 @@
     %>
     <tr>
       <td>
-      <time class="timeago" datetime="<%=dateformat(log.timestamp)%>">
-        <%=dateformat(log.timestamp, 'ago')%><br />
-        <%=dateformat(log.timestamp, 'MMM D YYYY, hh:mm')%>
+        <time class="timeago" datetime="<%=dateformat(log.timestamp)%>">
+          <%=dateformat(log.timestamp, 'ago')%><br />
+          <%=dateformat(log.timestamp, 'MMM D YYYY, hh:mm')%>
         </time>
       </td>
       <td>

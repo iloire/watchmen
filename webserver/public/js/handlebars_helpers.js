@@ -17,3 +17,12 @@ Handlebars.registerHelper('dateFormat', function(context, block) {
     return context;   //  moment plugin not available. return data as is.
   }
 });
+
+
+Handlebars.registerHelper('ifvalue', function (conditional, options) {
+  if (options.hash.value === conditional) {
+    return options.fn(this);
+  } else {
+    return options.inverse(this);
+  }
+});

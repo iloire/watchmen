@@ -1,22 +1,47 @@
-<a style="float:right" href="/" class="btn primary"><i class="icon-chevron-left"></i> back to list</a>
+<div class="details-page">
 
-<h2>
-  <% if (status === "success" ) {%>
-  <img class="status_icon" src="/images/green.png" alt="Service up" />
-  <% } else if (status === "error" ) {%>
-  <img class="status_icon" src="/images/red.png" alt="Service down" />
-  <% } %>
+  <a style="float:right" href="/" class="btn btn-default">
+    <span class="glyphicon glyphicon-chevron-left"></span> back to list
+  </a>
 
-  <%=title%>
-</h2>
+  <h2>
+    <%-partial ('partial/status', { status: status} )%>
+    <%=service.host.name%>
+  </h2>
 
-<div class="row-fluid">
-  <div class="span6">
-  <%-partial ('partial/display_logs_list', {logs:critical_events, log_type:'Critical'})%>
+  <div class="well">
+    <p>
+      Host: <%=service.host.host%> (port <%=service.host.port%>)
+    </p>
+
+    <p>
+    Ping interval: <span title="ping interval: <%=service.host.ping_interval%> seconds" class="label label-default"><%=service.host.ping_interval%></span>
+    </p>
+
+    <% if (service.host.warning_if_takes_more_than){ %>
+    <p>
+    Latency threshold: <span title="ping interval: <%=service.host.ping_interval%> seconds" class="label label-default"><%=service.host.warning_if_takes_more_than%></span>
+    </p>
+    <% } %>
+
+    <% if (service.data){ %>
+    <p>
+    Successful responses: <span title="<%=service.data.ok_responses_count%> successful responses" class="label label-success"><%=service.data.ok_responses_count%></span>
+    </p>
+    <% } %>
+
   </div>
-  <div class="span6">
-  <%-partial ('partial/display_logs_list', {logs:warning_events, log_type:'Warning'})%>
+
+  <div class="row">
+    <div class="col-md-6">
+    <%-partial ('partial/display_logs_list', {logs:critical_events, log_type:'Critical'})%>
+    </div>
+    <div class="col-md-6">
+    <%-partial ('partial/display_logs_list', {logs:warning_events, log_type:'Warning'})%>
+    </div>
   </div>
+
+  <a href="/" class="btn btn-default">
+    <span class="glyphicon glyphicon-chevron-left"></span> back to list
+  </a>
 </div>
-
-<a href="/" class="btn primary"><i class="icon-chevron-left"></i> back to list</a>

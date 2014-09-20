@@ -201,6 +201,8 @@ watchmen.on('service_error', function(service, state){
 
 # Running and stopping watchmen
 
+Make sure you have `redis-server` in your `PATH`
+
     $ npm start
     $ npm stop
 
