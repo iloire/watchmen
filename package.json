@@ -27,7 +27,7 @@
     "ejs": "1.0.0",
     "express": "2.5.x",
     "forever": "0.11.1",
-    "moment": "1.7.x",
+    "moment": "2.8.3",
     "redis": "0.7.x"
   },
   "devDependencies": {
