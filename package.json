@@ -28,7 +28,7 @@
     "express": "2.5.x",
     "forever": "0.11.1",
     "moment": "2.8.3",
-    "redis": "0.7.x"
+    "redis": "0.12.x"
   },
   "devDependencies": {
     "assert": "0.4.x",
