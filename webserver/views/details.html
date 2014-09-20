@@ -1,10 +1,13 @@
 <a style="float:right" href="/" class="btn primary"><i class="icon-chevron-left"></i> back to list</a>
 
 <h2>
+  <% if (status === "success" ) {%>
+  <img class="status_icon" src="/images/green.png" alt="Service up" />
+  <% } else if (status === "error" ) {%>
+  <img class="status_icon" src="/images/red.png" alt="Service down" />
+  <% } %>
+
   <%=title%>
-  <small>
-  current status: <img class="status_icon" src="/images/<%=service.data.status%>.png" alt="<%=service.data.status%>" /> <%=service.data.status%>
-  </small>
 </h2>
 
 <div class="row-fluid">
