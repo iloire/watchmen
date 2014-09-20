@@ -216,6 +216,14 @@ Run the tests with mocha:
 
 ## History
 
+**1.1.0**
+
+- Delete events older than a certain threshold (configurable in a per-host basis)
+- Bump jQuery to 1.11.1
+- Bump Handlebars to 2.0.0
+- Bump bootstrap to 3.2.0
+- Responsive design based on bootstrap
+
 **1.0.alpha1 Major changes and improvements**
 
 - **Storages** are now pluggable. `redis` storage is used by default but you can create your own : `couchdb`, `mongodb`, text file, etc (see lib/storage).
