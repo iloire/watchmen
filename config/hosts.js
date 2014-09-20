@@ -15,6 +15,7 @@ module.exports =
       enabled: true,
       alert_to: ['ivan@iloire.com'],
       warning_if_takes_more_than: 1500, //miliseconds
+      remove_events_older_than_seconds : 60 * 60 * 24 * 10, // purgue events older than (seconds)
       services : [
         {
           name: 'mail server'

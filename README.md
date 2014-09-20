@@ -53,6 +53,7 @@ Most of the properties can be defined either at host or service level. Service l
   enabled: true, //enables/disables this host
   alert_to: ['ivan@iloire.com'], //emails to alert if site goes down.
   warning_if_takes_more_than: 700, //miliseconds. alert if request takes more than this
+  remove_events_older_than_seconds : 60 * 60 * 24 * 10, // remove events older than (seconds)
   services : [
     {
       name : 'home',

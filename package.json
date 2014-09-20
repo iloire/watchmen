@@ -32,6 +32,7 @@
   },
   "devDependencies": {
     "assert": "0.4.x",
-    "mocha": "1.21.x"
+    "mocha": "1.21.x",
+    "sinon": "1.10.3"
   }
 }
