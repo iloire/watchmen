@@ -78,7 +78,7 @@ watchmen.start();
 //  - or - 
 // you can just uncomment the following line to launch both the monitor and the web server 
 // in the same process:
-require('./webserver/app');
+// require('./webserver/app');
 
 //----------------------------------------------------
 // Error handling

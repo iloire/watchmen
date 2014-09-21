@@ -206,6 +206,12 @@ Make sure you have `redis-server` in your `PATH`
     $ npm start
     $ npm stop
 
+Or if you want to run the services separately:
+
+    $ redis-server redis.conf
+    $ node server.js
+    $ node webserver/app.js
+
 
 # Tests
 
