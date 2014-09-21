@@ -11,7 +11,7 @@ module.exports =
       ping_service_name: 'smtp',
       timeout:10000,
       ping_interval: one_tick, //seconds
-      failed_ping_interval: one_tick / 3, //minutes
+      failed_ping_interval: one_tick / 3, //seconds
       enabled: true,
       alert_to: ['your-email@domain.com'],
       warning_if_takes_more_than: 1500, //miliseconds
@@ -22,7 +22,6 @@ module.exports =
         }
       ]
     } ,
-
     {
       name:'apple HTTPS',
       host: 'www.apple.com',
@@ -31,7 +30,7 @@ module.exports =
       ping_service_name: 'http',
       timeout:10000,
       ping_interval: one_tick, //seconds
-      failed_ping_interval: one_tick / 3, //minutes
+      failed_ping_interval: one_tick / 3, //seconds
       enabled: true,
       alert_to: ['your-email@domain.com'],
       warning_if_takes_more_than: 1500, //miliseconds
@@ -51,7 +50,7 @@ module.exports =
       ping_service_name: 'http',
       timeout:10000,
       ping_interval: one_tick, //seconds
-      failed_ping_interval: one_tick / 3, //minutes
+      failed_ping_interval: one_tick / 3, //seconds
       enabled: true,
       alert_to: ['your-email@domain.com'],
       warning_if_takes_more_than: 1500, //miliseconds
