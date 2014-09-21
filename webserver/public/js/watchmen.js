@@ -50,11 +50,21 @@ var watchmen_client = {
     // Config table sorter, remember sort options
     //------------------------------------------
     if (display_data.services.length){
+      var localStorageKey = "servicesSortList";
+      if (window.localStorage){
+        if (window.localStorage.getItem(localStorageKey)){
+          self.currentSort = JSON.parse(window.localStorage.getItem(localStorageKey));
+        }
+      }
+      //debugger;
       $("table.sorted").tablesorter({
         headers: {8: {sorter: 'percent'}, 9: {sorter: false}},
         sortList: self.currentSort
       }).bind("sortEnd", function(sorter) {
         self.currentSort = sorter.target.config.sortList;
+        if (window.localStorage){
+          window.localStorage.setItem(localStorageKey, JSON.stringify(self.currentSort));
+        }
       });
     }
 
