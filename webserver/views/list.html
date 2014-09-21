@@ -3,30 +3,27 @@
 <table class="table-services table sorted table-striped table-condensed">
   <thead>
     <th></th>
-    <th width="50"></th>
-    <th class="hidden-xs">Service</th>
-    <th class="hidden-xs"><span title="Average response time (milliseconds)">AVG res.</span></th>
+    <th class="hidden-xs">ping</th>
+    <th>host</th>
+    <th class="hidden-xs"><span title="Average response time (milliseconds)">AVG res. (ms)</span></th>
     <th class="hidden-xs">outages</th>
     <th class="hidden-xs">last outage</th>
-    <th class="hidden-xs">warnings</th>
-    <th class="hidden-xs">last warning</th>
+    <th class="hidden-xs hidden-sm">warnings</th>
+    <th class="hidden-xs hidden-sm">last warning</th>
     <th>uptime</th>
-    <th></th>
   </thead>
   <tbody>
 
   {{#each services}}
   <tr class="result-{{#if enabled}}{{data.status}}{{else}}disabled{{/if}}">
-
     <td>
-    {{#ifvalue data.status value="error"}}
-        <span class="label label-danger">offline</span>
-    {{/ifvalue}}
+      {{#ifvalue data.status value="error"}}
+          <span class="label label-danger">offline</span>
+      {{/ifvalue}}
 
-    {{#ifvalue data.status value="success"}}
-        <span class="label label-success">online</span>
-    {{/ifvalue}}
-
+      {{#ifvalue data.status value="success"}}
+          <span class="label label-success">online</span>
+      {{/ifvalue}}
     </td>
 
     <td class="service hidden-xs">
@@ -34,17 +31,18 @@
     </td>
 
     <td class="hosturl">
-      <a class="name" target="_blank" href="{{host.protocol}}://{{host.host}}:{{host.port}}{{url}}">
+      <a class="name" href="/details?service={{name}}&host={{host.name}}">
         {{host.name}} / {{name}}
       </a>
 
       {{#if data.last_check}}
       <span class="hidden-xs last_check">
-        last check:
+        last ping:
         {{dateFormat data.last_check format="MMM Do, h:mm:ss"}}
         <time datetime='{{dateFormat data.last_check format="MMMM Do, h:mm:ss"}}'>{{dateFormat data.last_check ago=true}}</time>
       </span>
       {{/if}}
+
     </td>
 
     <td class="avgresponse hidden-xs">
@@ -67,13 +65,13 @@
       {{/if}}
     </td>
 
-    <td class="result-warning hidden-xs">
+    <td class="result-warning hidden-xs hidden-sm">
       {{#if data.warnings}}
       <span class="label label-warning">{{data.warnings}}</span>
       {{/if}}
     </td>
 
-    <td class="result-warning hidden-xs">
+    <td class="result-warning hidden-xs hidden-sm">
       {{#if data.last_warning}}
       {{dateFormat data.last_warning format="MMM Do, h:mm:ss"}}
       <time datetime='{{dateFormat data.last_warning format="MMMM Do, h:mm:ss"}}'>{{dateFormat data.last_warning ago=true}}</time>
@@ -82,20 +80,14 @@
 
     <td class="result-uptime">
       {{#if data.uptime}}
-      <span>
-      {{data.uptime}}%
-      </span>
-      {{/if}}
-      {{#if data.up_since}}
-      <time class="hidden-xs" datetime='{{dateFormat data.up_since format="MMMM Do, h:mm:ss"}}'>started {{dateFormat data.up_since ago=true}}</time>
+      <a class="name" href="/details?service={{name}}&host={{host.name}}">
+        <span>
+        {{data.uptime}}%
+        </span>
+      </a>
       {{/if}}
     </td>
 
-    <td>
-      <a class="btn btn-default" href="/details?service={{name}}&host={{host.name}}">
-        <span class="glyphicon glyphicon-info-sign  "></span> details
-      </a>
-    </td>
   </tr>
   {{/each}}
   </tbody>
