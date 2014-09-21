@@ -63,7 +63,7 @@
 
   <h3>Service configuration</h3>
   <div class="section configuration row">
-
+    
     <div class="col-md-4">
       <p>
         Host: 
@@ -108,6 +108,10 @@
   </div>
   
   <h3>Events</h3>
+  <p>
+    Showing events from <%=dateformat(eventsSince, 'MMM D YYYY, hh:mm')%> (<%=dateformat(eventsSince, 'ago')%>)
+  </p>
+
   <div class="section events row">
     <div class="col-md-6">
     <%-partial ('partial/display_logs_list', {logs:critical_events, log_type:'Critical'})%>
