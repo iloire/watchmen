@@ -27,15 +27,15 @@
         </div>
     </div>
 
-    <div class="col-md-4 bg-info">
+    <div class="col-md-4">
       <% if (service.data && service.data.avg_response_time){ %>  
-        <p>avg. latency: 
+        <p>AVG. latency: 
           <span title="AVG response time: <%=service.data.avg_response_time%> milliseconds" class="label label-default"><%=service.data.avg_response_time %></span> milliseconds
         </p>
       <% } %>
     </div>
 
-    <div class="col-md-4 bg-danger">
+    <div class="col-md-4">
       <% if (service.data && service.data.outages){ %>  
         <p>Outages : 
           <span title="outages: <%=service.data.outages%>" class="label label-danger"><%=service.data.outages %></span>
