@@ -317,6 +317,7 @@ Run the tests with mocha:
 - Change configuration from control panel
 - Reset stats from control panel
 - Regular expressions support
+- Reset warning and error counter according to event expiration.
 
 ## License
 
