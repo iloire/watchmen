@@ -34,6 +34,9 @@ var helpers = {
       if (format==='ago'){
         return moment(date).fromNow();
       }
+      else if (format==='timespan'){
+        return moment(date).fromNow(true);
+      }
       else{
         return moment(date).format(format || 'MMM D YYYY, hh:mm');
       }
