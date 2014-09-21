@@ -22,8 +22,10 @@
         <% } %>
         </h1>
         <div>
-          <span class="text-muted small">uptime (since last service failure): </span>
-          <%=dateformat(service.data.up_since, 'timespan')%>
+          <% if (service.data && service.data.up_since) { %>  
+            <span class="text-muted small">uptime (since last service failure): </span>
+            <%=dateformat(service.data.up_since, 'timespan')%>
+          <% } %>
         </div>
     </div>
 
