@@ -222,6 +222,15 @@ Run the tests with mocha:
 
 ## History
 
+**1.1.1**
+
+- Persist table sorting options in localStorage.
+- Improve styling and responsiveness.
+- General code cleanup.
+- Display date of oldest event stored in the database in details view.
+- Bump redis, moment and ejs.
+- Some other minor changes.
+
 **1.1.0**
 
 - Delete events older than a certain threshold (configurable in a per-host basis)
