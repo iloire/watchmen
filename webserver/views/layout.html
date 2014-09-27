@@ -17,7 +17,7 @@
           <a class="navbar-brand" href="/">watchmen</a>
       </div>
       <div class="navbar-collapse collapse">
-          <div class="overview" id="totals_holder"></div>
+          <div id="status-overview"></div>
       </div>
     </div>
   </div>
@@ -31,12 +31,8 @@
     author: <a target="_blank" href="http://iloire.com">iloire.com</a>
   </footer>
 
-  <script id='totals_template' type="text/x-handlebars-template">
-    <span class="up">{{up}}</span>
-    +
-    <span class="down">{{down}}</span>
-    +
-    <span class="total">{{disabled}}</span>
+  <script id='status-overview-template' type="text/x-handlebars-template">
+    <span class="down">{{down}} services down</span>
   </script>
 
 <script>
