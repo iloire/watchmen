@@ -14,7 +14,7 @@ There is a <a href="http://letsnode.com/example-of-what-node-is-really-good-at" 
 
 Check the **web interface** in action: <a href="http://watchmen.letsnode.com" target="_blank">watchmen.letsnode.com</a>.
 
-![List of hosts](https://github.com/iloire/WatchMen/raw/1.x/screenshots/list_hosts_v010.png)
+![List of hosts](https://github.com/iloire/WatchMen/raw/1.x/screenshots/watchmen-01.png)
 
 ## Installation
 
