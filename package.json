@@ -26,8 +26,10 @@
   "dependencies": {
     "ejs": "0.7.x",
     "express": "2.5.x",
-    "redis": "0.7.x",
-    "moment": "1.7.x"
+    "moment": "1.7.x",
+    "passport": "^0.2.1",
+    "passport-google": "^0.3.0",
+    "redis": "0.7.x"
   },
   "devDependencies": {
     "assert": "0.4.x",
