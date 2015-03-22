@@ -322,6 +322,7 @@ Run the tests with mocha:
 - Iván Loire (@ivanloire)
 - Odenius (https://github.com/Odenius)
 - Nibbler999 (https://github.com/Nibbler999)
+- Eric Elliott (https://github.com/ericelliott)
 
 ## TODO
 
