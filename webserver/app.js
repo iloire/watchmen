@@ -64,6 +64,7 @@ var server = app.listen(port, function () {
     console.log("watchmen server listening on port %d in %s mode", port, app.settings.env);
   } else {
     console.log ('something went wrong... couldn\'t listen to that port.');
+    process.exit(1);
   }
 
   process.on('SIGINT', function () {
