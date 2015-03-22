@@ -51,13 +51,8 @@ app.dynamicHelpers(helpers);
 app.use(express.static(__dirname + '/public'));
 
 if (env === 'development') {
-  app.use(errorHandler({ dumpExceptions: true, showStack: true }));
-}
-
-if (env === 'development') {
   app.use(errorHandler());
 }
-
 
 //-----------------------------------------
 // Start server
