@@ -3,6 +3,7 @@ var watchmen = require ('../lib/watchmen.js');
 var redis_storage_class = require('../lib/storage/providers/redis');
 var mocked_ping_service = require ('./lib/mock/request_mocked');
 var sinon = require('sinon');
+var service_loader = require ('../lib/services');
 
 describe('redis storage', function(){
 
@@ -32,9 +33,11 @@ describe('redis storage', function(){
   beforeEach(function(done){
     clock = sinon.useFakeTimers(+new Date());
     redis_storage.flush_database(done);
-    services = require ('../lib/services').load_services();
-    service = services[0];
-    service.ping_service = mocked_ping_service; //assign mocked service
+    service_loader.load_services(function(err, _services){
+      services = _services;
+      service = services[0];
+      service.ping_service = mocked_ping_service; //assign mocked service
+    });
   });
 
   after(function(done){
@@ -55,11 +58,12 @@ describe('redis storage', function(){
 
   describe('reporting list', function(){
     it('should load info for all services', function(done){
-      var services = require ('../lib/services').load_services();
-      redis_storage.report_all(services, function(err, data){
-        assert.ifError(err);
-        assert.equal (data.services.length, 18);
-        done();
+      service_loader.load_services(function(err, _services){
+        redis_storage.report_all(services, function(err, data){
+          assert.ifError(err);
+          assert.equal (data.services.length, 18);
+          done();
+        });
       });
     });
   });

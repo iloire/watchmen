@@ -222,6 +222,10 @@ Run the tests with mocha:
 
 ## History
 
+**2.1.0**
+
+- Fix issue #7. Make load_services async so eventually services can be fetched form a database or remote server.
+
 **2.0.0**
 
 - Upgrade to Express 4 (requires Node 0.10 or later), hence bumping to 2.x.
