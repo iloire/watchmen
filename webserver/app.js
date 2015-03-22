@@ -49,15 +49,7 @@ var server = app.listen(port, function () {
 
   process.on('SIGINT', function () {
     console.log('stopping web server.. bye!');
-
-    // Let connections drain...
-    server.close(function () {
-      process.exit(0);
-    });
-
-    // Kill it anyway if it stalls.
-    setTimeout(function () {
-      process.exit(0);
-    },500);
+    server.close();
+    process.exit(0);
   });
 });
