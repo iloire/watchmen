@@ -5,24 +5,6 @@ var one_tick = 20; //seconds
 module.exports =
   [
     {
-      name: 'google smtp',
-      host: 'smtp.gmail.com',
-      port: 465,
-      ping_service_name: 'smtp',
-      timeout:10000,
-      ping_interval: one_tick, //seconds
-      failed_ping_interval: one_tick / 3, //seconds
-      enabled: true,
-      alert_to: ['your-email@domain.com'],
-      warning_if_takes_more_than: 1500, //miliseconds
-      remove_events_older_than_seconds : 60 * 60 * 24 * 10, // purgue events older than (seconds)
-      services : [
-        {
-          name: 'mail server'
-        }
-      ]
-    } ,
-    {
       name:'apple HTTPS',
       host: 'www.apple.com',
       port:443,
@@ -154,24 +136,6 @@ module.exports =
       ]
     } ,
     {
-      name:'letsnode.com frelancer service',
-      host: 'letsnode.com',
-      port:8080,
-      ping_service_name: 'http',
-      timeout:10000,
-      ping_interval: one_tick,
-      failed_ping_interval: one_tick / 3,
-      enabled: false,
-      services : [
-        {
-          name: 'home',
-          method: 'get',
-          url : '/',
-          expected: {statuscode: 200, contains: 'journey'}
-        }
-      ]
-    } ,
-    {
       name:'mathrace demo',
       host: 'letsnode.com',
       port:8090,
@@ -266,26 +230,6 @@ module.exports =
       ]
     } ,
     {
-      name:'cuéntica',
-      host: 'www.cuentica.com',
-      port:80,
-      ping_service_name: 'http',
-      timeout:10000,
-      ping_interval: one_tick,
-      failed_ping_interval: one_tick / 3,
-      enabled: true,
-      warning_if_takes_more_than: 1500, //miliseconds
-      alert_to:['your-email@domain.com'],
-      services : [
-        {
-          name: 'home',
-          method: 'get',
-          url : '/',
-          expected: {statuscode: 200, contains: 'Cuéntica'}
-        }
-      ]
-    } ,
-    {
       name:'form post test',
       host: 'hroch486.icpf.cas.cz',
       port:80,
@@ -307,25 +251,6 @@ module.exports =
           content_type : 'application/x-www-form-urlencoded', // application/json
           url : '/cgi-bin/echo.pl',
           expected: {statuscode: 200, contains: 'your_name = Ivan'}
-        }
-      ]
-    } ,
-    {
-      name:'Menéame',
-      host: 'www.meneame.net',
-      port:80,
-      ping_service_name: 'http',
-      timeout:10000,
-      ping_interval: one_tick,
-      failed_ping_interval: one_tick / 3,
-      warning_if_takes_more_than: 2000,
-      enabled: true,
-      services : [
-        {
-          name: 'home',
-          method: 'get',
-          url : '/',
-          expected: {statuscode: 200, contains: 'Menéame'}
         }
       ]
     } ,
