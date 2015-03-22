@@ -222,6 +222,12 @@ Run the tests with mocha:
 
 ## History
 
+**2.0.0**
+
+- Upgrade to Express 4 (requires Node 0.10 or later), hence bumping to 2.x.
+- Bump ejs
+- Remove dynamic helpers
+
 **1.1.1**
 
 - Persist table sorting options in localStorage.
