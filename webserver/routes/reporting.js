@@ -2,6 +2,22 @@ var services_loader = require ('../../lib/services');
 var moment = require('moment');
 
 module.exports.add_routes = function (app, storage){
+
+  app.all('*', function(req, res, next){
+    res.locals.dateformat = function (date, format) {
+      if (format==='ago'){
+        return moment(date).fromNow();
+      }
+      else if (format==='timespan'){
+        return moment(date).fromNow(true);
+      }
+      else{
+        return moment(date).format(format || 'MMM D YYYY, hh:mm');
+      }
+    };
+    next();
+  });
+
   //-------------------------------
   // Url log detail
   //-------------------------------
@@ -31,7 +47,9 @@ module.exports.add_routes = function (app, storage){
   // List of hosts and url's
   //-------------------------------
   app.get('/', function(req, res){
-    res.render('list.html', {title: 'watchmen'});
+    res.render('list.html', {
+      title: 'watchmen'
+    });
   });
 
   //-------------------------------

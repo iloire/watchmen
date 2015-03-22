@@ -28,7 +28,6 @@
     "ejs": "2.3.x",
     "errorhandler": "1.3.x",
     "express": "4.12.x",
-    "express-dynamic-helpers-patch": "0.0.x",
     "express-ejs-layouts": "1.1.x",
     "forever": "0.14.x",
     "method-override": "2.3.x",

@@ -28,26 +28,6 @@ app.use(methodOverride());
 //-----------------------------------------
 require('./routes/reporting').add_routes(app, storage);
 
-require('express-dynamic-helpers-patch')(app);
-
-var helpers = {
-    dateformat : function (req, res) {
-    return function (date, format) {
-      if (format==='ago'){
-        return moment(date).fromNow();
-      }
-      else if (format==='timespan'){
-        return moment(date).fromNow(true);
-      }
-      else{
-        return moment(date).format(format || 'MMM D YYYY, hh:mm');
-      }
-    };
-  }
-};
-
-app.dynamicHelpers(helpers);
-
 app.use(express.static(__dirname + '/public'));
 
 if (env === 'development') {
