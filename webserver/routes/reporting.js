@@ -54,7 +54,15 @@ module.exports.add_routes = function (app, storage){
   //-------------------------------
   app.get('/getdata', function(req, res){
     services_loader.load_services(function(err, services){
+      if (err) {
+        console.error(err);
+        return res.end(err);
+      }
       storage.report_all(services, function (err, data){
+        if (err) {
+          console.error(err);
+          return res.end(err);
+        }
         res.json(data);
       });
     });
