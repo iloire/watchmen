@@ -16,7 +16,7 @@ module.exports = (function (){
           realm: 'http://localhost:3000/'
         },
         function(identifier, profile, done) {
-          done(null, identifier);
+          done(null, profile.emails[0].value);
         }
       ));
 
