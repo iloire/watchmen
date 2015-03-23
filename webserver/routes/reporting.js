@@ -4,12 +4,6 @@ var auth = require('../auth');
 
 module.exports.add_routes = function (app, storage){
 
-  app.get('/login', function(req, res) {
-    res.render('login.html', {
-      title: 'Login'
-    });
-  });
-
   app.all('*', function(req, res, next){
     res.locals.moment = moment;
     next();

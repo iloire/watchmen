@@ -31,6 +31,12 @@ module.exports = (function (){
       app.use(passport.initialize());
       app.use(passport.session());
 
+      app.get('/login', function(req, res) {
+        res.render('login.html', {
+          title: 'Login'
+        });
+      });
+
       // Redirect the user to Google for authentication.  When complete, Google
       // will redirect the user back to the application at
       //     /auth/google/return
