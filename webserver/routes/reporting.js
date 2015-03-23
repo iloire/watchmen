@@ -1,10 +1,6 @@
 var services_loader = require ('../../lib/services');
 var moment = require('moment');
-
-function ensureAuthenticated(req, res, next) {
-  if (req.isAuthenticated()) { return next(); }
-  res.redirect('/login');
-}
+var auth = require('../auth');
 
 module.exports.add_routes = function (app, storage){
 
@@ -22,7 +18,7 @@ module.exports.add_routes = function (app, storage){
   //-------------------------------
   // Url log detail
   //-------------------------------
-  app.get('/details', ensureAuthenticated, function(req, res){
+  app.get('/details', auth.ensureAuthenticated, function(req, res){
 
     services_loader.load_services(function(err, services){
       if (err) {
@@ -54,7 +50,7 @@ module.exports.add_routes = function (app, storage){
   //-------------------------------
   // List of hosts and url's
   //-------------------------------
-  app.get('/', ensureAuthenticated, function(req, res){
+  app.get('/', auth.ensureAuthenticated, function(req, res){
     res.render('list.html', {
       title: 'watchmen'
     });
@@ -63,7 +59,7 @@ module.exports.add_routes = function (app, storage){
   //-------------------------------
   // Get list (JSON)
   //-------------------------------
-  app.get('/getdata', ensureAuthenticated, function(req, res){
+  app.get('/getdata', auth.ensureAuthenticated, function(req, res){
     services_loader.load_services(function(err, services){
       if (err) {
         console.error(err);
