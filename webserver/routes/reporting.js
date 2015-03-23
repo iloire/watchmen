@@ -4,17 +4,7 @@ var moment = require('moment');
 module.exports.add_routes = function (app, storage){
 
   app.all('*', function(req, res, next){
-    res.locals.dateformat = function (date, format) {
-      if (format==='ago'){
-        return moment(date).fromNow();
-      }
-      else if (format==='timespan'){
-        return moment(date).fromNow(true);
-      }
-      else{
-        return moment(date).format(format || 'MMM D YYYY, hh:mm');
-      }
-    };
+    res.locals.moment = moment;
     next();
   });
 
@@ -24,6 +14,11 @@ module.exports.add_routes = function (app, storage){
   app.get('/details', function(req, res){
 
     services_loader.load_services(function(err, services){
+      if (err) {
+        console.error(err);
+        return res.end(err);
+      }
+
       var service = services.filter(function(service){
         return (service.host.name === req.query ['host'] && service.name === req.query ['service']);
       })[0];

@@ -24,7 +24,7 @@
         <div>
           <% if (service.data && service.data.up_since) { %>  
             <span class="text-muted small">uptime (since last service failure): </span>
-            <%=dateformat(service.data.up_since, 'timespan')%>
+            <%=moment(service.data.up_since).fromNow(true)%>
           <% } %>
         </div>
     </div>
@@ -43,7 +43,7 @@
           <span title="outages: <%=service.data.outages%>" class="label label-danger"><%=service.data.outages %></span>
           <% if (service.data && service.data.last_outage){ %>  
             <span class="text-muted small">
-            - last one was <%=dateformat(service.data.last_outage, 'ago')%>
+            - last one was <%=moment(service.data.last_outage).fromNow()%>
             </span>
           <% } %>
         </p>
@@ -54,7 +54,7 @@
           <span title="warnings: <%=service.data.warnings%>" class="label label-warning"><%=service.data.warnings %></span>
           <% if (service.data && service.data.last_warning){ %>  
             <span class="text-muted small">
-            - last one was <%=dateformat(service.data.last_warning, 'ago')%>
+            - last one was <%=moment(service.data.last_warning).fromNow()%>
             </span>
           <% } %>
         </p>
@@ -108,10 +108,10 @@
     </div>
 
   </div>
-  
+
   <h3>Events</h3>
   <p>
-    Showing events from <%=dateformat(eventsSince, 'MMM D YYYY, hh:mm')%> (<%=dateformat(eventsSince, 'ago')%>)
+    Showing events from <%=moment(eventsSince).format('MMM D YYYY, hh:mm')%> (<%=moment(eventsSince).fromNow()%>)
   </p>
 
   <div class="section events row">

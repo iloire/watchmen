@@ -9,9 +9,9 @@
       %>
       <tr>
         <td>
-          <time class="timeago" datetime="<%=dateformat(log.timestamp)%>">
-            <%=dateformat(log.timestamp, 'ago')%><br />
-            <%=dateformat(log.timestamp, 'MMM D YYYY, hh:mm')%>
+          <time class="timeago" datetime="<%=moment(log.timestamp).format('MMM D YYYY, hh:mm')%>">
+            <%=moment(log.timestamp).fromNow()%><br />
+            <%=moment(log.timestamp).format('MMM D YYYY, hh:mm')%>
           </time>
         </td>
         <td>
@@ -38,9 +38,9 @@
       %>
       <tr>
         <td>
-          <time class="timeago" datetime="<%=dateformat(log.timestamp)%>">
-            <%=dateformat(log.timestamp, 'ago')%><br />
-            <%=dateformat(log.timestamp, 'MMM D YYYY, hh:mm')%>
+          <time class="timeago" datetime="<%=moment(log.timestamp).format('MMM D YYYY, hh:mm')%>">
+            <%=moment(log.timestamp).fromNow()%><br />
+            <%=moment(log.timestamp).format('MMM D YYYY, hh:mm')%>
           </time>
         </td>
         <td>
