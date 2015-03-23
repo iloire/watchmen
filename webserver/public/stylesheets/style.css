@@ -78,6 +78,10 @@ a {
   color:red;
 }
 
+.table-services tr.result-error a {
+  color:red;
+}
+
 /*ok*/
 .table-services tr.result-success a {
   color:green;
