@@ -1,65 +1,63 @@
 <script id='services_list_template' type="text/x-handlebars-template">
 
-<table class="table sorted table-striped table-condensed">
+<table class="table-services table sorted table-striped table-condensed">
   <thead>
-    <th width="40"></th>
-    <th width="80">Ping type</th>
-    <th>Service</th>
-    <th width="80"><span title="Average response time (milliseconds)">AVG res.</span></th>
-    <th width="70">outages</th>
-    <th width="14%">last outage</th>
-    <th width="75">warnings</th>
-    <th width="14%">last warning</th>
-    <th width="10%">uptime</th>
-    <th width="90"></th>
+    <th></th>
+    <th class="hidden-xs">ping</th>
+    <th>host</th>
+    <th class="hidden-xs"><span title="Average response time (milliseconds)">AVG res. (ms)</span></th>
+    <th class="hidden-xs">outages</th>
+    <th class="hidden-xs">last outage</th>
+    <th class="hidden-xs hidden-sm">warnings</th>
+    <th class="hidden-xs hidden-sm">last warning</th>
+    <th>uptime</th>
   </thead>
   <tbody>
 
   {{#each services}}
-  <tr class="{{#if enabled}}{{data.status}}{{else}}disabled{{/if}}">
+  <tr class="result-{{#if enabled}}{{data.status}}{{else}}disabled{{/if}}">
+    <td>
+      {{#ifvalue data.status value="error"}}
+          <span class="label label-danger">offline</span>
+      {{/ifvalue}}
 
-    <td class="icon">
-      <span>{{data.status}}</span>
+      {{#ifvalue data.status value="success"}}
+          <span class="label label-success">online</span>
+      {{/ifvalue}}
     </td>
 
-    <td style="text-align:center">
+    <td class="service hidden-xs">
       {{ping_service_name}}
     </td>
 
     <td class="hosturl">
-      <a target="_blank" href="{{host.protocol}}://{{host.host}}:{{host.port}}{{url}}">
+      <a class="name" href="/details?service={{name}}&host={{host.name}}">
         {{host.name}} / {{name}}
       </a>
-      <br />
-      <span title="ping interval: {{ping_interval}} seconds" class="label">{{ping_interval}}</span>
-      {{#if warning_if_takes_more_than}}
-      <span title="response limit (warning): {{warning_if_takes_more_than}} milliseconds" class="label label-warning">{{warning_if_takes_more_than}}</span>
-      {{/if}}
-
-      <span title="{{data.ok_responses_count}} successful responses" class="label label-success">{{data.ok_responses_count}}</span>
-
-      <br />
 
       {{#if data.last_check}}
-      <span class="last_check">
-        last check:
+      <span class="hidden-xs last_check">
+        last ping:
         {{dateFormat data.last_check format="MMM Do, h:mm:ss"}}
         <time datetime='{{dateFormat data.last_check format="MMMM Do, h:mm:ss"}}'>{{dateFormat data.last_check ago=true}}</time>
       </span>
       {{/if}}
+
     </td>
 
-    <td class="avgresponse">
-      {{data.avg_response_time}}
-    </td>
-
-    <td class="error">
-      {{#if data.outages}}
-      <span class="badge badge-important">{{data.outages}}</span>
+    <td class="avgresponse hidden-xs">
+      {{#if data.avg_response_time}}
+      <span class="label label-default">{{data.avg_response_time}}</span>
       {{/if}}
     </td>
 
-    <td class="error">
+    <td class="result-error hidden-xs">
+      {{#if data.outages}}
+      <span class="label label-danger">{{data.outages}}</span>
+      {{/if}}
+    </td>
+
+    <td class="result-error hidden-xs">
       {{#if data.last_outage}}
       {{dateFormat data.last_outage format="MMM Do, h:mm:ss"}}
       <br />
@@ -67,41 +65,39 @@
       {{/if}}
     </td>
 
-    <td class="warning">
+    <td class="result-warning hidden-xs hidden-sm">
       {{#if data.warnings}}
-      <span class="badge badge-warning">{{data.warnings}}</span>
+      <span class="label label-warning">{{data.warnings}}</span>
       {{/if}}
     </td>
 
-    <td class="warning">
+    <td class="result-warning hidden-xs hidden-sm">
       {{#if data.last_warning}}
       {{dateFormat data.last_warning format="MMM Do, h:mm:ss"}}
-      <br />
       <time datetime='{{dateFormat data.last_warning format="MMMM Do, h:mm:ss"}}'>{{dateFormat data.last_warning ago=true}}</time>
       {{/if}}
     </td>
 
-    <td class="">
+    <td class="result-uptime">
       {{#if data.uptime}}
-      {{data.uptime}}%
-      {{/if}}
-      <br />
-      {{#if data.up_since}}
-      <time datetime='{{dateFormat data.up_since format="MMMM Do, h:mm:ss"}}'>started {{dateFormat data.up_since ago=true}}</time>
+      <a class="name" href="/details?service={{name}}&host={{host.name}}">
+        <span>
+        {{data.uptime}}%
+        </span>
+      </a>
       {{/if}}
     </td>
 
-    <td>
-      <a class="btn primary" href="/details?service={{name}}&host={{host.name}}"><i class="icon-th-list"></i> details</a>
-    </td>
   </tr>
   {{/each}}
   </tbody>
 </table>
 </script>
 
-<span class="add-on"><i class="icon-search"></i></span>
-<input type="text" id="filter" placeholder="filter by host name"/>
+<div class="filter-container">
+  <span class="glyphicon glyphicon-search"></span>
+  <input class="form-control" type="text" id="filter" placeholder="filter by host name"/>
+</div>
 
 <div id="data_holder"></div>
 

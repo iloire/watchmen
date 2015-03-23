@@ -1,111 +1,165 @@
 body {
   padding-top: 60px;
-  font: 14px "Lucida Grande", Helvetica, Arial, sans-serif;
-}
-
-.filter{
-	padding:8px;
-}
-
-/*overview*/
-.overview {
-	text-align: right;
-	padding:10px;
-	font-size:1.5em;
-}
-
-.overview span {
-	color:white;
-	display:inline;
-	padding:5px 12px;
-	border-radius: 5px;
-}
-
-.overview .up{
-	background-color:green;
-}
-.overview .down{
-	background-color:red;
-}
-.overview .total{
-	background-color:gray;
-}
-
-time{
-	font-size:0.8em;
-	color:gray;
-}
-
-table th, table td { /*overwrite bootstrap style*/
-	padding: 5px;
-	line-height: 18px;
-	text-align: left;
-	vertical-align:middle;
-}
-
-table tbody tr td.icon {
-	width:30px !important;
-	height:30px !important;
-}
-
-table tbody tr td.icon span {display:none;}
-table tbody tr td.avgresponse {font-weight:bold;;}
-
-/*error*/
-table tbody tr.error .hosturl a {
-	color:red;
-}
-
-table tbody tr.error td.icon {
-	background: transparent url("/images/red.png") 5px 5px no-repeat;
-}
-
-/*ok*/
-table tbody tr.success td.hosturl a {
-	color:green;
-}
-table tbody tr.success td.icon {
-	background: transparent url("/images/green.png") 5px 5px no-repeat;
-}
-
-/*disabled*/
-table tr.disabled, table tr.disabled td.hosturl a {
-	background-color: #f5f5f5;
-	color:gray !important;
-}
-
-table tr.disabled td.icon {
-	background: transparent url("/images/disabled.png") 5px 5px no-repeat;
-}
-
-table tr.disabled a.hosturl {
-	color:gray !important;
 }
 
 a {
   color: #00B7FF;
 }
 
-.error, .failure, .critical {color:red;}
-.success {color:green;}
-.warning, .warnings{color:orange;}
-
-.last_check{
-	font-size:11px;
-	color:gray;
+/*overview*/
+#status-overview {
+  text-align: right;
+  padding: 10px;
+  font-size: 1.5em;
+  color: white;
 }
 
-img.status_icon{
-	max-width:35px;
-	max-height:25px;
+#status-overview span {
+  color: white;
+  display: inline;
+  padding: 5px 12px;
+  border-radius: 5px;
+}
+
+#status-overview .down{
+  background-color:red;
+}
+
+.filter-container {
+  max-width: 400px;
+  margin: 10px 0;
+}
+
+.filter-container {
+    position: relative;
+}
+.filter-container input {
+    padding-right: 30px;    
+}
+.filter-container span {
+    position: absolute;
+    right: 0px;
+    padding: 10px 12px;
+    pointer-events: none;
+}
+
+.table-services time {
+  display:block;
+  font-size:0.8em;
+  color:#ccc;
+}
+
+.table-services td.hosturl time { 
+  display:inline;
+}
+
+.table-services td.service{
+  text-align: center;
+  text-transform: uppercase;
+  margin-top:20px;
+  font-size:1.2em;
+  opacity:0.6;
+  color:gray;
+}
+
+.table-services td .name {
+  display:block;
+  font-size:1.2em;
+}
+
+.table-services span.label {
+  font-size:1.0em;
+  line-height: 2.0em;
+}
+
+/*error*/
+.table-services tr.result-error .hosturl a {
+  font-weight: bold;
+  color:red;
+}
+
+.table-services tr.result-error a {
+  color:red;
+}
+
+/*ok*/
+.table-services tr.result-success a {
+  color:green;
+}
+
+/*disabled*/
+.table-services tr.result-disabled, table tr.disabled td.hosturl a {
+  background-color: #f5f5f5;
+  color:gray !important;
+}
+
+.table-services tr.result-disabled {
+  opacity:0.5;
+}
+
+.table-services tr.result-disabled .hosturl a {
+  color:gray !important;
+}
+
+/* uptime */
+.table-services td.result-uptime span{
+  font-size:1.3em;
+}
+
+.result-error, .error, .failure, .critical {color:red;}
+.result-success, .success {color:green;}
+.result-warning, .warning, .warnings{color:orange;}
+
+.last_check{
+  color:#ccc;
+}
+
+/* details page */
+
+.details-page h2 {
+  margin: 10px 0;
+  font-size: 2.6em;
+}
+
+.details-page h3 { 
+  font-size: 2em;
+  margin-bottom: 0.8em;
+}
+
+.details-page .label.status {
+  font-size:1.5em;
+  line-height: 2em;
+}
+
+.details-page .configuration p, .details-page .status p, .details-page .configuration li {
+  font-size: 1.2em;
+  margin-bottom:5px;
+}
+.details-page .timeago {
+  color:gray;
+}
+
+.details-page h1.uptime {
+  margin-top: 0;
+  font-size:3em;
+}
+
+.details-page .section {
+  margin: 0 5px;
+  margin-bottom: 2em;
+}
+
+.details-page .status > div {
+  padding:15px;
+  min-height: 100px;
 }
 
 footer{
-	color:gray;
-	padding:20px;
-	text-align: center;
+  color:#ccc;
+  padding:20px;
+  text-align: center;
 }
 
 footer a {
-	color:#c2c2c2;
+  color:#c2c2c2;
 }

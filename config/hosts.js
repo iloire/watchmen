@@ -5,34 +5,16 @@ var one_tick = 20; //seconds
 module.exports =
   [
     {
-      name: 'iloire smtp',
-      host: 'mail.iloire.com',
-      port: 25,
-      ping_service_name: 'smtp',
-      timeout:10000,
-      ping_interval: one_tick, //seconds
-      failed_ping_interval: one_tick / 3, //minutes
-      enabled: true,
-      alert_to: ['ivan@iloire.com'],
-      warning_if_takes_more_than: 1500, //miliseconds
-      services : [
-        {
-          name: 'mail server'
-        }
-      ]
-    } ,
-
-    {
-      name:'Apple HTTPS',
+      name:'apple HTTPS',
       host: 'www.apple.com',
       port:443,
       protocol: 'https',
       ping_service_name: 'http',
       timeout:10000,
       ping_interval: one_tick, //seconds
-      failed_ping_interval: one_tick / 3, //minutes
+      failed_ping_interval: one_tick / 3, //seconds
       enabled: true,
-      alert_to: ['ivan@iloire.com'],
+      alert_to: ['your-email@domain.com'],
       warning_if_takes_more_than: 1500, //miliseconds
       services : [
         {
@@ -44,15 +26,15 @@ module.exports =
       ]
     } ,
     {
-      name:'VitaminasDev',
+      name:'vitaminas dev',
       host: 'www.vitaminasdev.com',
       port:80,
       ping_service_name: 'http',
       timeout:10000,
       ping_interval: one_tick, //seconds
-      failed_ping_interval: one_tick / 3, //minutes
+      failed_ping_interval: one_tick / 3, //seconds
       enabled: true,
-      alert_to: ['ivan@iloire.com'],
+      alert_to: ['your-email@domain.com'],
       warning_if_takes_more_than: 1500, //miliseconds
       services : [
         {
@@ -72,31 +54,6 @@ module.exports =
       ]
     } ,
     {
-      name:'iloire.com',
-      host: 'www.iloire.com',
-      port:80,
-      ping_service_name: 'http',
-      timeout:5000,
-      ping_interval: one_tick,
-      failed_ping_interval: one_tick / 3,
-      warning_if_takes_more_than: 1500, //miliseconds
-      enabled: true,
-      services : [
-        {
-          name: 'home',
-          method: 'get',
-          url : '/',
-          expected: {statuscode: 200, contains: 'vitaminas'}
-        },
-        {
-          name: 'english version',
-          method: 'get',
-          url : '/en',
-          expected: {statuscode: 200, contains: 'Freelance'}
-        }
-      ]
-    } ,
-    {
       name:'ASP Photo Gallery',
       host: 'www.aspphotogallery.net',
       port:80,
@@ -112,26 +69,12 @@ module.exports =
           name: 'home',
           method: 'get',
           url : '/',
-          expected: {statuscode: 302}
-        },
-        {
-          name: 'mvcphotogallery',
-          method: 'get',
-          url : '/mvcphotogallery',
-          warning_if_takes_more_than: 800,
-          expected: {statuscode: 200, contains: 'Knockout'}
-        },
-        {
-          name: 'demomvc',
-          method: 'get',
-          enabled: true,
-          url : '/demomvc',
-          expected: {statuscode: 200, contains: 'Simple, sexy, FAST, ASP.NET MVC photo gallery'}
+          expected: { statuscode: 200 , contains: 'dGallery'}
         }
       ]
     } ,
     {
-      name:'CachiruloValley',
+      name:'cachiruloValley',
       host: 'cachirulovalley.com',
       port:80,
       ping_service_name: 'http',
@@ -150,7 +93,7 @@ module.exports =
       ]
     } ,
     {
-      name:'Directorio CachiruloValley',
+      name:'directorio cachirulo valley',
       host: 'directorio.cachirulovalley.com',
       port:80,
       ping_service_name: 'http',
@@ -189,24 +132,6 @@ module.exports =
           method: 'get',
           url : '/',
           expected: {statuscode: 200, contains: 'A blog about node.js and express.js'}
-        }
-      ]
-    } ,
-    {
-      name:'letsnode.com frelancer service',
-      host: 'letsnode.com',
-      port:8080,
-      ping_service_name: 'http',
-      timeout:10000,
-      ping_interval: one_tick,
-      failed_ping_interval: one_tick / 3,
-      enabled: false,
-      services : [
-        {
-          name: 'home',
-          method: 'get',
-          url : '/',
-          expected: {statuscode: 200, contains: 'journey'}
         }
       ]
     } ,
@@ -253,7 +178,7 @@ module.exports =
       ping_service_name: 'http',
       ping_interval: one_tick,
       failed_ping_interval: one_tick / 3,
-      alert_to: ['ivan@iloire.com'],
+      alert_to: ['your-email@domain.com'],
       enabled: false,
       services : [
         {
@@ -265,8 +190,28 @@ module.exports =
       ]
     } ,
     {
-      name:'Idibay direct',
-      host: 'direct.idibay.com',
+      name:'amazon',
+      host: 'www.amazon.com',
+      port:80,
+      ping_service_name: 'http',
+      timeout: 10000,
+      ping_interval: one_tick,
+      failed_ping_interval: one_tick / 3,
+      warning_if_takes_more_than: 2000, //miliseconds
+      enabled: true,
+      alert_to:['your-email@domain.com'],
+      services : [
+        {
+          name: 'home',
+          method: 'get',
+          url : '/',
+          expected: {statuscode: 200, contains: 'Amazon'}
+        }
+      ]
+    } ,
+    {
+      name:'hacker news',
+      host: 'news.ycombinator.com',
       port:80,
       ping_service_name: 'http',
       timeout:10000,
@@ -274,53 +219,13 @@ module.exports =
       failed_ping_interval: one_tick / 3,
       warning_if_takes_more_than: 4000, //miliseconds
       enabled: true,
-      alert_to:['ivan@iloire.com'],
+      alert_to:['your-email@domain.com'],
       services : [
         {
           name: 'home',
           method: 'get',
           url : '/',
-          expected: {statuscode: 200, contains: 'Mundo Idibay'}
-        }
-      ]
-    } ,
-    {
-      name:'Idibay',
-      host: 'www.idibay.com',
-      port:80,
-      ping_service_name: 'http',
-      timeout:10000,
-      ping_interval: one_tick,
-      failed_ping_interval: one_tick / 3,
-      warning_if_takes_more_than: 4000, //miliseconds
-      enabled: true,
-      alert_to:['ivan@iloire.com'],
-      services : [
-        {
-          name: 'home',
-          method: 'get',
-          url : '/',
-          expected: {statuscode: 200, contains: 'Mundo Idibay'}
-        }
-      ]
-    } ,
-    {
-      name:'Cuéntica',
-      host: 'www.cuentica.com',
-      port:80,
-      ping_service_name: 'http',
-      timeout:10000,
-      ping_interval: one_tick,
-      failed_ping_interval: one_tick / 3,
-      enabled: true,
-      warning_if_takes_more_than: 1500, //miliseconds
-      alert_to:['ivan@iloire.com'],
-      services : [
-        {
-          name: 'home',
-          method: 'get',
-          url : '/',
-          expected: {statuscode: 200, contains: 'Cuéntica'}
+          expected: { statuscode: 301 }
         }
       ]
     } ,
@@ -346,25 +251,6 @@ module.exports =
           content_type : 'application/x-www-form-urlencoded', // application/json
           url : '/cgi-bin/echo.pl',
           expected: {statuscode: 200, contains: 'your_name = Ivan'}
-        }
-      ]
-    } ,
-    {
-      name:'Menéame',
-      host: 'www.meneame.net',
-      port:80,
-      ping_service_name: 'http',
-      timeout:10000,
-      ping_interval: one_tick,
-      failed_ping_interval: one_tick / 3,
-      warning_if_takes_more_than: 2000,
-      enabled: true,
-      services : [
-        {
-          name: 'home',
-          method: 'get',
-          url : '/',
-          expected: {statuscode: 200, contains: 'Menéame'}
         }
       ]
     } ,

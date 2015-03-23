@@ -29,32 +29,36 @@ var watchmen_client = {
     //------------------------------------------
     // Counters
     //------------------------------------------
-    var template_totals = Handlebars.compile($("#totals_template").html());
-    var totals_data = {};
+    var overviewTemplate = Handlebars.compile($("#status-overview-template").html());
+    var overviewData = {};
 
-    function up(service){
-      return (service.data && service.data.status === "success");
+    function down(service){
+      return (service.data && service.data.status === "error");
     }
 
-    function disabled(service){
-      return (!service.enabled);
-    }
+    overviewData.down = display_data.services.filter(down).length;
 
-    totals_data.all = display_data.services.length;
-    totals_data.up = display_data.services.filter(up).length;
-    totals_data.disabled = display_data.services.filter(disabled).length;
-    totals_data.down = totals_data.all - totals_data.up - totals_data.disabled;
-    $('#totals_holder').html(template_totals(totals_data));
+    $('#status-overview').html(overviewTemplate(overviewData));
 
     //------------------------------------------
     // Config table sorter, remember sort options
     //------------------------------------------
     if (display_data.services.length){
+      var localStorageKey = "servicesSortList";
+      if (window.localStorage){
+        if (window.localStorage.getItem(localStorageKey)){
+          self.currentSort = JSON.parse(window.localStorage.getItem(localStorageKey));
+        }
+      }
+      //debugger;
       $("table.sorted").tablesorter({
         headers: {8: {sorter: 'percent'}, 9: {sorter: false}},
         sortList: self.currentSort
       }).bind("sortEnd", function(sorter) {
         self.currentSort = sorter.target.config.sortList;
+        if (window.localStorage){
+          window.localStorage.setItem(localStorageKey, JSON.stringify(self.currentSort));
+        }
       });
     }
 

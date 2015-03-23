@@ -1,4 +1,5 @@
-var services_loader = require ('../../lib/services')
+var services_loader = require ('../../lib/services');
+var moment = require('moment');
 
 function ensureAuthenticated(req, res, next) {
   if (req.isAuthenticated()) { return next(); }
@@ -13,25 +14,39 @@ module.exports.add_routes = function (app, storage){
     });
   });
 
+  app.all('*', function(req, res, next){
+    res.locals.moment = moment;
+    next();
+  });
+
   //-------------------------------
   // Url log detail
   //-------------------------------
   app.get('/details', ensureAuthenticated, function(req, res){
-    var max = 100;
-    var host = req.query ['host'], service_name = req.query ['service'];
-    var service = services_loader.load_services().filter(function(service){
-      return (service.host.name === host && service.name === service_name);
-    });
-    if (!service.length){
-      return res.end('not found');
-    }
 
-    storage.report_one(service[0], function (err, service){
-      res.render('details.html', {
-        title: service.url_info,
-        service: service,
-        critical_events: service.data.events.filter(function(item){return item.type == 'critical';}),
-        warning_events: service.data.events.filter(function(item){return item.type == 'warning';})
+    services_loader.load_services(function(err, services){
+      if (err) {
+        console.error(err);
+        return res.end(err);
+      }
+
+      var service = services.filter(function(service){
+        return (service.host.name === req.query ['host'] && service.name === req.query ['service']);
+      })[0];
+
+      if (!service){
+        return res.end('not found');
+      }
+
+      storage.report_one(service, function (err, service){
+        res.render('details.html', {
+          title: service.url_info,
+          service : service,
+          eventsSince : moment (+new Date() - service.remove_events_older_than_seconds * 1000),
+          status: service.data ? service.data.status : 'unavailable', // no data collected yet
+          critical_events: service.data ? service.data.events.filter(function(item){return item.type == 'critical';}) : [],
+          warning_events: service.data ? service.data.events.filter(function(item){return item.type == 'warning';}) : []
+        });
       });
     });
   });
@@ -40,16 +55,27 @@ module.exports.add_routes = function (app, storage){
   // List of hosts and url's
   //-------------------------------
   app.get('/', ensureAuthenticated, function(req, res){
-    res.render('list.html', {title: 'watchmen'});
+    res.render('list.html', {
+      title: 'watchmen'
+    });
   });
 
   //-------------------------------
   // Get list (JSON)
   //-------------------------------
   app.get('/getdata', ensureAuthenticated, function(req, res){
-    var services = services_loader.load_services();
-    storage.report_all(services, function (err, data){
-      res.json(data);
+    services_loader.load_services(function(err, services){
+      if (err) {
+        console.error(err);
+        return res.end(err);
+      }
+      storage.report_all(services, function (err, data){
+        if (err) {
+          console.error(err);
+          return res.end(err);
+        }
+        res.json(data);
+      });
     });
   });
 

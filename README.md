@@ -12,20 +12,13 @@ There is a <a href="http://letsnode.com/example-of-what-node-is-really-good-at" 
 
 # Demo
 
-Check the **web interface** in action <a href="http://letsnode.com:8084" target="_blank">here</a>.
+Check the **web interface** in action: <a href="http://watchmen.letsnode.com" target="_blank">watchmen.letsnode.com</a>.
 
-![List of hosts](https://github.com/iloire/WatchMen/raw/1.x/screenshots/list_hosts_v010.png)
+![List of hosts](https://github.com/iloire/WatchMen/raw/1.x/screenshots/watchmen-01.png)
 
 ## Installation
 
-Watchmen depends on the following modules:
-
-- [ejs](https://github.com/visionmedia/ejs)
-- [express](https://github.com/visionmedia/express)
-- [moment](http://momentjs.com/)
-- [node_redis](https://github.com/mranney/node_redis)  (if you are using redis storage)
-
-Make sure you install those dependencies:
+Install the required dependencies first:
 
     $ npm install
 
@@ -53,6 +46,7 @@ Most of the properties can be defined either at host or service level. Service l
   enabled: true, //enables/disables this host
   alert_to: ['ivan@iloire.com'], //emails to alert if site goes down.
   warning_if_takes_more_than: 700, //miliseconds. alert if request takes more than this
+  remove_events_older_than_seconds : 60 * 60 * 24 * 10, // remove events older than (seconds)
   services : [
     {
       name : 'home',
@@ -198,19 +192,19 @@ watchmen.on('service_error', function(service, state){
 
 ```
 
-## Run watchmen
+# Running and stopping watchmen
 
-### Run the monitor server
+Make sure you have `redis-server` in your `PATH`
 
+    $ npm start
+    $ npm stop
+
+Or if you want to run the services separately:
+
+    $ redis-server redis.conf
     $ node server.js
+    $ node webserver/app.js
 
-or more probably you would want to use **forever** to run it in the background
-
-    $ forever start watchmen.js
-
-### Run the web app
-
-    $ forever start webserver/app.js 3000 #(where 3000 is the port you want to use).
 
 # Tests
 
@@ -220,6 +214,33 @@ Run the tests with mocha:
 
 
 ## History
+
+**2.1.0**
+
+- Fix issue #7. Make load_services async so eventually services can be fetched form a database or remote server.
+
+**2.0.0**
+
+- Upgrade to Express 4 (requires Node 0.10 or later), hence bumping to 2.x.
+- Bump ejs
+- Remove dynamic helpers
+
+**1.1.1**
+
+- Persist table sorting options in localStorage.
+- Improve styling and responsiveness.
+- General code cleanup.
+- Display date of oldest event stored in the database in details view.
+- Bump redis, moment and ejs.
+- Some other minor changes.
+
+**1.1.0**
+
+- Delete events older than a certain threshold (configurable in a per-host basis)
+- Bump jQuery to 1.11.1
+- Bump Handlebars to 2.0.0
+- Bump bootstrap to 3.2.0
+- Responsive design based on bootstrap
 
 **1.0.alpha1 Major changes and improvements**
 
@@ -295,9 +316,11 @@ Run the tests with mocha:
 
 ## Contributors
 
-- Iván Loire (@ivanloire)
-- Odenius (https://github.com/Odenius)
-- Nibbler999 (https://github.com/Nibbler999)
+- [Iván Loire](http://twitter.com/ivanloire)
+- [Oden](https://github.com/Odenius)
+- [Tom Atkinson](https://github.com/Nibbler999)
+- [Martin Bučko](https://github.com/MartinBucko)
+- [Eric Elliott](https://github.com/ericelliott)
 
 ## TODO
 
@@ -308,10 +331,11 @@ Run the tests with mocha:
 - Change configuration from control panel
 - Reset stats from control panel
 - Regular expressions support
+- Reset warning and error counter according to event expiration.
 
 ## License
 
-Copyright (c) 2012 Iván Loire
+Copyright (c) 2012 - 2015 Iván Loire
 
 Permission is hereby granted, free of charge, to any person
 obtaining a copy of this software and associated documentation

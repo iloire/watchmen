@@ -2,19 +2,22 @@ var assert = require ('assert');
 
 describe('services', function(){
 
-  var services = require ('../lib/services').load_services();
+  var services_loader = require ('../lib/services');
 
   describe('reporting list', function(){
     it('should load all services', function(done){
-      var services = require ('../lib/services').load_services();
-      assert.equal (services.length, 26);
-      done();
+      services_loader.load_services(function(err, services){
+        assert.equal (services.length, 18);
+        done();
+      });
     });
 
     it('should load all enabled services', function(done){
-      var services_enabled = services.filter(function(item){return item.enabled;});
-      assert.equal (services_enabled.length, 23);
-      done();
+      services_loader.load_services(function(err, services){
+        var services_enabled = services.filter(function(item){return item.enabled;});
+        assert.equal (services_enabled.length, 16);
+        done();
+      });      
     });
   });
 });
