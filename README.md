@@ -18,14 +18,7 @@ Check the **web interface** in action: <a href="http://watchmen.letsnode.com" ta
 
 ## Installation
 
-Watchmen depends on the following modules:
-
-- [ejs](https://github.com/visionmedia/ejs)
-- [express](https://github.com/visionmedia/express)
-- [moment](http://momentjs.com/)
-- [node_redis](https://github.com/mranney/node_redis)  (if you are using redis storage)
-
-Make sure you install those dependencies:
+Install the required dependencies first:
 
     $ npm install
 
