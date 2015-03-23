@@ -316,11 +316,11 @@ Run the tests with mocha:
 
 ## Contributors
 
-- Iván Loire (@ivanloire)
-- Odenius (https://github.com/Odenius)
-- Nibbler999 (https://github.com/Nibbler999)
-- Martin Bučko https://github.com/MartinBucko
-- Eric Elliott (https://github.com/ericelliott)
+- [Iván Loire](http://twitter.com/ivanloire)
+- [Oden](https://github.com/Odenius)
+- [Tom Atkinson](https://github.com/Nibbler999)
+- [Martin Bučko](https://github.com/MartinBucko)
+- [Eric Elliott](https://github.com/ericelliott)
 
 ## TODO
 
