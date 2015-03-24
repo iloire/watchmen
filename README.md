@@ -260,6 +260,10 @@ Run the tests with mocha:
 
 ## History
 
+**2.3.0**
+
+- Use passport-google-oauth2 as Google authentication strategy.
+
 **2.2.0**
 
 - Added service/host authorization with passportjs and GoogleStrategy.
