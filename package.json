@@ -33,8 +33,8 @@
     "forever": "0.14.x",
     "method-override": "2.3.x",
     "moment": "2.9.x",
-    "passport": "^0.2.1",
-    "passport-google": "^0.3.0",
+    "passport": "0.2.x",
+    "passport-google": "0.3.x",
     "redis": "0.12.x"
   },
   "devDependencies": {
