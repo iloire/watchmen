@@ -22,7 +22,7 @@ module.exports =
           method: 'get',
           url : '/',
           expected: {statuscode: 200, contains: 'Apple Inc'},
-          restrictedTo: [ "iloire@gmail.com" ]
+          restrictedTo: [ "myemail@domain.com" ]
         }
       ]
     } ,
@@ -53,7 +53,7 @@ module.exports =
           failed_ping_interval: one_tick / 3
         }
       ],
-      restrictedTo: [ "iloire@gmail.com" ]
+      restrictedTo: [ "myemail@domain.com" ]
     } ,
     {
       name:'ASP Photo Gallery',
@@ -74,7 +74,7 @@ module.exports =
           expected: { statuscode: 200 , contains: 'dGallery'}
         }
       ],
-      restrictedTo: [ "iloire@gmail.com" ]
+      restrictedTo: [ "myemail@domain.com" ]
     } ,
     {
       name:'cachiruloValley',
@@ -94,7 +94,7 @@ module.exports =
           expected: {statuscode: 200, contains: ''}
         }
       ],
-      restrictedTo: [ "iloire@gmail.com" ]
+      restrictedTo: [ "myemail@domain.com" ]
     } ,
     {
       name:'directorio cachirulo valley',
@@ -120,7 +120,7 @@ module.exports =
           expected: {statuscode: 200, contains: ''}
         }
       ],
-      restrictedTo: [ "iloire@gmail.com" ]
+      restrictedTo: [ "myemail@domain.com" ]
     } ,
     {
       name:'letsnode.com',
