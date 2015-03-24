@@ -85,7 +85,7 @@ Most of the properties can be defined either at host or service level. Service l
 
 ### Authorization settings (since 2.2.0)
 
-Since version 2.2.0 you can restrict certain services or hosts to certaing users (authentication is made using passportjs's GoogleStrategy).
+Since version ``2.2.0`` you can restrict services or hosts to certain users (authentication works using passportjs's GoogleStrategy).
 
 Simple use the ``restrictedTo`` option and provide the list of emails with access to that particular service or host.
 
