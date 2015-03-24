@@ -112,6 +112,12 @@ level
 
 As with the other configuration options, ``restrictedTo`` can be used at service or host level.
 
+Make sure you set the right hostname in the ``config/general.js`` file so the OAuth dance can be negociated correctly:
+
+```js
+public_host_name: 'http://watchmen.letsnode.com/', // required for OAuth dance
+```
+
 ### Ping services
 
 #### HTTP
@@ -243,6 +249,10 @@ Run the tests with mocha:
 
 
 ## History
+
+**2.2.0**
+
+- Added service/host authorization with passportjs and GoogleStrategy.
 
 **2.1.0**
 
