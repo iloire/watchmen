@@ -1,6 +1,5 @@
 var express = require('express');
 var watchmen = require('../lib/watchmen');
-var config = require('../config/general');
 var app = express();
 var storage_factory = require ('../lib/storage/storage_factory');
 var storage = storage_factory.get_storage_instance();
@@ -27,9 +26,7 @@ app.use(bodyParser.json());
 
 app.use(methodOverride());
 
-if (config.requireAuthentication) {
-  require('./auth').configureApp(app);
-}
+require('./auth').configureApp(app);
 
 //-----------------------------------------
 // Import routes

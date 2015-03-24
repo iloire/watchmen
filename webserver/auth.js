@@ -52,6 +52,24 @@ module.exports = (function (){
     },
 
     /**
+     * Filter authorized servers according to service's authorization settings
+     * @param  {String} userId
+     * @param  {Array} services 
+     * @return {Array} services after authorization filters
+     */
+    filterAuthorizedServers: function(services, req) {
+      return services.filter(function(service){
+        if (!service.restrictedTo){
+          return true;
+        } else {
+          return service.restrictedTo.filter(function(user){
+            return user === req.user;
+          }).length > 0;
+        }
+      });
+    },
+
+    /**
      * Authentication middleware
      * @param  {Request}   req
      * @param  {Response}   res

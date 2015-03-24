@@ -6,13 +6,14 @@ module.exports.add_routes = function (app, storage){
 
   app.all('*', function(req, res, next){
     res.locals.moment = moment;
+    res.locals.user = req.user;
     next();
   });
 
   //-------------------------------
   // Url log detail
   //-------------------------------
-  app.get('/details', auth.ensureAuthenticated, function(req, res){
+  app.get('/details', function(req, res){
 
     services_loader.load_services(function(err, services){
       if (err) {
@@ -20,7 +21,7 @@ module.exports.add_routes = function (app, storage){
         return res.end(err);
       }
 
-      var service = services.filter(function(service){
+      var service = auth.filterAuthorizedServers(services, req).filter(function(service){
         return (service.host.name === req.query ['host'] && service.name === req.query ['service']);
       })[0];
 
@@ -44,7 +45,7 @@ module.exports.add_routes = function (app, storage){
   //-------------------------------
   // List of hosts and url's
   //-------------------------------
-  app.get('/', auth.ensureAuthenticated, function(req, res){
+  app.get('/', function(req, res){
     res.render('list.html', {
       title: 'watchmen'
     });
@@ -53,13 +54,13 @@ module.exports.add_routes = function (app, storage){
   //-------------------------------
   // Get list (JSON)
   //-------------------------------
-  app.get('/getdata', auth.ensureAuthenticated, function(req, res){
+  app.get('/getdata', function(req, res){
     services_loader.load_services(function(err, services){
       if (err) {
         console.error(err);
         return res.end(err);
       }
-      storage.report_all(services, function (err, data){
+      storage.report_all(auth.filterAuthorizedServers(services, req), function (err, data){
         if (err) {
           console.error(err);
           return res.end(err);

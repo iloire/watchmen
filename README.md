@@ -83,6 +83,35 @@ Most of the properties can be defined either at host or service level. Service l
 }
 ```
 
+### Authorization settings (since 2.2.0)
+
+Since version 2.2.0 you can restrict certain services or hosts to certaing users (authentication is made using passportjs's GoogleStrategy).
+
+Simple use the ``restrictedTo`` option and provide the list of emails with access to that particular service or host.
+
+```js
+{
+  name:'letsnode blog',
+  host: 'letsnode.com',
+  port:80,
+  ping_interval: one_minute, //set ping interval (in seconds)
+  ping_service_name: 'http', //if ping_service_name is not defined, 'http' is used by default
+  failed_ping_interval: one_minute, //set ping interval if site is down (in seconds)
+  services : [
+    {
+      name : 'home',
+      method: 'get',
+      url : '/',
+      expected: {statuscode: 200, contains: 'A blog about node.js and express.js'},
+      restrictedTo: ["admin@yourdomain.com"] // you can apply restrictions at a service or host 
+    }
+  ],
+level
+} ,
+```
+
+As with the other configuration options, ``restrictedTo`` can be used at service or host level.
+
 ### Ping services
 
 #### HTTP
