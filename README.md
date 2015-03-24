@@ -85,7 +85,7 @@ Most of the properties can be defined either at host or service level. Service l
 
 ### Authorization settings (since 2.2.0)
 
-Since version ``2.2.0`` you can restrict services or hosts to certain users (authentication works using passportjs's GoogleStrategy).
+Since version ``2.2.0`` you can restrict services or hosts to certain users (authentication works using passportjs's OAuth2 GoogleStrategy).
 
 Simple use the ``restrictedTo`` option and provide the list of emails with access to that particular service or host.
 
@@ -117,6 +117,17 @@ Make sure you set the right hostname in the ``config/general.js`` file so the OA
 ```js
 public_host_name: 'http://watchmen.letsnode.com/', // required for OAuth dance
 ```
+
+Also you will need to set the Google client ID and secret using ``env`` variables accordingly. (Login into https://console.developers.google.com/ to create them first)
+
+```
+  auth: {
+    GOOGLE_CLIENT_ID: process.env.WATCHMEN_GOOGLE_CLIENT_ID || '<Create credentials from Google Dev Console>',
+    GOOGLE_CLIENT_SECRET: process.env.WATCHMEN_GOOGLE_CLIENT_SECRET || '<Create credentials from Google Dev Console>'
+  },
+```
+
+
 
 ### Ping services
 
