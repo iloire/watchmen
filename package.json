@@ -7,7 +7,7 @@
     "stop": "forever stop server.js; forever stop webserver/app.js"
   },
   "description": "A Node.js HTTP monitor",
-  "version": "2.2.0",
+  "version": "2.3.0",
   "homepage": "http://letsnode.com",
   "repository": {
     "type": "git",
