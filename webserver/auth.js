@@ -2,7 +2,7 @@ var config = require('../config/general');
 var passport = require('passport');
 var url = require('url');
 
-var GoogleStrategy = require('passport-google').Strategy;
+var GoogleStrategy = require( 'passport-google-oauth2' ).Strategy;
 
 module.exports = (function (){
 
@@ -15,10 +15,12 @@ module.exports = (function (){
     configureApp : function (app){
 
       passport.use(new GoogleStrategy({
-          returnURL: url.resolve(config.public_host_name, '/auth/google/return'),
-          realm: config.public_host_name
+          clientID: config.auth.GOOGLE_CLIENT_ID,
+          clientSecret: config.auth.GOOGLE_CLIENT_SECRET,
+          passReqToCallback: true,
+          callbackURL: url.resolve(config.public_host_name, '/auth/google/callback')
         },
-        function(identifier, profile, done) {
+        function(request, accessToken, refreshToken, profile, done) {
           done(null, profile.emails[0].value);
         }
       ));
@@ -34,24 +36,16 @@ module.exports = (function (){
       app.use(passport.initialize());
       app.use(passport.session());
 
-      app.get('/login', function(req, res) {
-        res.render('login.html', {
-          title: 'Login'
-        });
+      app.get('/auth/google', passport.authenticate('google', {
+        scope: 'https://www.google.com/m8/feeds https://www.googleapis.com/auth/userinfo.email https://www.googleapis.com/auth/userinfo.profile'
+      }));
+
+      app.get('/auth/google/callback', passport.authenticate('google', {
+        failureRedirect: '/'
+      }), function(req, res) {
+          // successful authentication
+          res.redirect('/');
       });
-
-      // Redirect the user to Google for authentication.  When complete, Google
-      // will redirect the user back to the application at
-      //     /auth/google/return
-      app.get('/auth/google', passport.authenticate('google'));
-
-      // Google will redirect the user to this URL after authentication.  Finish
-      // the process by verifying the assertion.  If valid, the user will be
-      // logged in.  Otherwise, authentication has failed.
-      app.get('/auth/google/return', passport.authenticate('google', {
-          successRedirect: '/',
-          failureRedirect: '/login' }
-      ));
     },
 
     /**
