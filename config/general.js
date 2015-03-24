@@ -1,5 +1,7 @@
 module.exports = {
 
+  public_host_name: 'http://watchmen.letsnode.com/', // required for OAuth dance
+
   'notifications' : {
     enabled: false, //if disabled, no notifications will be sent
     to: ['your-email@domain.com'], //default notification list if no alert_to is specified for host or url

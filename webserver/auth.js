@@ -1,3 +1,9 @@
+var config = require('../config/general');
+var passport = require('passport');
+var url = require('url');
+
+var GoogleStrategy = require('passport-google').Strategy;
+
 module.exports = (function (){
 
   return {
@@ -8,12 +14,9 @@ module.exports = (function (){
      */
     configureApp : function (app){
 
-      var passport = require('passport');
-      var GoogleStrategy = require('passport-google').Strategy;
-
       passport.use(new GoogleStrategy({
-          returnURL: 'http://localhost:3000/auth/google/return',
-          realm: 'http://localhost:3000/'
+          returnURL: url.resolve(config.public_host_name, '/auth/google/return'),
+          realm: config.public_host_name
         },
         function(identifier, profile, done) {
           done(null, profile.emails[0].value);
