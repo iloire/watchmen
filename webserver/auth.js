@@ -2,7 +2,7 @@ var config = require('../config/general');
 var passport = require('passport');
 var url = require('url');
 
-var GoogleStrategy = require('passport-google-oauth').OAuth2Strategy;
+var GoogleStrategy = require( 'passport-google-oauth2' ).Strategy;
 
 module.exports = (function (){
 
@@ -17,9 +17,10 @@ module.exports = (function (){
       passport.use(new GoogleStrategy({
           clientID: config.auth.GOOGLE_CLIENT_ID,
           clientSecret: config.auth.GOOGLE_CLIENT_SECRET,
+          passReqToCallback: true,
           callbackURL: url.resolve(config.public_host_name, '/auth/google/callback')
         },
-        function(identifier, profile, done) {
+        function(request, accessToken, refreshToken, profile, done) {
           done(null, profile.emails[0].value);
         }
       ));
@@ -40,9 +41,9 @@ module.exports = (function (){
       }));
 
       app.get('/auth/google/callback', passport.authenticate('google', {
-        failureRedirect: '/login'
+        failureRedirect: '/'
       }), function(req, res) {
-          // Successful authentication, redirect home.
+          // successful authentication
           res.redirect('/');
       });
     },

@@ -34,7 +34,7 @@
     "method-override": "2.3.x",
     "moment": "2.9.x",
     "passport": "0.2.x",
-    "passport-google-oauth": "0.2.x",
+    "passport-google-oauth2": "0.1.x",
     "redis": "0.12.x"
   },
   "devDependencies": {
