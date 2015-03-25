@@ -64,18 +64,8 @@ module.exports = (function (){
           }).length > 0;
         }
       });
-    },
-
-    /**
-     * Authentication middleware
-     * @param  {Request}   req
-     * @param  {Response}   res
-     * @param  {Function} next
-     */
-    ensureAuthenticated: function(req, res, next) {
-      if (req.isAuthenticated()) { return next(); }
-      res.redirect('/login');
     }
+
   };
 
 }());
