@@ -2,7 +2,9 @@
   "author": "Iván Loire <ivan@iloire.com> (http://iloire.com/)",
   "name": "watchmen",
   "scripts": {
+    "pretest": "npm install",
     "test": "redis-server test/redis.conf;mocha -R list -b test/*.mocha;kill `cat test/redis.pid`",
+    "prestart": "npm install",
     "start": "redis-server redis.conf; forever --minUptime 1000 --spinSleepTime 2000 start server.js; forever --minUptime 1000 --spinSleepTime 2000 start webserver/app.js 8084; forever list",
     "stop": "forever stop server.js; forever stop webserver/app.js"
   },
