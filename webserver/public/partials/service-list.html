@@ -13,7 +13,7 @@
 
         <table ng-table="tableParams" class="table-services table sorted table-striped table-condensed">
             <tbody>
-            <tr ng-class={'result-disabled':service.disabled,'result-success':service.data.status=='success','result-error':service.data.status=='error'} ng-repeat="service in $data | filter:query">
+            <tr ng-class={'result-disabled':service.enabled===false,'result-success':service.data.status=='success','result-error':service.data.status=='error'} ng-repeat="service in $data | filter:query">
                 <td data-title="'Status'" sortable="'data.status'">
                     <span ng-if="service.data.status == 'error'" class="label label-danger">offline</span>
                     <span ng-if="service.data.status == 'success'" class="label label-success">online</span>
