@@ -18,9 +18,22 @@ Check the **web interface** in action: <a href="http://watchmen.letsnode.com" ta
 
 ## Installation
 
-Install the required dependencies first:
+This command will install both npm and bower dependencies
 
     $ npm install
+
+# Running and stopping watchmen
+
+Make sure you have `redis-server` in your `PATH`
+
+    $ npm start
+    $ npm stop
+
+Or if you want to run the services separately:
+
+    $ redis-server redis.conf
+    $ node server.js
+    $ node webserver/app.js
 
 ## Configuration
 
@@ -236,20 +249,6 @@ watchmen.on('service_error', function(service, state){
 });
 
 ```
-
-# Running and stopping watchmen
-
-Make sure you have `redis-server` in your `PATH`
-
-    $ npm start
-    $ npm stop
-
-Or if you want to run the services separately:
-
-    $ redis-server redis.conf
-    $ node server.js
-    $ node webserver/app.js
-
 
 # Tests
 

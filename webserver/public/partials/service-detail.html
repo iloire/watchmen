@@ -1,0 +1,139 @@
+<div class="details-page">
+
+    {{service}}
+
+    <a style="float:right" href="/" class="btn btn-default">
+        <span class="glyphicon glyphicon-chevron-left"></span> back to list
+    </a>
+
+    <h2>{{serviceDetails.service.host.name}}</h2>
+
+
+    <div class="section status row">
+
+        <div class="col-md-4">
+            <h1 class="uptime">
+
+                <span ng-if="!serviceDetails.service.enabled" title="Disabled" class="label label-default">Service disabled</span>
+
+                <span ng-if="serviceDetails.service.data && serviceDetails.service.data.uptime"
+                      title="Up time: {{serviceDetails.service.data.uptime}} %"
+                      ng-class="{'label label-success':serviceDetails.status=='success','label label-danger':serviceDetails.status=='error','label label-default':!serviceDetails.status}">
+
+                    {{serviceDetails.service.data.uptime}} %
+                </span>
+                <span ng-if="serviceDetails.service.data && serviceDetails.service.data.uptime" class="small">uptime</span>
+
+                <span ng-if="serviceDetails.service.enabled && (!serviceDetails.service.data || !serviceDetails.service.data.uptime)" title="Offline" class="label label-danger">Offline</span>
+            </h1>
+
+            <div ng-if="serviceDetails.service.data && serviceDetails.service.data.up_since">
+                <span class="text-muted small">uptime (since {{serviceDetails.service.data.up_since}}): </span>
+                <span am-time-ago="serviceDetails.service.data.up_since"></span>
+                <!--<%=moment(service.data.up_since).fromNow(true)%>-->
+            </div>
+        </div>
+
+        <div class="col-md-4">
+            <p ng-if="serviceDetails.service.data && serviceDetails.service.data.avg_response_time">AVG. latency:
+                <span title="AVG response time: {{serviceDetails.service.data.avg_response_time}} milliseconds" class="label label-default">
+                    {{serviceDetails.service.data.avg_response_time}}
+                </span> milliseconds
+            </p>
+        </div>
+
+        <div class="col-md-4">
+            <p ng-if="serviceDetails.service.data && serviceDetails.service.data.outages">Outages :
+                <span title="outages: {{serviceDetails.service.data.outages}}" class="label label-danger">{{serviceDetails.service.data.outages}}</span>
+                <span ng-if="serviceDetails.service.data && serviceDetails.service.data.last_outage" class="text-muted small">
+                - last one was
+                    <span am-time-ago="serviceDetails.service.data.last_outage"></span>
+                </span>
+            </p>
+
+            <p ng-if="serviceDetails.service.data && serviceDetails.service.data.warnings">Warnings :
+                <span title="warnings: {{serviceDetails.service.data.warnings}}" class="label label-warning">{{serviceDetails.service.data.warnings}}</span>
+                <span ng-if="serviceDetails.service.data && serviceDetails.service.data.last_warning" class="text-muted small">
+                - last one was <span am-time-ago="serviceDetails.service.data.last_warning"></span>
+                </span>
+            </p>
+        </div>
+    </div>
+
+
+    <h3>Service configuration</h3>
+    <div class="section configuration row">
+
+        <div class="col-md-4">
+            <p>
+                Host:
+                <a target="_blank" href="{{serviceDetails.service.host.host}}:{{serviceDetails.service.host.port}}">
+                    {{serviceDetails.service.host.host}} (port {{serviceDetails.service.host.port}})
+                </a>
+            </p>
+
+            <p>
+                Ping interval: <em>{{serviceDetails.service.host.ping_interval}}</em> seconds
+            </p>
+
+            <p ng-if="serviceDetails.service.warning_if_takes_more_than">
+                Latency threshold: <span title="latency threshold: {{serviceDetails.service.warning_if_takes_more_than}} seconds" class="label label-default">{{serviceDetails.service.warning_if_takes_more_than}}</span> milliseconds
+            </p>
+        </div>
+
+        <div class="col-md-4">
+            <div ng-if="serviceDetails.service.expected">
+                <p>Expected response:</p>
+                <ul>
+                    <li ng-if="serviceDetails.service.expected && serviceDetails.service.expected.statuscode">
+                        Status code: <span title="ping interval: {{serviceDetails.service.expected.statuscode}} seconds" class="label label-default">{{serviceDetails.service.expected.statuscode}}</span>
+                    </li>
+                    <li ng-if="serviceDetails.service.expected && serviceDetails.service.expected.contains">
+                        Text in body: <em>{{serviceDetails.service.expected.contains}}</em>
+                    </li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="col-md-4">
+        </div>
+
+    </div>
+
+    <h3>Events</h3>
+    <p>
+        Showing events since
+        <span am-time-ago="serviceDetails.eventsSince"></span>
+    </p>
+
+    <div class="section events row">
+        <table ng-table="tableCriticalLogs" class="table-services table sorted table-striped table-condensed">
+            <tbody>
+            <tr ng-repeat="log in $data">
+                <td class="" data-title="'Msg'" sortable="'msg'">
+                    {{log.msg}}
+                </td>
+                <td class="" data-title="'Timestamp'" sortable="'timestamp'">
+                    <span am-time-ago="log.timestamp"></span>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+
+        <table ng-table="tableWarningLogs" class="table-services table sorted table-striped table-condensed">
+            <tbody>
+            <tr ng-repeat="log in $data">
+                <td class="" data-title="'Msg'" sortable="'msg'">
+                    {{log.msg}}
+                </td>
+                <td class="" data-title="'Timestamp'" sortable="'timestamp'">
+                    <span am-time-ago="log.timestamp"></span>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+
+
+    </div>
+
+</div>

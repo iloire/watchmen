@@ -3,3 +3,5 @@ logs/
 .DS_Store
 node_modules/
 watchmen.rdb
+.idea/
+webserver/public/bower_components/

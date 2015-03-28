@@ -7,19 +7,16 @@ var moment = require ('moment');
 var bodyParser = require('body-parser');
 var methodOverride = require('method-override');
 var errorHandler = require('errorhandler');
-var expressLayouts = require('express-ejs-layouts');
 var session = require('express-session');
 
 app.set('views', __dirname + '/views');
 app.set('view engine', 'ejs');
-app.set('layout', 'layout.html');
 
 //register .html extension with ejs view render
 app.engine('.html', require('ejs').renderFile);
 app.use(session({
   secret: 'keyboard cat'
 }));
-app.use(expressLayouts);
 
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
@@ -31,7 +28,8 @@ require('./auth').configureApp(app);
 //-----------------------------------------
 // Import routes
 //-----------------------------------------
-require('./routes/reporting').add_routes(app, storage);
+require('./routes/web').add_routes(app);
+require('./routes/service').add_routes(app, storage);
 
 app.use(express.static(__dirname + '/public'));
 
