@@ -119,9 +119,13 @@ a {
   font-size: 2.6em;
 }
 
+.details-page h2 a{
+  font-size: 0.7em;
+}
+
 .details-page h3 {
   font-size: 2em;
-  margin-bottom: 0.8em;
+  margin: 0.5em 0;
 }
 
 .details-page .label.status {
@@ -129,21 +133,22 @@ a {
   line-height: 2em;
 }
 
-.details-page .configuration p, .details-page .status p, .details-page .configuration li {
-  font-size: 1.2em;
-  margin-bottom:5px;
-}
 .details-page .timeago {
   color:gray;
 }
 
+.details-page table.general td:first-child {
+  padding-right:10px;
+}
+.details-page table.general .label {
+  margin:5px;
+}
+
 .details-page h1.uptime {
   margin-top: 0;
-  font-size:3em;
 }
 
 .details-page .section {
-  margin: 0 5px;
   margin-bottom: 2em;
 }
 
@@ -160,4 +165,9 @@ footer{
 
 footer a {
   color:#c2c2c2;
+}
+
+.ng-table th.sortable.sort-desc, .ng-table th.sortable.sort-asc {
+  background-color: #f5f5f5;
+  border-radius: 3px;
 }
