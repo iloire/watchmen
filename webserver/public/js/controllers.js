@@ -14,15 +14,30 @@ watchmenControllers.controller('ServiceListCtrl', ['$scope', '$filter', '$timeou
         $scope[key] = [];
         $scope.tableParams = createngTableParams(key, ngTableParams, $scope, $filter, 5);
 
-        (function tick($scope, Service){
-            $scope.services = Service.query(function(data){
-                $scope[key] = data;
-                $scope.tableParams.reload();
 
+        (function tick($scope, Service) {
+
+            function scheduleNextTick (){
                 $timeout(function(){
                     tick($scope, Service)
                 }, SERVICES_POLLING_INTERVAL);
-            });
+            };
+
+            function errorHandler(err){
+                $scope.errorLoadingServices="Error loading data from remote server";
+                console.error(err);
+                scheduleNextTick();
+            }
+
+            $scope.services = Service.query(function(data){
+                $scope.errorLoadingServices=null;
+
+                $scope[key] = data;
+                $scope.tableParams.reload();
+
+                scheduleNextTick();
+            }, errorHandler);
+
         })($scope, Service);
     }]);
 
