@@ -12,7 +12,7 @@ watchmenControllers.controller('ServiceListCtrl', ['$scope', '$filter', '$timeou
         var key = 'tableServicesData';
 
         $scope[key] = [];
-        $scope.tableParams = createngTableParams(key, ngTableParams, $scope, $filter, 5);
+        $scope.tableParams = createngTableParams(key, ngTableParams, $scope, $filter, 10);
 
 
         (function tick($scope, Service) {
@@ -51,8 +51,8 @@ watchmenControllers.controller('ServiceDetailCtrl', ['$scope', '$filter', '$rout
         $scope.serviceDetails = Service.get({ serviceId: $routeParams.host + ',' + $routeParams.service }, function(data){
             $scope['tableCriticalLogsData'] = data.critical_events;
             $scope['tableWarningLogsData'] = data.warning_events;
-            $scope.tableCriticalLogs = createngTableParams('tableCriticalLogsData', ngTableParams, $scope, $filter, 25);
-            $scope.tableWarningLogs = createngTableParams('tableWarningLogsData', ngTableParams, $scope, $filter, 25);
+            $scope.tableCriticalLogs = createngTableParams('tableCriticalLogsData', ngTableParams, $scope, $filter, 10);
+            $scope.tableWarningLogs = createngTableParams('tableWarningLogsData', ngTableParams, $scope, $filter, 10);
         });
     }]);
 

@@ -4,11 +4,7 @@
         <span class="glyphicon glyphicon-chevron-left"></span> back to list
     </a>
 
-    <h2>{{serviceDetails.service.host.name}}
-        <a target="_blank" href="{{serviceDetails.service.host.host}}:{{serviceDetails.service.host.port}}">
-            {{serviceDetails.service.host.host}} (port {{serviceDetails.service.host.port}})
-        </a>
-    </h2>
+    <h2>{{serviceDetails.service.host.name}}</h2>
 
     <div class="section status row">
 
@@ -42,7 +38,7 @@
                         <span title="AVG response time: {{serviceDetails.service.data.avg_response_time}} milliseconds" class="label label-default">
                             {{serviceDetails.service.data.avg_response_time}}
                         </span>
-                        <span class="text-muted small">milliseconds</span>
+                        milliseconds
                     </td>
                 </tr>
                 <tr ng-if="serviceDetails.service.data && serviceDetails.service.data.outages">
@@ -51,9 +47,9 @@
                     </td>
                     <td>
                         <span title="outages: {{serviceDetails.service.data.outages}}" class="label label-danger">{{serviceDetails.service.data.outages}}</span>
-                        <span ng-if="serviceDetails.service.data && serviceDetails.service.data.last_outage" class="text-muted small">
-                        (last one was
-                            <span am-time-ago="serviceDetails.service.data.last_outage"></span>)
+                        <span ng-if="serviceDetails.service.data && serviceDetails.service.data.last_outage">
+                        last one was
+                            <span am-time-ago="serviceDetails.service.data.last_outage"></span>
                         </span>
                     </td>
                 </tr>
@@ -61,8 +57,8 @@
                     <td>Warnings</td>
                     <td>
                         <span title="warnings: {{serviceDetails.service.data.warnings}}" class="label label-warning">{{serviceDetails.service.data.warnings}}</span>
-                        <span ng-if="serviceDetails.service.data && serviceDetails.service.data.last_warning" class="text-muted small">
-                        (last one was <span am-time-ago="serviceDetails.service.data.last_warning"></span>)
+                        <span ng-if="serviceDetails.service.data && serviceDetails.service.data.last_warning">
+                        last one was <span am-time-ago="serviceDetails.service.data.last_warning"></span>
                         </span>
                     </td>
                 </tr>
@@ -73,53 +69,69 @@
         <div class="col-md-6">
 
             <h4>Configuration</h4>
-
-            <table class="general">
-                <tr>
-                    <td>Ping interval:</td>
-                    <td><em>{{serviceDetails.service.host.ping_interval}}</em> seconds</td>
-                </tr>
-                <tr ng-if="serviceDetails.service.warning_if_takes_more_than">
-                    <td>Latency threshold: </td>
-                    <td><span title="latency threshold: {{serviceDetails.service.warning_if_takes_more_than}} seconds" class="label label-default">{{serviceDetails.service.warning_if_takes_more_than}}</span> milliseconds</td>
-                </tr>
-                <tr ng-if="serviceDetails.service.expected && serviceDetails.service.expected.statuscode">
-                    <td>Expected status code:</td>
-                    <td>
-                        <span title="ping interval: {{serviceDetails.service.expected.statuscode}} seconds" class="label label-default">{{serviceDetails.service.expected.statuscode}}</span>
-                    </td>
-                </tr>
-                <tr ng-if="serviceDetails.service.expected && serviceDetails.service.expected.statuscode">
-                    <td>Expected text:</td>
-                    <td>
-                        <em>{{serviceDetails.service.expected.contains}}</em>
-                    </td>
-                </tr>
-            </table>
+            <div class="panel panel-default">
+                <div class="panel-body">
+                    <table class="general">
+                    <tr>
+                        <td>
+                            Host
+                        </td>
+                        <td>
+                            {{serviceDetails.service.host.host}} (port {{serviceDetails.service.host.port}})
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>Ping interval:</td>
+                        <td><em>{{serviceDetails.service.host.ping_interval}}</em> seconds</td>
+                    </tr>
+                    <tr ng-if="serviceDetails.service.warning_if_takes_more_than">
+                        <td>Latency threshold: </td>
+                        <td><span title="latency threshold: {{serviceDetails.service.warning_if_takes_more_than}} seconds" class="label label-default">{{serviceDetails.service.warning_if_takes_more_than}}</span> milliseconds
+                            <span class="text-muted small">
+                            (if above, will trigger a warning event)
+                            </span>
+                        </td>
+                    </tr>
+                    <tr ng-if="serviceDetails.service.expected && serviceDetails.service.expected.statuscode">
+                        <td>Expected status code:</td>
+                        <td>
+                            <span title="ping interval: {{serviceDetails.service.expected.statuscode}} seconds" class="label label-default">{{serviceDetails.service.expected.statuscode}}</span>
+                        </td>
+                    </tr>
+                    <tr ng-if="serviceDetails.service.expected && serviceDetails.service.expected.statuscode">
+                        <td>Expected text:</td>
+                        <td>
+                            <em>{{serviceDetails.service.expected.contains}}</em>
+                        </td>
+                    </tr>
+                </table>
+                </div>
+            </div>
 
         </div>
 
     </div>
 
-    <h3>Events</h3>
-    <p>
-        Showing events since
-        <span>{{serviceDetails.eventsSince | amDateFormat:'DD/MMM'}}</span>
-        (<span am-time-ago="serviceDetails.eventsSince"></span>)
-    </p>
+    <h3>Events
+        <span>
+            (showing events since
+            <span>{{serviceDetails.eventsSince | amDateFormat:'DD/MMM'}}</span>, or
+            <span am-time-ago="serviceDetails.eventsSince"></span>)
+        </span>
+    </h3>
 
     <div class="section events row">
         <div class="col-md-6">
             <h4>Critical</h4>
-            <table ng-table="tableCriticalLogs" class="table-services table sorted table-striped table-condensed">
+            <table ng-table="tableCriticalLogs" class="table-logs table sorted table-striped table-condensed">
                 <tbody>
                 <tr ng-repeat="log in $data">
-                    <td class="" data-title="'Msg'" sortable="'msg'">
+                    <td class="" data-title="'Message'" sortable="'msg'">
                         <span ng-class="{'success':log.status==='success','error':log.status==='error'}">
                             {{log.msg}}
                         </span>
                     </td>
-                    <td class="" data-title="'Timestamp'" sortable="'timestamp'">
+                    <td class="" data-title="'When'" sortable="'timestamp'">
                         <span am-time-ago="log.timestamp"></span>
                     </td>
                 </tr>
@@ -128,15 +140,15 @@
         </div>
         <div class="col-md-6">
             <h4>Warnings</h4>
-            <table ng-table="tableWarningLogs" class="table-services table sorted table-striped table-condensed">
+            <table ng-table="tableWarningLogs" class="table-logs table sorted table-striped table-condensed">
                 <tbody>
                 <tr ng-repeat="log in $data">
-                    <td class="" data-title="'Msg'" sortable="'msg'">
+                    <td class="" data-title="'Message'" sortable="'msg'">
                         <span class="warning">
                             {{log.msg}}
                         </span>
                     </td>
-                    <td class="" data-title="'Timestamp'" sortable="'timestamp'">
+                    <td class="" data-title="'When'" sortable="'timestamp'">
                         <span am-time-ago="log.timestamp"></span>
                     </td>
                 </tr>

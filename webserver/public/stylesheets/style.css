@@ -42,12 +42,15 @@ a {
 }
 
 .table-services td.service{
-  text-align: center;
   text-transform: uppercase;
   margin-top:20px;
   font-size:1.2em;
   opacity:0.6;
   color:gray;
+}
+
+.table-services th{
+  text-align: left;
 }
 
 .table-services td .name {
@@ -74,6 +77,14 @@ a {
 
 .table-services tr.result-error a {
   color:red;
+}
+
+.table-logs th {
+  text-align: left;
+}
+
+.table-logs td:first-child {
+  width:70%;
 }
 
 /*ok*/
@@ -115,8 +126,10 @@ a {
   font-size: 2.6em;
 }
 
-.details-page h2 a{
-  font-size: 0.7em;
+.details-page h3 > span {
+  font-size: 0.5em;
+  color: #ccc;
+  font-weight: normal;
 }
 
 .details-page h3 {
@@ -142,10 +155,6 @@ a {
 
 .details-page h1.uptime {
   margin-top: 0;
-}
-
-.details-page .section {
-  margin-bottom: 2em;
 }
 
 .details-page .status > div {
