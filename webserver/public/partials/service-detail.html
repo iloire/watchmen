@@ -1,6 +1,6 @@
 <div class="details-page">
 
-    <a style="float:right" href="/" class="btn btn-default">
+    <a style="float:right" href="/" class="btn btn-default hidden-xs">
         <span class="glyphicon glyphicon-chevron-left"></span> back to list
     </a>
 
@@ -9,7 +9,6 @@
             {{serviceDetails.service.host.host}} (port {{serviceDetails.service.host.port}})
         </a>
     </h2>
-
 
     <div class="section status row">
 
@@ -28,12 +27,14 @@
                 <span ng-if="serviceDetails.service.enabled && (!serviceDetails.service.data || !serviceDetails.service.data.uptime)" title="Offline" class="label label-danger">Offline</span>
             </h1>
 
-            <br/>
-            <!--<div ng-if="serviceDetails.service.data && serviceDetails.service.data.up_since">-->
-                <!--<span class="text-muted small">uptime (since {{serviceDetails.service.data.up_since}}): </span>-->
-                <!--<span am-time-ago="serviceDetails.service.data.up_since"></span>-->
-            <!--</div>-->
+            <div ng-if="serviceDetails.service.data && serviceDetails.service.data.up_since">
+                <span class="text-muted small">last change on uptime:
+                    <span>{{serviceDetails.service.data.up_since | amDateFormat:'DD/MMM hh:mm'}}</span>
+                    (<span am-time-ago="serviceDetails.service.data.up_since"></span>)
+                </span>
+            </div>
 
+            <br/>
             <table class="general">
                 <tr ng-if="serviceDetails.service.data && serviceDetails.service.data.avg_response_time">
                     <td>AVG. latency</td>
@@ -103,11 +104,13 @@
     <h3>Events</h3>
     <p>
         Showing events since
-        <span am-time-ago="serviceDetails.eventsSince"></span>
+        <span>{{serviceDetails.eventsSince | amDateFormat:'DD/MMM'}}</span>
+        (<span am-time-ago="serviceDetails.eventsSince"></span>)
     </p>
 
     <div class="section events row">
         <div class="col-md-6">
+            <h4>Critical</h4>
             <table ng-table="tableCriticalLogs" class="table-services table sorted table-striped table-condensed">
                 <tbody>
                 <tr ng-repeat="log in $data">
@@ -124,6 +127,7 @@
             </table>
         </div>
         <div class="col-md-6">
+            <h4>Warnings</h4>
             <table ng-table="tableWarningLogs" class="table-services table sorted table-striped table-condensed">
                 <tbody>
                 <tr ng-repeat="log in $data">
