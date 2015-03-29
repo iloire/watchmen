@@ -16,5 +16,7 @@ module.exports = {
     }
   },
 
+  ga_analytics_ID: process.env.WATCHMEN_GOOGLE_ANALYTICS_ID,
+
   remove_events_older_than_seconds : 60 * 60 * 24 * 10, // 10 days default configuration
 };

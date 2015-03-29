@@ -2,6 +2,7 @@
   "author": "Iván Loire <ivan@iloire.com> (http://iloire.com/)",
   "name": "watchmen",
   "scripts": {
+    "postinstall": "bower install",
     "pretest": "npm install",
     "test": "redis-server test/redis.conf;mocha -R list -b test/*.mocha;kill `cat test/redis.pid`",
     "prestart": "npm install",
@@ -9,7 +10,7 @@
     "stop": "forever stop server.js; forever stop webserver/app.js"
   },
   "description": "A Node.js HTTP monitor",
-  "version": "2.3.0",
+  "version": "2.4.0",
   "homepage": "http://letsnode.com",
   "repository": {
     "type": "git",
@@ -39,6 +40,7 @@
     "redis": "0.12.x"
   },
   "devDependencies": {
+    "bower": "1.3.x",
     "assert": "1.3.x",
     "mocha": "2.1.x",
     "sinon": "1.12.x"
