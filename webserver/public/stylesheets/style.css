@@ -41,16 +41,6 @@ a {
     pointer-events: none;
 }
 
-.table-services time {
-  display:block;
-  font-size:0.8em;
-  color:#ccc;
-}
-
-.table-services td.hosturl time {
-  display:inline;
-}
-
 .table-services td.service{
   text-align: center;
   text-transform: uppercase;
