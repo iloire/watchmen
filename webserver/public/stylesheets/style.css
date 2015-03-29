@@ -70,6 +70,12 @@ a {
   line-height: 2.0em;
 }
 
+.table-services .time-ago{
+  font-size:0.9em;
+  color: #ccc;
+  display:block;
+}
+
 /*error*/
 .table-services tr.result-error .hosturl a {
   font-weight: bold;

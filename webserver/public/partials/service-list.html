@@ -28,9 +28,10 @@
                         {{service.host.name}} / {{service.name}}
                     </a>
 
-                    <span ng-if="last_check" class="hidden-xs last_check">
+                    <span ng-if="service.data.last_check" class="hidden-xs last_check">
                         last ping:
-                        <span ng-if="service.data.last_check" am-time-ago="service.data.last_check"></span>
+                        <span>{{service.data.last_check | amDateFormat:'DD/MMM, hh:mm'}}</span>
+                        <span class="time-ago" am-time-ago="service.data.last_check"></span>
                     </span>
                 </td>
 
@@ -45,7 +46,10 @@
                 </td>
 
                 <td class="result-error hidden-xs" data-title="'Last outage'" sortable="'data.last_outage'">
-                    <span ng-if="service.data.last_outage" am-time-ago="service.data.last_outage"></span>
+                    <div ng-if="service.data.last_outage">
+                        <span>{{service.data.last_outage | amDateFormat:'DD/MMM, hh:mm'}}</span>
+                        <span class="time-ago" am-time-ago="service.data.last_outage"></span>
+                    </div>
                 </td>
 
                 <td class="result-warning hidden-xs hidden-sm" data-title="'Warnings'" sortable="'data.warnings'">
@@ -53,14 +57,15 @@
                 </td>
 
                 <td class="result-warning hidden-xs hidden-sm" data-title="'Last warning'" sortable="'data.last_warning'">
-                    <span ng-if="service.data.last_warning" am-time-ago="service.data.last_warning"></span>
+                    <div ng-if="service.data.last_warning">
+                        <span>{{service.data.last_warning | amDateFormat:'DD/MMM, hh:mm'}}</span>
+                        <span class="time-ago" am-time-ago="service.data.last_warning"></span>
+                    </div>
                 </td>
 
                 <td class="result-uptime"  data-title="'Uptime'" sortable="'data.uptime'">
                     <a ng-if="service.data.uptime" class="name" href="#/details/{{service.host.name}}/{{service.name}}">
-                        <span>
-                        {{service.data.uptime}}%
-                        </span>
+                        <span>{{service.data.uptime}}%</span>
                     </a>
                 </td>
             </tr>
