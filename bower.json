@@ -12,7 +12,6 @@
     "angular-moment": "0.9.x",
     "ng-table": "0.5.x",
     "bootstrap": "3.3.x",
-    "jquery": "2.1.x",
     "moment": "2.9.x"
   },
   "resolutions": {
