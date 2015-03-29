@@ -14,7 +14,7 @@ a {
   color: white;
 }
 
-#status-overview span {
+#status-overview > span {
   color: white;
   display: inline;
   padding: 5px 12px;

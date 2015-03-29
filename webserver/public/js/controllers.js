@@ -30,6 +30,11 @@ watchmenControllers.controller('ServiceListCtrl', ['$scope', '$filter', '$timeou
             }
 
             $scope.services = Service.query(function(data){
+
+                $scope.servicesDown=data.filter(function(service){
+                    return service.data && service.data.status==='error';
+                }).length;
+
                 $scope.errorLoadingServices=null;
 
                 $scope[key] = data;

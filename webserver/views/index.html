@@ -11,21 +11,10 @@
   </head>
   <body>
 
-  <div class="navbar navbar-inverse navbar-fixed-top" role="navigation">
-      <div class="container-fluid">
-        <div class="navbar-header">
-          <a class="navbar-brand" href="/">watchmen</a>
-      </div>
-      <div class="navbar-collapse collapse">
-          <div id="status-overview"></div>
-      </div>
-    </div>
-  </div>
+  <div id="navbar" x-ng-controller="ServiceListCtrl" x-ng-include="'partials/header.html'"></div>
 
   <div class="container-fluid">
-    <div class="view-container">
       <div ng-view class="view-frame"></div>
-    </div>
   </div>
 
   <footer>
