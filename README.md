@@ -259,6 +259,12 @@ Run the tests with mocha:
 
 ## History
 
+**2.4.0**
+- Frontend revamp using angularjs.
+- Client side pagination using ngTable.
+- Client dependencies now managed by bower.
+- Extract analytics ID to config.
+
 **2.3.0**
 
 - Use passport-google-oauth2 as Google authentication strategy.
