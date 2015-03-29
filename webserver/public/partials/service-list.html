@@ -30,7 +30,7 @@
 
                     <span ng-if="service.data.last_check" class="hidden-xs last_check">
                         last ping:
-                        <span>{{service.data.last_check | amDateFormat:'DD/MMM, hh:mm'}}</span>
+                        <span>{{service.data.last_check | amDateFormat:'DD/MMM, HH:mm'}}</span>
                         <span class="time-ago" am-time-ago="service.data.last_check"></span>
                     </span>
                 </td>
@@ -47,7 +47,7 @@
 
                 <td header-class="'hidden-xs'" class="result-error hidden-xs" data-title="'Last outage'" sortable="'data.last_outage'">
                     <div ng-if="service.data.last_outage">
-                        <span>{{service.data.last_outage | amDateFormat:'DD/MMM, hh:mm'}}</span>
+                        <span>{{service.data.last_outage | amDateFormat:'DD/MMM, HH:mm'}}</span>
                         <span class="time-ago" am-time-ago="service.data.last_outage"></span>
                     </div>
                 </td>
@@ -58,7 +58,7 @@
 
                 <td header-class="'hidden-xs hidden-sm'" class="result-warning hidden-xs hidden-sm" data-title="'Last warning'" sortable="'data.last_warning'">
                     <div ng-if="service.data.last_warning">
-                        <span>{{service.data.last_warning | amDateFormat:'DD/MMM, hh:mm'}}</span>
+                        <span>{{service.data.last_warning | amDateFormat:'DD/MMM, HH:mm'}}</span>
                         <span class="time-ago" am-time-ago="service.data.last_warning"></span>
                     </div>
                 </td>
