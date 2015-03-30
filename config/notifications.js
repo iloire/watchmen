@@ -21,6 +21,7 @@ exports = module.exports = (function(){
                 path: './postmark/postmark',
                 config: '../../config/notification-services/postmark'
             }
-        ]
+        ],
+        logTo: process.env.WATCHMEN_NOTIFICATIONS_LOG_TO // log notification events into a file
     }
 })();
