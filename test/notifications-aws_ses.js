@@ -1,5 +1,5 @@
 var assert = require ('assert');
-var AWSSesNotificationsFactory = new require('../lib/notifications/aws-ses/aws-ses');
+var AWSSesNotificationsFactory = new require('../lib/notifications/services/aws-ses/aws-ses');
 
 describe('aws-ses notifications', function(){
 

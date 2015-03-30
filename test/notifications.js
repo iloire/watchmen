@@ -33,14 +33,14 @@ describe('notifications', function(){
                 {
                     enabled: false,
                     name: 'service 1',
-                    path: '../../test/fixtures/notifications/service1/service',
-                    config: '../../test/fixtures/notifications/service1/config'
+                    path: '../../test/fixtures/notifications/services/service1/service',
+                    config: '../../test/fixtures/notifications/services/service1/config'
                 },
                 {
                     enabled: true,
                     name: 'service 2',
-                    path: '../../test/fixtures/notifications/service2/service',
-                    config: '../../test/fixtures/notifications/service2/config'
+                    path: '../../test/fixtures/notifications/services/service2/service',
+                    config: '../../test/fixtures/notifications/services/service2/config'
                 }
             ];
             var notifications_service = new NotificationsFactory(defaultConfig);

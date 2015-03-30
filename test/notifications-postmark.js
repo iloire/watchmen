@@ -1,5 +1,5 @@
 var assert = require ('assert');
-var PostmarkNotificationsFactory = new require('../lib/notifications/postmark/postmark');
+var PostmarkNotificationsFactory = new require('../lib/notifications/services/postmark/postmark');
 
 describe('Postmark notifications', function(){
 
