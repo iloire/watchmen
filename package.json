@@ -3,14 +3,13 @@
   "name": "watchmen",
   "scripts": {
     "postinstall": "bower install",
-    "pretest": "npm install",
-    "test": "redis-server test/redis.conf;mocha -R list -b test/*.mocha;kill `cat test/redis.pid`",
+    "test": "redis-server test/redis.conf;mocha -R list -b test/*.js;kill `cat test/redis.pid`",
     "prestart": "npm install",
     "start": "redis-server redis.conf; forever --minUptime 1000 --spinSleepTime 2000 start server.js; forever --minUptime 1000 --spinSleepTime 2000 start webserver/app.js 8084; forever list",
     "stop": "forever stop server.js; forever stop webserver/app.js"
   },
-  "description": "A Node.js HTTP monitor",
-  "version": "2.4.0",
+  "description": "A simple service monitor",
+  "version": "2.5.0",
   "homepage": "http://letsnode.com",
   "repository": {
     "type": "git",
@@ -27,6 +26,8 @@
   ],
   "license": "MIT",
   "dependencies": {
+    "async": "0.9.x",
+    "aws-sdk": "2.1.x",
     "body-parser": "1.12.x",
     "ejs": "2.3.x",
     "errorhandler": "1.3.x",
