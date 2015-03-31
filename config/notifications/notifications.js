@@ -1,18 +1,20 @@
 exports = module.exports = (function(){
 
     /**
-     * Notification services.
-     * Enable the ones you want to use :)
-     *
-     * How to create a new notification service:
-     * - 1) Create a new service entry in this file
-     * - 2) Create the actual service file in 'path'
-     * - 3) Setup some default configuration file in 'config'
+     * Notifications configuration file.
      */
 
     return  {
-        enabled: true,
-        to: ['your-email@domain.com'],
+
+        /**
+         * Enable the services you would like to use when an alert is triggered
+         *
+         * How to create a new notification service:
+         * - 1) Create a new service entry in this file
+         * - 2) Create the actual service file in the 'path' path
+         * - 3) Setup some default configuration file in the 'config' path
+         */
+
         services: [
             {
                 enabled: process.env.WATCHMEN_NOTIFICATIONS_AWS_SES_ENABLED,
@@ -27,6 +29,8 @@ exports = module.exports = (function(){
                 config: '../../config/notifications/services/postmark'
             }
         ],
+
         logTo: process.env.WATCHMEN_NOTIFICATIONS_LOG_TO // log notification events into a file
+
     }
 })();
