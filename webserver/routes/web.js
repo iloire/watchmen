@@ -1,4 +1,4 @@
-var config = require('../../config/general');
+var config = require('../../config/web');
 
 module.exports.add_routes = function (app){
 
