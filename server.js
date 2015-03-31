@@ -1,14 +1,14 @@
+var colors = require('colors');
 var notificationsFactory = require ('./lib/notifications/notifications');
 var notificationService = new notificationsFactory();
 
 var storageFactory = require('./lib/storage/storage_factory');
 var storage = storageFactory.get_storage_instance();
 
-
 require('./lib/services').load_services(function(err, services){
 
-  if (err){
-    console.error('Error loading services');
+  if (err) {
+    console.error('error loading services'.red);
     storage.quit();
     process.exit(0);
   }
@@ -18,10 +18,10 @@ require('./lib/services').load_services(function(err, services){
   var watchmen = new WatchMen(services, storage);
 
   watchmen.on('service_error', function(service, state) {
-    var errorMsg = service.url_info + ' down!. Error: ' + state.error + '. Retrying in ' +
-        (parseInt(state.next_attempt_secs, 10) / 60) + ' minute(s)..';
+    var errorMsg = service.url_info + ' down!. ' + state.error;
+    var retryingMsg = '. retrying in ' + (parseInt(state.next_attempt_secs, 10) / 60) + ' minute(s)..';
 
-    console.error (errorMsg);
+    console.log (errorMsg + retryingMsg.gray);
 
     if (state.prev_state.status === 'success') {
       notificationService.sendServiceDownAlert(service, state.error);
@@ -52,7 +52,7 @@ require('./lib/services').load_services(function(err, services){
   // Start watchmen
   //----------------------------------------------------
   watchmen.start();
-
+  console.log('watchmen monitor started'.gray);
 });
 
 
@@ -71,7 +71,7 @@ process.on('uncaughtException', function(err) {
 });
 
 process.on('SIGINT', function () {
-  console.log('stopping watchmen..');
+  console.log('stopping watchmen..'.gray);
   storage.quit();
   process.exit(0);
 });
