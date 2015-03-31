@@ -41,7 +41,7 @@ describe('Postmark notifications', function(){
             });
         });
 
-        // TODO: this is calling Postmark. Need to mock?
+        // TODO: this is calling Postmark. Need to mock with proxyquire or similar
         //it('all required fields should send', function(done){
         //    var postMarkService = new PostmarkNotificationsFactory(defaultConfig);
         //    postMarkService.send(message, function(err, data){
@@ -92,7 +92,6 @@ describe('Postmark notifications', function(){
                 done();
             });
         });
-
     });
 
 });

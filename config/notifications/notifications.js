@@ -30,7 +30,8 @@ exports = module.exports = (function(){
             }
         ],
 
-        logTo: process.env.WATCHMEN_NOTIFICATIONS_LOG_TO // log notification events into a file
+        logTo: process.env.WATCHMEN_NOTIFICATIONS_LOG_TO, // log notification events into a file
 
+        alwaysAlertTo: process.env.WATCHMEN_NOTIFICATIONS_ALWAYS_ALERT_TO // comma separated emails
     }
 })();

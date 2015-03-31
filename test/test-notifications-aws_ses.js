@@ -63,8 +63,7 @@ describe('aws-ses notifications', function(){
             });
         });
 
-
-        // TODO: this is calling AWS. Need to mock?
+        // TODO: this is calling AWS. Need to mock with proxyquire or similar
         //it('all required fields should send', function(done){
         //    var awsService = new AWSSesNotificationsFactory(defaultConfig);
         //    awsService.send(message, function(err, data){

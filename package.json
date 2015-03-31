@@ -35,6 +35,7 @@
     "express": "4.12.x",
     "express-ejs-layouts": "1.1.x",
     "express-session": "1.10.x",
+    "lodash": "3.6.x",
     "method-override": "2.3.x",
     "moment": "2.9.x",
     "passport": "0.2.x",
