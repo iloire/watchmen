@@ -38,6 +38,7 @@
     "moment": "2.9.x",
     "passport": "0.2.x",
     "passport-google-oauth2": "0.1.x",
+    "postmark": "1.0.x",
     "redis": "0.12.x"
   },
   "devDependencies": {
