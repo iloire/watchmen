@@ -84,7 +84,7 @@ function start (services, storage) {
 
   // notification services info:
   notificationService.getEnabledServices().forEach(function(s){
-    console.log('', s.name, ' notification service is enabled'.gray);
+    console.log('', s.getName(), ' notification service is enabled'.gray);
     var configErrors = s.checkConfiguration();
     if (configErrors) {
       console.error(configErrors.red);
