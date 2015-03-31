@@ -26,9 +26,10 @@ describe('aws-ses notifications', function(){
         it('"from" config field is required', function(done){
             defaultConfig.from = null;
             var awsService = new AWSSesNotificationsFactory(defaultConfig);
-            awsService.send(message, function(err, data){
+            awsService.send(message, function(err){
                 assert.ok(err);
                 assert.ok(err.indexOf('invalid configuration') === 0, err);
+                assert.ok(err.indexOf('"from"') > -1, err);
                 done();
             });
         });
@@ -36,9 +37,10 @@ describe('aws-ses notifications', function(){
         it('"region" config field is required', function(done){
             defaultConfig.region = null;
             var awsService = new AWSSesNotificationsFactory(defaultConfig);
-            awsService.send(message, function(err, data){
+            awsService.send(message, function(err){
                 assert.ok(err);
                 assert.ok(err.indexOf('invalid configuration') === 0, err);
+                assert.ok(err.indexOf('"region"') > -1, err);
                 done();
             });
         });
@@ -46,9 +48,10 @@ describe('aws-ses notifications', function(){
         it('"AWS_KEY" config field is required', function(done){
             defaultConfig.AWS_KEY = null;
             var awsService = new AWSSesNotificationsFactory(defaultConfig);
-            awsService.send(message, function(err, data){
+            awsService.send(message, function(err){
                 assert.ok(err);
                 assert.ok(err.indexOf('invalid configuration') === 0, err);
+                assert.ok(err.indexOf('"AWS_KEY"') > -1, err);
                 done();
             });
         });
@@ -56,9 +59,10 @@ describe('aws-ses notifications', function(){
         it('"AWS_SECRET" config field is required', function(done){
             defaultConfig.AWS_SECRET = null;
             var awsService = new AWSSesNotificationsFactory(defaultConfig);
-            awsService.send(message, function(err, data){
+            awsService.send(message, function(err){
                 assert.ok(err);
                 assert.ok(err.indexOf('invalid configuration') === 0, err);
+                assert.ok(err.indexOf('"AWS_SECRET"') > -1, err);
                 done();
             });
         });
@@ -66,7 +70,7 @@ describe('aws-ses notifications', function(){
         // TODO: this is calling AWS. Need to mock with proxyquire or similar
         //it('all required fields should send', function(done){
         //    var awsService = new AWSSesNotificationsFactory(defaultConfig);
-        //    awsService.send(message, function(err, data){
+        //    awsService.send(message, function(err){
         //        assert.ifError(err);
         //        done();
         //    })
@@ -78,7 +82,7 @@ describe('aws-ses notifications', function(){
         it('"to" field is required', function(done){
             message.to = null;
             var awsService = new AWSSesNotificationsFactory(defaultConfig);
-            awsService.send(message, function(err, data){
+            awsService.send(message, function(err){
                 assert.ok(err);
                 assert.ok(err.indexOf('invalid options') === 0, err);
                 done();
@@ -88,7 +92,7 @@ describe('aws-ses notifications', function(){
         it('"title" field is required', function(done){
             message.title = null;
             var awsService = new AWSSesNotificationsFactory(defaultConfig);
-            awsService.send(message, function(err, data){
+            awsService.send(message, function(err){
                 assert.ok(err);
                 assert.ok(err.indexOf('invalid options') === 0, err);
                 done();
@@ -98,7 +102,7 @@ describe('aws-ses notifications', function(){
         it('"body" field is required', function(done){
             message.body = null;
             var awsService = new AWSSesNotificationsFactory(defaultConfig);
-            awsService.send(message, function(err, data){
+            awsService.send(message, function(err){
                 assert.ok(err);
                 assert.ok(err.indexOf('invalid options') === 0, err);
                 done();
