@@ -114,6 +114,7 @@ require('./lib/services').load_services(function(err, services){
 process.on('uncaughtException', function(err) {
   console.error('uncaughtException:');
   console.error(err);
+  exit(1);
 });
 
 process.on('SIGINT', function () {
