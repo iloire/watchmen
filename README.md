@@ -1,4 +1,4 @@
-I# "watchmen", a service monitor for node.js
+# "watchmen", a service monitor for node.js
 
 [![Build Status](https://secure.travis-ci.org/iloire/WatchMen.png?branch=1.x)](http://travis-ci.org/iloire/WatchMen)
 
