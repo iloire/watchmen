@@ -8,6 +8,6 @@ Service.prototype.getName = function() {
     return 'service 1'
 };
 
-Service.prototype.send = function(options, cb) {
+Service.prototype._send = function(options, cb) {
     cb();
 };
