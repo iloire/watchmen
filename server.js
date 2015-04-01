@@ -80,7 +80,7 @@ function start (services, storage) {
 
   watchmen.start();
 
-  console.log('watchmen monitor started'.gray);
+  console.log('watchmen has started'.gray);
 
   // notification services info:
   notificationService.getEnabledServices().forEach(function(s){
