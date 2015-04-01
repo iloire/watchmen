@@ -3,6 +3,7 @@
 /* Controllers */
 
 var SERVICES_POLLING_INTERVAL = 3000;
+var timer;
 
 var watchmenControllers = angular.module('watchmenControllers', []);
 
@@ -18,7 +19,8 @@ watchmenControllers.controller('ServiceListCtrl', ['$scope', '$filter', '$timeou
         (function tick($scope, Service) {
 
             function scheduleNextTick (){
-                $timeout(function(){
+                $timeout.cancel(timer);
+                timer = $timeout(function(){
                     tick($scope, Service)
                 }, SERVICES_POLLING_INTERVAL);
             };
