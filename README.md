@@ -257,15 +257,15 @@ Example: log in the console and send email if there is an outage:
   watchmen.start();
 ```
 
-# Tests
+## Tests
 
     $ npm test
 
-# Test coverage
+### Test coverage
 
     $ npm run coverage
 
-Then
+Then check the coverage reports:
 
     $ open coverage/lcov-report/lib/index.html
 
