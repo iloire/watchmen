@@ -1,4 +1,4 @@
-# "watchmen", a service monitor for node.js
+I# "watchmen", a service monitor for node.js
 
 [![Build Status](https://secure.travis-ci.org/iloire/WatchMen.png?branch=1.x)](http://travis-ci.org/iloire/WatchMen)
 
@@ -124,7 +124,7 @@ level
 } ,
 ```
 
-Make sure you set the right hostname in the ``config/general.js`` file so the OAuth dance can be negociated correctly:
+Make sure you set the right hostname in the ``config/web.js`` file so the OAuth dance can be negociated correctly:
 
 ```js
 public_host_name: 'http://watchmen.letsnode.com/', // required for OAuth dance
@@ -138,8 +138,6 @@ auth: {
 	GOOGLE_CLIENT_SECRET: process.env.WATCHMEN_GOOGLE_CLIENT_SECRET || '<Create credentials from Google Dev Console>'
 },
 ```
-
-
 
 ### Ping services
 
@@ -163,21 +161,37 @@ Using http ping service, you can also check for a) certain http status code or b
 - `host.port`
 - `host.ping_service_name` (use 'smtp')
 
-### b) Define Postmark and notifications settings:
+### b) Notifications settings:
 
-```js
-//-------------------
-// config/general.js
-//-------------------
+You can use one, many or none of the following notification services simultaneously:
 
-module.exports.notifications = {
-  enabled: false, //if disabled, no email will be sent (just console messages)
-  to: 'ivan@iloire.com',
-  postmark : {
-    from: 'ivan@iloire.com',
-    api_key : 'your-postmark-key-here'
-  }
-}
+#### AWS-SES
+
+```
+export WATCHMEN_NOTIFICATIONS_AWS_SES_ENABLED='true'
+
+export WATCHMEN_AWS_FROM='your@email'
+export WATCHMEN_AWS_REGION='your AWS region'
+export WATCHMEN_AWS_KEY='your AWS Key'
+export WATCHMEN_AWS_SECRET='your AWS secret'
+
+```
+
+#### Postmark
+
+```
+export WATCHMEN_NOTIFICATIONS_POSTMARK_ENABLED='true'
+
+export WATCHMEN_POSTMARK_FROM='your@email'
+export WATCHMEN_POSTMARK_API_KEY='your Postmark API key'
+```
+
+Every time the service triggers an alert, a notification will be send using the predefined notification services to the email addresses defined on the ``alert_to`` property for a particular service or host.
+
+Also, you can subscribe a list of emails to receive all the notifications form all the services by using:
+
+```
+export WATCHMEN_NOTIFICATIONS_ALWAYS_ALERT_TO="admin1@domain.com, leaddev@domain.com"
 ```
 
 ### c) Configure the storage provider
@@ -228,26 +242,19 @@ Example: log in the console and send email if there is an outage:
 // server.js
 //-------------------
 
-watchmen.on('service_error', function(service, state){
+  var watchmen = new WatchMenFactory(services, storage);
 
-  /*
-  //Do here any additional stuff when you get an error
-  */
-  var info = service.url_info + ' down!. Error: ' + state.error + '. Retrying in ' +
-      (parseInt(state.next_attempt_secs, 10) / 60) + ' minute(s)..';
+  watchmen.on('service_error', eventHandlers.onServiceError);
+  watchmen.on('service_warning', eventHandlers.onServiceWarning);
+  watchmen.on('service_back', eventHandlers.onServiceBack);
+  watchmen.on('service_ok', eventHandlers.onServiceOk);
 
-  console.log (info);
+  // your own additional custom handlers:
+  watchmen.on('service_error', function(service, state){
+    // do stuff on error
+  });
 
-
-  if (state.prev_state.status === 'success' && config.notifications.enabled){
-    email_service.sendEmail(
-        service.alert_to,
-        service.url_info + ' is down!',
-        service.url_info + ' is down!. Reason: ' + error
-    );
-  }
-});
-
+  watchmen.start();
 ```
 
 # Tests
@@ -259,7 +266,12 @@ Run the tests with mocha:
 
 ## History
 
+**x.x.0**
+
+- New notifications system.
+
 **2.4.0**
+
 - Frontend revamp using angularjs.
 - Client side pagination using ngTable.
 - Client dependencies now managed by bower.
