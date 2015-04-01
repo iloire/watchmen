@@ -111,12 +111,6 @@ require('./lib/services').load_services(function(err, services){
 // in the same process:
 // require('./webserver/app');
 
-process.on('uncaughtException', function(err) {
-  console.error('uncaughtException:');
-  console.error(err);
-  exit(1);
-});
-
 process.on('SIGINT', function () {
   console.log('stopping watchmen..'.gray);
   exit(0);
