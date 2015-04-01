@@ -2,8 +2,13 @@
   "author": "Iván Loire <ivan@iloire.com> (http://iloire.com/)",
   "name": "watchmen",
   "scripts": {
+    "precoverage": "npm install;redis-server test/redis.conf",
+    "coverage": "./node_modules/istanbul/lib/cli.js cover ./node_modules/mocha/bin/_mocha -- --ui bdd -R spec -t 5000",
+    "postcoverage": "kill `cat test/redis.pid`",
     "postinstall": "bower install",
-    "test": "redis-server test/redis.conf;mocha -R list -b test/*.js;kill `cat test/redis.pid`",
+    "pretest": "npm install;redis-server test/redis.conf",
+    "test": "mocha -R list -b test/*.js;kill `cat test/redis.pid`",
+    "posttest": "kill `cat test/redis.pid`",
     "prestart": "npm install",
     "start": "redis-server redis.conf; forever --minUptime 1000 --spinSleepTime 2000 start server.js; forever --minUptime 1000 --spinSleepTime 2000 start webserver/app.js 8084; forever list",
     "stop": "forever stop server.js; forever stop webserver/app.js"
@@ -47,6 +52,7 @@
     "bower": "1.3.x",
     "assert": "1.3.x",
     "mocha": "2.1.x",
+    "istanbul": "0.3.x",
     "sinon": "1.12.x"
   }
 }

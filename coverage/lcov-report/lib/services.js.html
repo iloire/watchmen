@@ -1,0 +1,234 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <title>Code coverage report for lib/services.js</title>
+    <meta charset="utf-8">
+    <link rel="stylesheet" href="../prettify.css">
+    <link rel="stylesheet" href="../base.css">
+    <style type='text/css'>
+        div.coverage-summary .sorter {
+            background-image: url(../sort-arrow-sprite.png);
+        }
+    </style>
+</head>
+<body>
+<div class="header high">
+    <h1>Code coverage report for <span class="entity">lib/services.js</span></h1>
+    <h2>
+        Statements: <span class="metric">96.43% <small>(27 / 28)</small></span> &nbsp;&nbsp;&nbsp;&nbsp;
+        Branches: <span class="metric">81.48% <small>(22 / 27)</small></span> &nbsp;&nbsp;&nbsp;&nbsp;
+        Functions: <span class="metric">100% <small>(3 / 3)</small></span> &nbsp;&nbsp;&nbsp;&nbsp;
+        Lines: <span class="metric">96.43% <small>(27 / 28)</small></span> &nbsp;&nbsp;&nbsp;&nbsp;
+        Ignored: <span class="metric"><span class="ignore-none">none</span></span> &nbsp;&nbsp;&nbsp;&nbsp;
+    </h2>
+    <div class="path"><a href="../index.html">All files</a> &#187; <a href="index.html">lib/</a> &#187; services.js</div>
+</div>
+<div class="body">
+<pre><table class="coverage">
+<tr><td class="line-count">1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+21
+22
+23
+24
+25
+26
+27
+28
+29
+30
+31
+32
+33
+34
+35
+36
+37
+38
+39
+40
+41
+42
+43
+44
+45
+46
+47
+48
+49
+50
+51
+52
+53
+54
+55
+56
+57
+58
+59
+60
+61
+62
+63
+64</td><td class="line-coverage"><span class="cline-any cline-yes">1</span>
+<span class="cline-any cline-yes">1</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">11</span>
+<span class="cline-any cline-yes">10</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">15</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">15</span>
+<span class="cline-any cline-yes">18</span>
+<span class="cline-any cline-yes">18</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">18</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">18</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">18</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">18</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">18</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">18</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">18</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">18</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">18</span>
+<span class="cline-any cline-yes">18</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">18</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">18</span>
+<span class="cline-any cline-yes">17</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">18</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1</span>
+<span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">var hosts = require('../config/hosts');
+var config = require('../config/general');
+&nbsp;
+var services = null;
+&nbsp;
+/**
+ * Returns exiting services from persistance repository (or config file)
+ * It also normalises the configuration based on service + host config.
+ * @param  {Function} cb 
+ */
+module.exports.load_services = function (cb){
+&nbsp;
+  // Now this function is reading from the config file but 
+  // eventually services can be persisted in a database or fetched form a remote server
+&nbsp;
+  if (services) { //cache services collection
+    return cb(null, services);
+  }
+&nbsp;
+  services = [];
+&nbsp;
+  hosts.forEach (function(host){
+&nbsp;
+    host.protocol = host.protocol || 'http';
+&nbsp;
+    host.services.forEach(function(service){
+      service.host = host;
+      delete service.host.services; //avoid circular references
+&nbsp;
+      //friendly display
+      service.url_info = host.name + ' - ' + host.host + ':'+ host.port  + ' / ' + service.name;
+&nbsp;
+      service.warning_if_takes_more_than = service.warning_if_takes_more_than || host.warning_if_takes_more_than;
+&nbsp;
+      service.remove_events_older_than_seconds = service.remove_events_older_than_seconds || host.remove_events_older_than_seconds || config.remove_events_older_than_seconds;
+&nbsp;
+      service.ping_interval = service.ping_interval || host.ping_interval || <span class="branch-2 cbranch-no" title="branch not covered" >60;</span>
+&nbsp;
+      service.failed_ping_interval = service.failed_ping_interval || host.failed_ping_interval || <span class="branch-2 cbranch-no" title="branch not covered" >70;</span>
+&nbsp;
+      service.alert_to = service.alert_to || host.alert_to || [];
+&nbsp;
+      service.ping_service_name = (service.ping_service_name || host.ping_service_name || <span class="branch-2 cbranch-no" title="branch not covered" >'http')</span>;
+&nbsp;
+      service.ping_service = require('./ping_services/' + service.ping_service_name);
+&nbsp;
+      <span class="missing-if-branch" title="else path not taken" >E</span>if (service.enabled === undefined){ //no enabled config found for service
+        service.enabled = host.enabled;
+      }
+&nbsp;
+      <span class="missing-if-branch" title="if path not taken" >I</span>if (service.enabled === undefined){ //no enabled config found for host
+<span class="cstat-no" title="statement not covered" >        service.enabled = true;</span>
+      }
+&nbsp;
+      if (service.restrictedTo === undefined){
+        service.restrictedTo = host.restrictedTo;
+      }
+&nbsp;
+      services.push (service);
+    });
+  });
+&nbsp;
+  cb(null, services);
+};</pre></td></tr>
+</table></pre>
+
+</div>
+<div class="footer">
+    <div class="meta">Generated by <a href="http://istanbul-js.org/" target="_blank">istanbul</a> at Wed Apr 01 2015 21:44:42 GMT+1100 (AEDT)</div>
+</div>
+<script src="../prettify.js"></script>
+<script>
+window.onload = function () {
+        if (typeof prettyPrint === 'function') {
+            prettyPrint();
+        }
+};
+</script>
+<script src="../sorter.js"></script>
+</body>
+</html>

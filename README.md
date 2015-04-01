@@ -259,10 +259,15 @@ Example: log in the console and send email if there is an outage:
 
 # Tests
 
-Run the tests with mocha:
-
     $ npm test
 
+# Test coverage
+
+    $ npm run coverage
+
+Then
+
+    $ open coverage/lcov-report/lib/index.html
 
 ## History
 
