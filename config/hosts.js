@@ -1,7 +1,10 @@
 var one_tick = 20; //seconds
 
-//service name must be unique for a certain host.
-//host name must be unique
+// This will be soon moved to a database
+// https://github.com/iloire/WatchMen/issues/23
+
+// service name must be unique for a certain host.
+// host name must be unique
 module.exports =
   [
     {

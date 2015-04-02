@@ -1,4 +1,4 @@
-var config = require('../config/general');
+var config = require('../config/web');
 var passport = require('passport');
 var url = require('url');
 
