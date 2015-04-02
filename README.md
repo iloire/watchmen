@@ -271,9 +271,15 @@ Then check the coverage reports:
 
 ## History
 
-**x.x.0**
+**2.5.0**
 
-- New notifications system.
+- Rewrite notification system (support for postmark and AWS-SES - it is easy to add new ones).
+- Add 'alwaysAlertTo' to notifications.
+- Refactor configuration files. IMPORTANT: Please update your configuration files if you are upgrading (host/service config is still the same)!
+- Use postmark module instead of custom code for talking to postmark service.
+- Add istanbul for test coverage.
+- Fix: Cancel timeout to avoid hammering the server when the controller gets called multiple times.
+- Add colors to server console output.
 
 **2.4.0**
 
