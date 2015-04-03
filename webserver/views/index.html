@@ -17,6 +17,8 @@
       <div ng-view class="view-frame"></div>
   </div>
 
+  <span class="spinner" us-spinner="{radius:50, width:10, length: 50}" spinner-key="spinner-1"></span>
+
   <footer>
     <% if (user) { %>
       logged as <%=user%>
@@ -45,8 +47,11 @@
   <% } %>
   <script src="bower_components/moment/moment.js"></script>
   <script src="bower_components/angular/angular.js"></script>
+  <script src="bower_components/angular-animate/angular-animate.min.js"></script>
   <script src="bower_components/angular-resource/angular-resource.js"></script>
   <script src="bower_components/angular-route/angular-route.js"></script>
+  <script src="bower_components/angular-spinner/angular-spinner.js"></script>
+  <script src="bower_components/spin.js/spin.js"></script>
   <script src="bower_components/angular-moment/angular-moment.js"></script>
   <script src="bower_components/ng-table/dist/ng-table.min.js"></script>
 

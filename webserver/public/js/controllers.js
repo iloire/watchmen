@@ -7,16 +7,20 @@ var timer;
 
 var watchmenControllers = angular.module('watchmenControllers', []);
 
-watchmenControllers.controller('ServiceListCtrl', ['$scope', '$filter', '$timeout', 'Service', 'ngTableParams',
-    function($scope, $filter, $timeout, Service, ngTableParams) {
+watchmenControllers.controller('ServiceListCtrl',
+    ['$scope', '$filter', '$timeout', 'Service', 'ngTableParams', 'usSpinnerService',
+    function($scope, $filter, $timeout, Service, ngTableParams, usSpinnerService) {
+
+        usSpinnerService.spin('spinner-1');
 
         var key = 'tableServicesData';
 
         $scope[key] = [];
         $scope.tableParams = createngTableParams(key, ngTableParams, $scope, $filter, 10);
 
-
         (function tick($scope, Service) {
+
+            usSpinnerService.stop('spinner-1');
 
             function scheduleNextTick (){
                 $timeout.cancel(timer);
@@ -48,9 +52,11 @@ watchmenControllers.controller('ServiceListCtrl', ['$scope', '$filter', '$timeou
         })($scope, Service);
     }]);
 
-watchmenControllers.controller('ServiceDetailCtrl', ['$scope', '$filter', '$routeParams', 'Service', 'ngTableParams',
-    function($scope, $filter, $routeParams, Service, ngTableParams) {
+watchmenControllers.controller('ServiceDetailCtrl', ['$scope', '$filter', '$routeParams', 'Service', 'ngTableParams', 'usSpinnerService',
+    function($scope, $filter, $routeParams, Service, ngTableParams, usSpinnerService) {
+        usSpinnerService.spin('spinner-1');
         $scope.serviceDetails = Service.get({ serviceId: $routeParams.host + ',' + $routeParams.service }, function(data){
+            usSpinnerService.stop('spinner-1');
             $scope['tableCriticalLogsData'] = data.critical_events;
             $scope['tableWarningLogsData'] = data.warning_events;
             $scope.tableCriticalLogs = createngTableParams('tableCriticalLogsData', ngTableParams, $scope, $filter, 10);
