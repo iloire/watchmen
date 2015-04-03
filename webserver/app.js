@@ -11,10 +11,12 @@ var session = require('express-session');
 app.set('views', __dirname + '/views');
 app.set('view engine', 'ejs');
 
-//register .html extension with ejs view render
 app.engine('.html', require('ejs').renderFile);
+
 app.use(session({
-  secret: 'keyboard cat'
+  secret: 'myBigSecret',
+  saveUninitialized: true,
+  resave: true
 }));
 
 app.use(bodyParser.urlencoded({ extended: false }));
