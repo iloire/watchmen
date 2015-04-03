@@ -16,7 +16,18 @@ Check the **web interface** in action: <a href="http://watchmen.letsnode.com" ta
 
 ![List of hosts](https://github.com/iloire/WatchMen/raw/1.x/screenshots/watchmen-01.png)
 
-## Installation
+# Installation
+
+## Requirements
+
+Install first bower and redis store:
+
+    $ npm install -g bower
+
+[http://redis.io/download](Download redis from here)
+
+
+## Install watchmen
 
 This command will install both npm and bower dependencies
 
@@ -242,19 +253,19 @@ Example: log in the console and send email if there is an outage:
 // server.js
 //-------------------
 
-  var watchmen = new WatchMenFactory(services, storage);
+var watchmen = new WatchMenFactory(services, storage);
 
-  watchmen.on('service_error', eventHandlers.onServiceError);
-  watchmen.on('service_warning', eventHandlers.onServiceWarning);
-  watchmen.on('service_back', eventHandlers.onServiceBack);
-  watchmen.on('service_ok', eventHandlers.onServiceOk);
+watchmen.on('service_error', eventHandlers.onServiceError);
+watchmen.on('service_warning', eventHandlers.onServiceWarning);
+watchmen.on('service_back', eventHandlers.onServiceBack);
+watchmen.on('service_ok', eventHandlers.onServiceOk);
 
-  // your own additional custom handlers:
-  watchmen.on('service_error', function(service, state){
-    // do stuff on error
-  });
+// your own additional custom handlers:
+watchmen.on('service_error', function(service, state){
+  // do stuff on error
+});
 
-  watchmen.start();
+watchmen.start();
 ```
 
 ## Tests
