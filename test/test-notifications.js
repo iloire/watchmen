@@ -34,7 +34,7 @@ describe('notifications', function(){
         it('should require services', function(done){
             defaultNotificationsConfig.services = null;
             var notifications_service = new NotificationsFactory(defaultNotificationsConfig);
-            notifications_service.sendServiceBackAlert({}, function(err){
+            notifications_service.sendServiceBackAlert({}, {}, function(err){
                 assert.equal(err.indexOf('invalid configuration in NotificationService'), 0);
                 done();
             });
@@ -74,7 +74,7 @@ describe('notifications', function(){
                 assert.ok(service.body.indexOf('url info is down') === 0, service.body);
                 cb();
             };
-            notifications_service.sendServiceDownAlert(mockServiceConfig, "ERROR", done);
+            notifications_service.sendServiceDownAlert(mockServiceConfig, { error: "ERROR" }, done);
         });
     });
 
@@ -98,7 +98,7 @@ describe('notifications', function(){
                 assert.ok(service.body.indexOf('url info is back') === 0, service.body);
                 cb();
             };
-            notifications_service.sendServiceBackAlert(mockServiceConfig, done);
+            notifications_service.sendServiceBackAlert(mockServiceConfig, {}, done);
         });
 
         it('should call take into account config.alwaysAlertTo', function (done) {
@@ -109,7 +109,7 @@ describe('notifications', function(){
                 assert.equal(service.to[3], 'admin2@domain.com');
                 cb();
             };
-            notifications_service.sendServiceBackAlert(mockServiceConfig, done);
+            notifications_service.sendServiceBackAlert(mockServiceConfig, {}, done);
         });
     });
 

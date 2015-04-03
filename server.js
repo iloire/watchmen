@@ -20,7 +20,7 @@ var eventHandlers = {
     console.log (errorMsg + retryingMsg.gray);
 
     if (state.prev_state.status === 'success') {
-      notificationService.sendServiceDownAlert(service, state.error);
+      notificationService.sendServiceDownAlert(service, state);
     }
   },
 
@@ -46,7 +46,7 @@ var eventHandlers = {
    */
 
   onServiceBack: function (service, state) {
-    notificationService.sendServiceBackAlert(service);
+    notificationService.sendServiceBackAlert(service, state);
   },
 
   /**
