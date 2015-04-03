@@ -7,21 +7,21 @@ var bodyParser = require('body-parser');
 var methodOverride = require('method-override');
 var errorHandler = require('errorhandler');
 var session = require('express-session');
+var compress = require('compression');
 
 app.set('views', __dirname + '/views');
 app.set('view engine', 'ejs');
 
 app.engine('.html', require('ejs').renderFile);
 
+app.use(compress());
 app.use(session({
   secret: 'myBigSecret',
   saveUninitialized: true,
   resave: true
 }));
-
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
-
 app.use(methodOverride());
 
 require('./auth').configureApp(app);
