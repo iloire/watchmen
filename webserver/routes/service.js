@@ -28,12 +28,13 @@ module.exports.add_routes = function (app, storage){
                 var service = services[0];
 
                 storage.report_one(service, function (err, service){
+                    var events = (service.data && service.data.events) ? service.data.events : [];
                     res.json({
                         service : service,
                         eventsSince : moment (+new Date() - service.remove_events_older_than_seconds * 1000),
                         status: service.data ? service.data.status : 'unavailable', // no data collected yet
-                        critical_events: service.data ? service.data.events.filter(function(item){return item.type == 'critical';}) : [],
-                        warning_events: service.data ? service.data.events.filter(function(item){return item.type == 'warning';}) : []
+                        critical_events: events.filter(function(item){return item.type == 'critical';}),
+                        warning_events: events.filter(function(item){return item.type == 'warning';})
                     });
                 });
 
