@@ -1,26 +1,29 @@
-'use strict';
+(function(){
 
-/* App Module */
+    'use strict';
 
-var watchmenApp = angular.module('watchmenApp', [
-    'ngRoute',
-    'ngAnimate',
-    'angularSpinner',
-    'ngTable', // table sorting and pagination
-    'angularMoment',
-    'watchmenControllers',
-    'watchmenServices'
-]);
+    /* App Module */
 
-watchmenApp.config(['$routeProvider',
-    function($routeProvider) {
-        $routeProvider.
-            when('/details/:host/:service', {
-                templateUrl: 'partials/service-detail.html',
-                controller: 'ServiceDetailCtrl'
-            }).
-            otherwise({
-                templateUrl: 'partials/service-list.html',
-                controller: 'ServiceListCtrl'
-            });
-    }]);
+    var watchmenApp = angular.module('watchmenApp', [
+        'ngRoute',
+        'ngAnimate',
+        'angularSpinner',
+        'ngTable', // table sorting and pagination
+        'angularMoment',
+        'watchmenControllers',
+        'watchmenServices'
+    ]);
+
+    watchmenApp.config(['$routeProvider',
+        function($routeProvider) {
+            $routeProvider.
+                when('/details/:host/:service', {
+                    templateUrl: 'partials/service-detail.html',
+                    controller: 'ServiceDetailCtrl'
+                }).
+                otherwise({
+                    templateUrl: 'partials/service-list.html',
+                    controller: 'ServiceListCtrl'
+                });
+        }]);
+})();
