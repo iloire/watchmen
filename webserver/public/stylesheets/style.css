@@ -16,6 +16,7 @@ a {
   -o-transition: all 0.3s ease;
   transition: all 0.3s ease;
 }
+
 /*overview*/
 #status-overview {
   text-align: right;
@@ -75,16 +76,9 @@ a {
 
 .table-services .time-ago{
   font-size:0.9em;
-  color: #ccc;
-  display:block;
 }
 
 /*error*/
-.table-services tr.result-error .hosturl a {
-  font-weight: bold;
-  color:red;
-}
-
 .table-services tr.result-error a {
   color:red;
 }
@@ -103,7 +97,7 @@ a {
 }
 
 /*disabled*/
-.table-services tr.result-disabled, table tr.disabled td.hosturl a {
+.table-services tr.result-disabled, table tr.disabled a {
   background-color: #f5f5f5;
   color:gray !important;
 }
@@ -112,7 +106,7 @@ a {
   opacity:0.5;
 }
 
-.table-services tr.result-disabled .hosturl a {
+.table-services tr.result-disabled a {
   color:gray !important;
 }
 
