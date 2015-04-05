@@ -37,28 +37,35 @@
                         scheduleNextTick();
                     }
 
-                    $scope.services = Service.query(function (data) {
+                    $scope.services = Service.getAll(function (services) {
+                        $scope.errorLoadingServices = null; // reset error
 
-                        $scope.servicesDown = data.filter(function (service) {
+                        $scope[key] = services;
+                        $scope.tableParams.reload();
+                        $scope.servicesDown=services.filter(function (service) {
                             return service.data && service.data.status === 'error';
                         }).length;
 
-                        $scope.errorLoadingServices = null;
-
-                        $scope[key] = data;
-                        $scope.tableParams.reload();
+                        transition.loaded();
 
                         scheduleNextTick();
                     }, errorHandler);
 
                 })($scope, Service);
+
             }]);
+
+    /**
+     * Service details
+     */
 
     watchmenControllers.controller('ServiceDetailCtrl', ['$scope', '$filter', '$routeParams', 'Service', 'ngTableParams', 'usSpinnerService',
         function ($scope, $filter, $routeParams, Service, ngTableParams, usSpinnerService) {
             usSpinnerService.spin('spinner-1');
-            $scope.serviceDetails = Service.get({serviceId: $routeParams.host + ',' + $routeParams.service}, function (data) {
+            $scope.loading = true;
+            $scope.serviceDetails = Service.getDetails({serviceId: $routeParams.host + ',' + $routeParams.service}, function (data) {
                 usSpinnerService.stop('spinner-1');
+                $scope.loading = false;
                 $scope.tableCriticalLogsData = data.critical_events;
                 $scope.tableWarningLogsData = data.warning_events;
                 $scope.tableCriticalLogs = createngTableParams('tableCriticalLogsData', ngTableParams, $scope, $filter, 10);
