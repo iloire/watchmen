@@ -46,6 +46,7 @@ var eventHandlers = {
    */
 
   onServiceBack: function (service, state) {
+    console.log (service.url_info.white +  ' is back'.green + '. Down for '.gray + (state.down_time_last_request + '').white + ' seconds'.gray);
     notificationService.sendServiceBackAlert(service, state);
   },
 
@@ -98,6 +99,7 @@ require('./lib/services').load_services(function(err, services){
     console.error('error loading services'.red);
     exit(1);
   }
+  console.error(services.length + ' services loaded'.gray);
   start(services, storage);
 });
 
