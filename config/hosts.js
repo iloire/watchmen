@@ -17,15 +17,147 @@ module.exports =
       ping_interval: one_tick, //seconds
       failed_ping_interval: one_tick / 3, //seconds
       enabled: true,
-      alert_to: ['your-email@domain.com'],
+      //alert_to: ['your-email@domain.com'],
       warning_if_takes_more_than: 1500, //miliseconds
       services : [
         {
           name: 'home',
           method: 'get',
           url : '/',
-          expected: {statuscode: 200, contains: 'Apple Inc'},
-          restrictedTo: [ "myemail@domain.com" ]
+          expected: {statuscode: 200, contains: 'Apple Inc'}
+        }
+      ]
+    } ,
+    {
+      name:'yahoo',
+      host: 'www.yahoo.com',
+      port:80,
+      //protocol: 'http', // default is http
+      //ping_service_name: 'http', // default is http
+      //timeout:10000,  // default is 10 seconds
+      ping_interval: one_tick, //seconds
+      //failed_ping_interval: one_tick / 3, //default is 1/3 of ping_interval
+      //enabled: true, //default is true
+      //alert_to: ['your-email@domain.com'],
+      warning_if_takes_more_than: 1500, //miliseconds
+      services : [
+        {
+          name: 'home',
+          method: 'get',
+          url : '/',
+          expected: {statuscode: 301}
+        }
+      ]
+    } ,
+    {
+      name:'facebook',
+      host: 'www.facebook.com',
+      port:80,
+      ping_interval: one_tick, //seconds
+      //alert_to: ['your-email@domain.com'],
+      warning_if_takes_more_than: 1500, //miliseconds
+      services : [
+        {
+          name: 'home',
+          method: 'get',
+          url : '/',
+          expected: {statuscode: 302}
+        }
+      ]
+    } ,
+    {
+      name:'twitter',
+      host: 'www.twitter.com',
+      port:80,
+      ping_interval: one_tick, //seconds
+      //alert_to: ['your-email@domain.com'],
+      warning_if_takes_more_than: 1500, //miliseconds
+      services : [
+        {
+          name: 'home',
+          method: 'get',
+          url : '/',
+          expected: {statuscode: 301}
+        }
+      ]
+    } ,
+    {
+      name:'youtube',
+      host: 'www.youtube.com',
+      port:80,
+      ping_interval: one_tick, //seconds
+      //alert_to: ['your-email@domain.com'],
+      warning_if_takes_more_than: 1500, //miliseconds
+      services : [
+        {
+          name: 'home',
+          method: 'get',
+          url : '/',
+          expected: {statuscode: 301}
+        }
+      ]
+    } ,
+    {
+      name:'medium',
+      host: 'www.medium.com',
+      port:80,
+      ping_interval: one_tick, //seconds
+      // alert_to: ['your-email@domain.com'],
+      warning_if_takes_more_than: 1500, //miliseconds
+      services : [
+        {
+          name: 'home',
+          method: 'get',
+          url : '/',
+          expected: {statuscode: 301}
+        }
+      ]
+    } ,
+    {
+      name:'bitbucket',
+      host: 'www.bitbucket.com',
+      port:80,
+      ping_interval: one_tick, //seconds
+      //alert_to: ['your-email@domain.com'],
+      warning_if_takes_more_than: 1500, //miliseconds
+      services : [
+        {
+          name: 'home',
+          method: 'get',
+          url : '/',
+          expected: {statuscode: 302}
+        }
+      ]
+    } ,
+    {
+      name:'github',
+      host: 'www.github.com',
+      port:80,
+      ping_interval: one_tick, //seconds
+      //alert_to: ['your-email@domain.com'],
+      warning_if_takes_more_than: 1500, //miliseconds
+      services : [
+        {
+          name: 'home',
+          method: 'get',
+          url : '/',
+          expected: {statuscode: 200, contains: 'Github'}
+        }
+      ]
+    } ,
+    {
+      name:'microsoft',
+      host: 'www.microsoft.com',
+      port:80,
+      ping_interval: one_tick, //seconds
+      //alert_to: ['your-email@domain.com'],
+      warning_if_takes_more_than: 1500, //miliseconds
+      services : [
+        {
+          name: 'home',
+          method: 'get',
+          url : '/',
+          expected: {statuscode: 200, contains: 'Microsoft'}
         }
       ]
     } ,
@@ -33,12 +165,8 @@ module.exports =
       name:'vitaminas dev',
       host: 'www.vitaminasdev.com',
       port:80,
-      ping_service_name: 'http',
-      timeout:10000,
       ping_interval: one_tick, //seconds
-      failed_ping_interval: one_tick / 3, //seconds
-      enabled: true,
-      alert_to: ['your-email@domain.com'],
+      //alert_to: ['your-email@domain.com'],
       warning_if_takes_more_than: 1500, //miliseconds
       services : [
         {
@@ -62,12 +190,8 @@ module.exports =
       name:'ASP Photo Gallery',
       host: 'www.aspphotogallery.net',
       port:80,
-      ping_service_name: 'http',
-      timeout:5000,
       ping_interval: one_tick,
-      failed_ping_interval: one_tick / 3,
       warning_if_takes_more_than: 1300, //miliseconds
-      enabled: true,
       alert_to: ['ajax@aspphotogallery.net'], //you can include a different email recipient per host
       services : [
         {
@@ -83,12 +207,8 @@ module.exports =
       name:'cachiruloValley',
       host: 'cachirulovalley.com',
       port:80,
-      ping_service_name: 'http',
-      timeout:10000,
       ping_interval: one_tick,
-      failed_ping_interval: one_tick / 3,
       warning_if_takes_more_than: 3000, //miliseconds
-      enabled: true,
       services : [
         {
           name: 'home',
@@ -103,16 +223,13 @@ module.exports =
       name:'directorio cachirulo valley',
       host: 'directorio.cachirulovalley.com',
       port:80,
-      ping_service_name: 'http',
-      timeout:10000,
       ping_interval: 3 * one_tick,
-      failed_ping_interval: one_tick / 3,
       warning_if_takes_more_than: 3000, //miliseconds
-      enabled: true,
       services : [
         {
           name: 'home',
           method: 'get',
+          //alert_to: ['email@domain.com'], //alert at service level
           url : '/',
           expected: {statuscode: 200, contains: ''}
         } ,
@@ -120,6 +237,7 @@ module.exports =
           name: 'directory',
           method: 'get',
           url : '/directory',
+          //alert_to: ['other.email@domain.com'], //alert at service level
           expected: {statuscode: 200, contains: ''}
         }
       ],
@@ -129,17 +247,13 @@ module.exports =
       name:'letsnode.com',
       host: 'letsnode.com',
       port:80,
-      ping_service_name: 'http',
-      timeout:10000,
       ping_interval: one_tick,
-      failed_ping_interval: one_tick / 3,
-      enabled: true,
       services : [
         {
           name: 'home',
           method: 'get',
           url : '/',
-          expected: {statuscode: 200, contains: 'A blog about node.js and express.js'}
+          expected: {statuscode: 200}
         }
       ]
     } ,
@@ -147,11 +261,7 @@ module.exports =
       name:'mathrace demo',
       host: 'letsnode.com',
       port:8090,
-      ping_service_name: 'http',
-      timeout:10000,
       ping_interval: one_tick,
-      failed_ping_interval: one_tick / 3,
-      enabled: true,
       services : [
         {
           name: 'home',
@@ -165,11 +275,7 @@ module.exports =
       name:'google.com',
       host: 'www.google.com',
       port:80,
-      ping_service_name: 'http',
-      timeout:10000,
       ping_interval: one_tick,
-      failed_ping_interval: one_tick / 3,
-      enabled: false,
       services : [
         {
           name: 'home',
@@ -183,10 +289,8 @@ module.exports =
       name:'localhost test',
       host: '127.0.0.1',
       port:8080,
-      ping_service_name: 'http',
       ping_interval: one_tick,
-      failed_ping_interval: one_tick / 3,
-      alert_to: ['your-email@domain.com'],
+      //alert_to: ['your-email@domain.com'],
       enabled: false,
       services : [
         {
@@ -201,13 +305,9 @@ module.exports =
       name:'amazon',
       host: 'www.amazon.com',
       port:80,
-      ping_service_name: 'http',
-      timeout: 10000,
       ping_interval: one_tick,
-      failed_ping_interval: one_tick / 3,
       warning_if_takes_more_than: 2000, //miliseconds
-      enabled: true,
-      alert_to:['your-email@domain.com'],
+      //alert_to:['your-email@domain.com'],
       services : [
         {
           name: 'home',
@@ -218,16 +318,28 @@ module.exports =
       ]
     } ,
     {
+      name:'wordpress',
+      host: 'www.wordpress.com',
+      port:80,
+      ping_interval: one_tick,
+      warning_if_takes_more_than: 2000, //miliseconds
+      //alert_to:['your-email@domain.com'],
+      services : [
+        {
+          name: 'home',
+          method: 'get',
+          url : '/',
+          expected: {statuscode: 301}
+        }
+      ]
+    } ,
+    {
       name:'hacker news',
       host: 'news.ycombinator.com',
       port:80,
-      ping_service_name: 'http',
-      timeout:10000,
       ping_interval: one_tick,
-      failed_ping_interval: one_tick / 3,
       warning_if_takes_more_than: 4000, //miliseconds
-      enabled: true,
-      alert_to:['your-email@domain.com'],
+      //alert_to:['your-email@domain.com'],
       services : [
         {
           name: 'home',
@@ -241,10 +353,7 @@ module.exports =
       name:'form post test',
       host: 'hroch486.icpf.cas.cz',
       port:80,
-      ping_service_name: 'http',
       ping_interval: one_tick,
-      failed_ping_interval: one_tick / 3,
-      enabled: true,
       services : [
         {
           name: 'post',
@@ -266,12 +375,9 @@ module.exports =
       name:'node js',
       host: 'nodejs.org',
       port:80,
-      ping_service_name: 'http',
       timeout:10000,
       ping_interval: one_tick,
-      failed_ping_interval: one_tick / 3,
       warning_if_takes_more_than: 1500,
-      enabled: true,
       services : [
         {
           name: 'home',
@@ -285,12 +391,8 @@ module.exports =
       name:'redis',
       host: 'redis.io',
       port:80,
-      ping_service_name: 'http',
-      timeout:10000,
       ping_interval: one_tick,
-      failed_ping_interval: one_tick / 3,
       warning_if_takes_more_than: 1500,
-      enabled: true,
       services : [
         {
           name: 'home',
@@ -304,17 +406,13 @@ module.exports =
       name:'express',
       host: 'expressjs.com',
       port:80,
-      ping_service_name: 'http',
-      timeout:10000,
       ping_interval: one_tick,
-      failed_ping_interval: one_tick / 3,
-      enabled: true,
       services : [
         {
           name: 'home',
           method: 'get',
           url : '/',
-          expected: {statuscode: 200, contains: 'web application framework'}
+          expected: {statuscode: 200}
         }
       ]
     }

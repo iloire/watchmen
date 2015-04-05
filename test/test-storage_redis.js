@@ -13,7 +13,6 @@ describe('redis storage', function(){
 
   var services, service;
 
-  var temp_status = null;
   var clock;
 
   var ok_response = {body : 'Apple Inc.', response : 200, timeDiff : 100};
@@ -61,7 +60,7 @@ describe('redis storage', function(){
       service_loader.load_services(function(err, _services){
         redis_storage.report_all(services, function(err, data){
           assert.ifError(err);
-          assert.equal (data.services.length, 18);
+          assert.equal (data.services.length, 27); // not the best, should change when services get store in the DB
           done();
         });
       });
