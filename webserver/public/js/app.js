@@ -6,7 +6,6 @@
 
     var watchmenApp = angular.module('watchmenApp', [
         'ngRoute',
-        'ngAnimate',
         'angularSpinner',
         'ngTable', // table sorting and pagination
         'angularMoment',

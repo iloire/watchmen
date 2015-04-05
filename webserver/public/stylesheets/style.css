@@ -9,13 +9,6 @@ a {
 .spinner {
   opacity: 0.8;
 }
-.view-frame.ng-enter,
-.view-frame.ng-leave {
-  -webkit-transition: all 0.3s ease;
-  -moz-transition: all 0.3s ease;
-  -o-transition: all 0.3s ease;
-  transition: all 0.3s ease;
-}
 
 /*overview*/
 #status-overview {
