@@ -1,4 +1,4 @@
-var one_tick = 20; //seconds
+var one_tick = 60; //seconds
 
 // This will be soon moved to a database
 // https://github.com/iloire/WatchMen/issues/23
