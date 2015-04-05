@@ -9,20 +9,32 @@
 
     var watchmenControllers = angular.module('watchmenControllers', []);
 
+    /**
+     * Services list
+     */
+
     watchmenControllers.controller('ServiceListCtrl',
         ['$scope', '$filter', '$timeout', 'Service', 'ngTableParams', 'usSpinnerService',
             function ($scope, $filter, $timeout, Service, ngTableParams, usSpinnerService) {
 
-                usSpinnerService.spin('spinner-1');
+                var transition = {
+                    loading: function(){
+                        usSpinnerService.spin('spinner-1');
+                        $scope.loading = true;
+                    },
+                    loaded : function(){
+                        usSpinnerService.stop('spinner-1');
+                        $scope.loading = false;
+                    }
+                };
 
                 var key = 'tableServicesData';
+                transition.loading();
 
                 $scope[key] = [];
-                $scope.tableParams = createngTableParams(key, ngTableParams, $scope, $filter, 10);
+                $scope.tableParams = createngTableParams(key, ngTableParams, $scope, $filter, 25);
 
                 (function tick($scope, Service) {
-
-                    usSpinnerService.stop('spinner-1');
 
                     function scheduleNextTick() {
                         $timeout.cancel(timer);
@@ -73,10 +85,17 @@
             });
         }]);
 
-    function getDefaultParameters(key, count) {
+    /**
+     * Returns local stored or default parameters for ngTable.
+     * @param key
+     * @param pageSize
+     * @returns {Object} parameters
+     */
+
+    function getDefaultParameters(key, pageSize) {
         var defaults = {
             page: 1,
-            count: count || 10,
+            count: pageSize || 10,
             debugMode: true
         };
 
@@ -103,7 +122,9 @@
                     var orderedData = params.sorting() ?
                         $filter('orderBy')(data, params.orderBy()) : data;
 
-                    $defer.resolve(orderedData.slice((params.page() - 1) * params.count(), params.page() * params.count()));
+                    var paginatedData = orderedData.slice((params.page() - 1) * params.count(), params.page() * params.count());
+
+                    $defer.resolve(paginatedData);
 
                     var paramsForStorage = {
                         sorting: params.sorting(),

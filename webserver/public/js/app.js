@@ -17,11 +17,11 @@
         function($routeProvider) {
             $routeProvider.
                 when('/details/:host/:service', {
-                    templateUrl: 'partials/service-detail.html',
+                    templateUrl: 'service-detail.html',
                     controller: 'ServiceDetailCtrl'
                 }).
                 otherwise({
-                    templateUrl: 'partials/service-list.html',
+                    templateUrl: 'service-list.html',
                     controller: 'ServiceListCtrl'
                 });
         }]);

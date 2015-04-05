@@ -1,9 +1,11 @@
+<%- include header.html %>
+
 <div ng-if="errorLoadingServices" class="alert alert-danger" role="alert">
     <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
     <span>{{errorLoadingServices}}</span>
 </div>
 
-<div class="container-fluid">
+<div class="container-fluid" ng-show="!loading">
     <div class="row">
 
         <div class="filter-container">

@@ -5,17 +5,26 @@
     <link rel='stylesheet' href='bower_components/bootstrap/dist/css/bootstrap.min.css' />
     <link rel='stylesheet' href='bower_components/bootstrap/dist/css/bootstrap-theme.min.css' />
     <link rel='stylesheet' href='bower_components/ng-table/dist/ng-table.min.css' />
-
     <link rel='stylesheet' href='stylesheets/style.css' />
     <meta name="viewport" content="width=device-width">
   </head>
   <body>
 
-  <div id="navbar" x-ng-controller="ServiceListCtrl" x-ng-include="'partials/header.html'"></div>
-
   <div class="container-fluid">
       <div ng-view class="view-frame"></div>
   </div>
+
+  <script type="text/ng-template" id="service-detail.html">
+    <%- include service-detail.html %>
+  </script>
+
+  <script type="text/ng-template" id="service-list.html">
+    <%- include service-list.html %>
+  </script>
+
+  <script type="text/ng-template" id="header.html">
+    <%- include header.html %>
+  </script>
 
   <span class="spinner" us-spinner="{radius:50, width:10, length: 50}" spinner-key="spinner-1"></span>
 

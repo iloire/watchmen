@@ -11,21 +11,21 @@ a {
 }
 
 /*overview*/
-#status-overview {
+.status-overview {
   text-align: right;
   padding: 10px;
   font-size: 1.5em;
   color: white;
 }
 
-#status-overview > span {
+.status-overview > span {
   color: white;
   display: inline;
   padding: 5px 12px;
   border-radius: 5px;
 }
 
-#status-overview .down{
+.status-overview .down{
   background-color:red;
 }
 
