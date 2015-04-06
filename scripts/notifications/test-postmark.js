@@ -1,4 +1,4 @@
-var postMarkFactory = require('../lib/notifications/services/postmark/postmark');
+var postMarkFactory = require('../../lib/notifications/services/postmark/postmark');
 
 var testEmailAddress = 'xxxxx@domain.com';
 

@@ -1,7 +1,7 @@
 // you should use an amazon verified address in both "from" and "to" fields until you get
 // production access: http://docs.aws.amazon.com/ses/latest/DeveloperGuide/request-production-access.html
 
-var sesFactory = require('../lib/notifications/services/aws-ses/aws-ses');
+var sesFactory = require('../../lib/notifications/services/aws-ses/aws-ses');
 
 var testEmailAddress = 'xxxxx@domain.com';
 
