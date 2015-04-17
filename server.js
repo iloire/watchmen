@@ -118,6 +118,7 @@ require('./lib/services').load_services(function(err, services){
 
 process.on('SIGINT', function () {
   console.log('stopping watchmen..'.gray);
+  storage.quit();
   process.exit(0);
 });
 
