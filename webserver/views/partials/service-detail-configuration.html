@@ -1,0 +1,40 @@
+<button ng-click="showConfig=!showConfig">show service configuration</button>
+
+<div ng-hide="!showConfig" class="panel panel-default">
+    <div class="panel-body">
+        <table class="general">
+            <tr>
+                <td>
+                    Host
+                </td>
+                <td>
+                    {{serviceDetails.service.host.host}} (port {{serviceDetails.service.host.port}})
+                </td>
+            </tr>
+            <tr>
+                <td>Ping interval:</td>
+                <td><em>{{serviceDetails.service.host.ping_interval}}</em> seconds</td>
+            </tr>
+            <tr ng-if="serviceDetails.service.warning_if_takes_more_than">
+                <td>Latency threshold: </td>
+                <td><span title="latency threshold: {{serviceDetails.service.warning_if_takes_more_than}} seconds" class="label label-default">{{serviceDetails.service.warning_if_takes_more_than}}</span> milliseconds
+                            <span class="text-muted small">
+                            (if above, will trigger a warning event)
+                            </span>
+                </td>
+            </tr>
+            <tr ng-if="serviceDetails.service.expected && serviceDetails.service.expected.statuscode">
+                <td>Expected status code:</td>
+                <td>
+                    <span title="ping interval: {{serviceDetails.service.expected.statuscode}} seconds" class="label label-default">{{serviceDetails.service.expected.statuscode}}</span>
+                </td>
+            </tr>
+            <tr ng-if="serviceDetails.service.expected && serviceDetails.service.expected.statuscode">
+                <td>Expected text:</td>
+                <td>
+                    <em>{{serviceDetails.service.expected.contains}}</em>
+                </td>
+            </tr>
+        </table>
+    </div>
+</div>

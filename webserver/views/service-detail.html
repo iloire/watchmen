@@ -8,154 +8,24 @@
 
     <h2>{{serviceDetails.service.host.name}}</h2>
 
-    <div class="section status row">
+    <%- include partials/service-detail-status-header.html %>
 
-        <div class="col-md-6">
-
-            <h1 class="uptime">
-                <span ng-if="!serviceDetails.service.enabled" title="Disabled" class="label label-default">Service disabled</span>
-
-                <span ng-if="serviceDetails.service.data && serviceDetails.service.data.uptime"
-                      title="Up time: {{serviceDetails.service.data.uptime}} %"
-                      ng-class="{'label label-success':serviceDetails.status=='success','label label-danger':serviceDetails.status=='error','label label-default':!serviceDetails.status}">
-
-                    {{serviceDetails.service.data.uptime}} % uptime
-                </span>
-
-                <span ng-if="serviceDetails.service.enabled && (!serviceDetails.service.data || !serviceDetails.service.data.uptime)" title="Offline" class="label label-danger">Offline</span>
-            </h1>
-
-            <div ng-if="serviceDetails.service.data && serviceDetails.service.data.up_since">
-                <span class="text-muted small">last change on uptime:
-                    <span>{{serviceDetails.service.data.up_since | amDateFormat:'DD/MMM hh:mm'}}</span>
-                    (<span am-time-ago="serviceDetails.service.data.up_since"></span>)
-                </span>
-            </div>
-
-            <br/>
-            <table class="general">
-                <tr ng-if="serviceDetails.service.data && serviceDetails.service.data.avg_response_time">
-                    <td>AVG. latency</td>
-                    <td>
-                        <span title="AVG response time: {{serviceDetails.service.data.avg_response_time}} milliseconds" class="label label-default">
-                            {{serviceDetails.service.data.avg_response_time}}
-                        </span>
-                        milliseconds
-                    </td>
-                </tr>
-                <tr ng-if="serviceDetails.service.data && serviceDetails.service.data.outages">
-                    <td>
-                        Outages
-                    </td>
-                    <td>
-                        <span title="outages: {{serviceDetails.service.data.outages}}" class="label label-danger">{{serviceDetails.service.data.outages}}</span>
-                        <span ng-if="serviceDetails.service.data && serviceDetails.service.data.last_outage">
-                        last one was
-                            <span am-time-ago="serviceDetails.service.data.last_outage"></span>
-                        </span>
-                    </td>
-                </tr>
-                <tr ng-if="serviceDetails.service.data && serviceDetails.service.data.warnings">
-                    <td>Warnings</td>
-                    <td>
-                        <span title="warnings: {{serviceDetails.service.data.warnings}}" class="label label-warning">{{serviceDetails.service.data.warnings}}</span>
-                        <span ng-if="serviceDetails.service.data && serviceDetails.service.data.last_warning">
-                        last one was <span am-time-ago="serviceDetails.service.data.last_warning"></span>
-                        </span>
-                    </td>
-                </tr>
-            </table>
-
-        </div>
-
-        <div class="col-md-6">
-
-            <h4>Configuration</h4>
-            <div class="panel panel-default">
-                <div class="panel-body">
-                    <table class="general">
-                    <tr>
-                        <td>
-                            Host
-                        </td>
-                        <td>
-                            {{serviceDetails.service.host.host}} (port {{serviceDetails.service.host.port}})
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>Ping interval:</td>
-                        <td><em>{{serviceDetails.service.host.ping_interval}}</em> seconds</td>
-                    </tr>
-                    <tr ng-if="serviceDetails.service.warning_if_takes_more_than">
-                        <td>Latency threshold: </td>
-                        <td><span title="latency threshold: {{serviceDetails.service.warning_if_takes_more_than}} seconds" class="label label-default">{{serviceDetails.service.warning_if_takes_more_than}}</span> milliseconds
-                            <span class="text-muted small">
-                            (if above, will trigger a warning event)
-                            </span>
-                        </td>
-                    </tr>
-                    <tr ng-if="serviceDetails.service.expected && serviceDetails.service.expected.statuscode">
-                        <td>Expected status code:</td>
-                        <td>
-                            <span title="ping interval: {{serviceDetails.service.expected.statuscode}} seconds" class="label label-default">{{serviceDetails.service.expected.statuscode}}</span>
-                        </td>
-                    </tr>
-                    <tr ng-if="serviceDetails.service.expected && serviceDetails.service.expected.statuscode">
-                        <td>Expected text:</td>
-                        <td>
-                            <em>{{serviceDetails.service.expected.contains}}</em>
-                        </td>
-                    </tr>
-                </table>
-                </div>
-            </div>
-
-        </div>
-
+    <div class="configuration">
+        <%- include partials/service-detail-configuration.html %>
     </div>
 
-    <h3>Events
-        <span>
-            (showing events since
-            <span>{{serviceDetails.eventsSince | amDateFormat:'DD/MMM'}}</span>, or
-            <span am-time-ago="serviceDetails.eventsSince"></span>)
-        </span>
-    </h3>
-
-    <div class="section events row">
-        <div class="col-md-6">
-            <h4>Critical</h4>
-            <table ng-table="tableCriticalLogs" class="table-logs table sorted table-striped table-condensed">
-                <tbody>
-                <tr ng-repeat="log in $data">
-                    <td class="" data-title="'Message'" sortable="'msg'">
-                        <span ng-class="{'success':log.status==='success','error':log.status==='error'}">
-                            {{log.msg}}
-                        </span>
-                    </td>
-                    <td class="" data-title="'When'" sortable="'timestamp'">
-                        <span am-time-ago="log.timestamp"></span>
-                    </td>
-                </tr>
-                </tbody>
-            </table>
-        </div>
-        <div class="col-md-6">
-            <h4>Warnings</h4>
-            <table ng-table="tableWarningLogs" class="table-logs table sorted table-striped table-condensed">
-                <tbody>
-                <tr ng-repeat="log in $data">
-                    <td class="" data-title="'Message'" sortable="'msg'">
-                        <span class="warning">
-                            {{log.msg}}
-                        </span>
-                    </td>
-                    <td class="" data-title="'When'" sortable="'timestamp'">
-                        <span am-time-ago="log.timestamp"></span>
-                    </td>
-                </tr>
-                </tbody>
-            </table>
-        </div>
+    <div ng-show="showLastHourChart">
+        <h4>Last hour</h4>
+        <div id='chart-last-hour'></div>
     </div>
+    <div ng-show="showLast24Chart">
+        <h4>Last 24 hours</h4>
+        <div id='chart-last-24-hours'></div>
+    </div>
+    <div ng-show="showLastWeekChart">
+        <h4>Last week</h4>
+        <div id='chart-last-week'></div>
+    </div>
+
+    <%- include partials/service-detail-events.html %>
 </div>

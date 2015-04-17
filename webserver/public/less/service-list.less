@@ -1,0 +1,83 @@
+
+.error, .failure, .critical {color:red;}
+.success {color:green;}
+.warning, .warnings{color:orange;}
+
+.table-services {
+
+  tr.result-disabled, tr.result-disabled a {
+    background-color: #f5f5f5;
+    color:gray !important;
+    opacity:0.5;
+  }
+
+  tr.result-success a {
+    color:green;
+  }
+
+  tr.result-error a {
+    color: red;
+  }
+
+  tr.result-warning  {
+    color: orange;
+  }
+
+  th {
+    text-align: left;
+  }
+
+  td.outages {
+    color:red;
+  }
+
+  td.warnings {
+    color:orange;
+  }
+
+  td.service {
+    text-transform: uppercase;
+    margin-top: 20px;
+    font-size: 1.2em;
+    opacity: 0.6;
+    color: gray;
+  }
+
+  td a.name {
+    display: block;
+    font-size: 1.2em;
+  }
+
+  span.label {
+    font-size: 1.0em;
+    line-height: 2.0em;
+  }
+
+  .last_check{
+    color:#ccc;
+  }
+
+  .time-ago {
+    font-size: 0.9em;
+  }
+
+  td.result-uptime span{
+    font-size:1.3em;
+  }
+}
+
+.filter-container {
+  margin: 10px 0;
+  position: relative;
+
+  input {
+    padding-right: 30px;
+  }
+
+  span {
+    position: absolute;
+    right: 0px;
+    padding: 10px 12px;
+    pointer-events: none;
+  }
+}

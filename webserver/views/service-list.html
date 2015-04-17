@@ -15,7 +15,7 @@
 
         <table ng-table="tableParams" class="table-services table sorted table-striped table-condensed">
             <tbody>
-            <tr ng-class={'result-disabled':service.enabled===false,'result-success':service.data.status=='success','result-error':service.data.status=='error'} ng-repeat="service in $data | filter:query">
+            <tr ng-class={'result-disabled':service.enabled===false,'result-success':service.data.status=='success','result-error':service.data.status=='error','result-error':!service.data,'result-error':!service.data.status} ng-repeat="service in $data | filter:query">
                 <td data-title="'Status'" sortable="'data.status'">
                     <span ng-if="service.data.status == 'error'" class="label label-danger">offline</span>
                     <span ng-if="service.data.status == 'success'" class="label label-success">online</span>
@@ -28,6 +28,7 @@
                 <td data-title="'Host'" sortable="'host.name'">
                     <a class="name" href="#/details/{{service.host.name}}/{{service.name}}">
                         {{service.host.name}} / {{service.name}}
+                        77 {{service.data.status}} 77
                     </a>
 
                     <span ng-if="service.data.last_check" class="hidden-xs last_check">
@@ -37,31 +38,29 @@
                     </span>
                 </td>
 
-                <td header-class="'hidden-xs'" class="avgresponse hidden-xs" data-title="'AVG res. (ms)'" sortable="'data.avg_response_time'">
-                    <span ng-if="service.data.avg_response_time" class="label label-default">
-                        {{service.data.avg_response_time}}
+                <td header-class="'hidden-xs'" class="avgresponse hidden-xs" data-title="'AVG res. (ms)'" sortable="'latest_mean_latency'">
+                    <span ng-if="service.latest_mean_latency" class="label label-default">
+                        {{service.latest_mean_latency}}
                     </span>
                 </td>
 
-                <td header-class="'hidden-xs'" class="result-error hidden-xs" data-title="'Outages'" sortable="'data.outages'">
-                    <span ng-if="service.data.outages" class="label label-danger">{{service.data.outages}}</span>
+                <td header-class="'hidden-xs'" class="outages hidden-xs" data-title="'Outages last 24h'" sortable="'outages_last_24hours'">
+                    <span ng-if="service.outages_last_24hours" class="label label-danger">{{service.outages_last_24hours}}</span>
                 </td>
 
-                <td header-class="'hidden-xs'" class="result-error hidden-xs" data-title="'Last outage'" sortable="'data.last_outage'">
+                <td header-class="'hidden-xs'" class="outages hidden-xs" data-title="'Last outage'" sortable="'data.last_outage'">
                     <div ng-if="service.data.last_outage">
-                        <span>{{service.data.last_outage | amDateFormat:'DD/MMM, HH:mm'}}</span>
-                        (<span class="time-ago" am-time-ago="service.data.last_outage"></span>)
+                        <span class="time-ago" am-time-ago="service.data.last_outage"></span>
                     </div>
                 </td>
 
-                <td header-class="'hidden-xs hidden-sm'" class="result-warning hidden-xs hidden-sm" data-title="'Warnings'" sortable="'data.warnings'">
-                    <span ng-if="service.data.warnings" class="label label-warning">{{service.data.warnings}}</span>
+                <td header-class="'hidden-xs hidden-sm'" class="warnings hidden-xs hidden-sm" data-title="'Warnings last 24h'" sortable="'warnings_last_24Hours'">
+                    <span ng-if="service.warnings_last_24Hours" class="label label-warning">{{service.warnings_last_24Hours}}</span>
                 </td>
 
-                <td header-class="'hidden-xs hidden-sm'" class="result-warning hidden-xs hidden-sm" data-title="'Last warning'" sortable="'data.last_warning'">
+                <td header-class="'hidden-xs hidden-sm'" class="warnings hidden-xs hidden-sm" data-title="'Last warning'" sortable="'data.last_warning'">
                     <div ng-if="service.data.last_warning">
-                        <span>{{service.data.last_warning | amDateFormat:'DD/MMM, HH:mm'}}</span>
-                        (<span class="time-ago" am-time-ago="service.data.last_warning"></span>)
+                        <span class="time-ago" am-time-ago="service.data.last_warning"></span>
                     </div>
                 </td>
 
