@@ -1,4 +1,5 @@
 var colors = require('colors');
+var moment = require('moment');
 var notificationsFactory = require ('./lib/notifications/notifications');
 var notificationService = new notificationsFactory();
 
@@ -15,7 +16,8 @@ var eventHandlers = {
 
   onServiceError: function(service, state) {
     var errorMsg = service.url_info + ' down!. ' + state.error.red;
-    var retryingMsg = '. retrying in ' + (parseInt(state.next_attempt_secs, 10) / 60) + ' minute(s)..';
+    var nextAttempt = moment.duration(state.next_attempt_secs, 'seconds');
+    var retryingMsg = '. retrying in ' + nextAttempt.humanize();
 
     console.log (errorMsg + retryingMsg.gray);
 
@@ -46,7 +48,8 @@ var eventHandlers = {
    */
 
   onServiceBack: function (service, state) {
-    console.log (service.url_info.white +  ' is back'.green + '. Down for '.gray + (state.down_time_last_request + '').white + ' seconds'.gray);
+    var duration = moment.duration(state.down_time_last_request, 'seconds');
+    console.log (service.url_info.white +  ' is back'.green + '. Down for '.gray + duration.humanize().white);
     notificationService.sendServiceBackAlert(service, state);
   },
 
