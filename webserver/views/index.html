@@ -2,12 +2,13 @@
 <html lang="en" ng-app="watchmenApp">
   <head>
     <title>watchmen, http monitor for node.js - <%= title %></title>
-    <link rel='stylesheet' href='bower_components/bootstrap/dist/css/bootstrap.min.css' />
-    <link rel='stylesheet' href='bower_components/bootstrap/dist/css/bootstrap-theme.min.css' />
-    <link rel='stylesheet' href='bower_components/ng-table/dist/ng-table.min.css' />
-    <link rel='stylesheet' href='bower_components/c3/c3.min.css' />
-    <link rel='stylesheet' href='build/app.css' />
+    <link rel='stylesheet' href='<%=baseUrl%>bower_components/bootstrap/dist/css/bootstrap.min.css' />
+    <link rel='stylesheet' href='<%=baseUrl%>bower_components/bootstrap/dist/css/bootstrap-theme.min.css' />
+    <link rel='stylesheet' href='<%=baseUrl%>bower_components/ng-table/dist/ng-table.min.css' />
+    <link rel='stylesheet' href='<%=baseUrl%>bower_components/c3/c3.min.css' />
+    <link rel='stylesheet' href='<%=baseUrl%>build/app.css' />
     <meta name="viewport" content="width=device-width">
+    <base href="<%=baseUrl%>">
   </head>
   <body>
 
@@ -52,7 +53,7 @@
   </script>
   <% } %>
 
-  <script src="build/vendor.js"></script>
-  <script src="build/app.js"></script>
+  <script src="<%=baseUrl%>build/vendor.js"></script>
+  <script src="<%=baseUrl%>build/app.js"></script>
   </body>
 </html>

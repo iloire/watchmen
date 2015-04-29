@@ -13,8 +13,11 @@
         'watchmenServices'
     ]);
 
-    watchmenApp.config(['$routeProvider',
-        function($routeProvider) {
+    watchmenApp.config(['$routeProvider', '$locationProvider',
+        function($routeProvider, $locationProvider) {
+
+            $locationProvider.html5Mode(true);
+
             $routeProvider.
                 when('/details/:host/:service', {
                     templateUrl: 'service-detail.html',
