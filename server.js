@@ -3,27 +3,40 @@ var moment = require('moment');
 var notificationsFactory = require ('./lib/notifications/notifications');
 var notificationService = new notificationsFactory();
 
-var storageFactory = require('./lib/storage/storage_factory');
-var storage = storageFactory.get_storage_instance();
+var storageFactory = require('./lib/storage/storage-factory');
+var storage = storageFactory.getStorageInstance('development'); // TODO: correct flag according to env
+var WatchMenFactory = require('./lib/watchmen');
 
 var eventHandlers = {
 
   /**
-   * When there is an error pinging the service
+   * On a new outage
    * @param service
    * @param state
    */
 
-  onServiceError: function(service, state) {
-    var errorMsg = service.url_info + ' down!. ' + state.error.red;
-    var nextAttempt = moment.duration(state.next_attempt_secs, 'seconds');
+  onNewOutage: function(service, state) {
+    var errorMsg = service.name + ' down!'.red;
+    var nextAttempt = moment.duration(service.failedInterval, 'seconds');
+    var retryingMsg = 'retrying in ' + nextAttempt.humanize();
+
+    console.log (errorMsg, ' ', retryingMsg.gray);
+
+    notificationService.sendServiceDownAlert(service, state);
+  },
+
+  /**
+   * Failed ping on an existing outage
+   * @param service
+   * @param state
+   */
+
+  onCurrentOutage: function(service, state) {
+    var errorMsg = service.name + ' down!'.red;
+    var nextAttempt = moment.duration(state.failedInterval, 'seconds');
     var retryingMsg = '. retrying in ' + nextAttempt.humanize();
 
     console.log (errorMsg + retryingMsg.gray);
-
-    if (state.prev_state.status === 'success') {
-      notificationService.sendServiceDownAlert(service, state);
-    }
   },
 
   /**
@@ -32,12 +45,9 @@ var eventHandlers = {
    * @param state
    */
 
-  onServiceWarning: function (service, state) {
+  onLatencyWarning: function (service, elapsedTime) { // TODO unit test elapsedTime
     /*
-     // Do here any additional stuff when you get a warning
-
-     console.log (service.url_info + ' WARNING (' + state.elapsed_time + ' ms, avg: '
-     + state.avg_response_time + ') ## ' + state.warnings + ' warnings');
+     Do here any additional stuff when you get a warning
      */
   },
 
@@ -47,10 +57,10 @@ var eventHandlers = {
    * @param state
    */
 
-  onServiceBack: function (service, state) {
-    var duration = moment.duration(state.down_time_last_request, 'seconds');
-    console.log (service.url_info.white +  ' is back'.green + '. Down for '.gray + duration.humanize().white);
-    notificationService.sendServiceBackAlert(service, state);
+  onServiceBack: function (service, currentOutage) {
+    var duration = moment.duration(+new Date() - currentOutage.timestamp, 'seconds');
+    console.log (service.name.white +  ' is back'.green + '. Down for '.gray + duration.humanize().white);
+    notificationService.sendServiceBackAlert(service, {}); // TODO: check second parameter (it was state)
   },
 
   /**
@@ -60,27 +70,22 @@ var eventHandlers = {
    */
 
   onServiceOk: function (service, state) {
-
-    /*
-    var serviceOkMsg = service.url_info + ' responded ' + 'OK!'.green;
-    var responseTimeMsg = state.elapsed_time + ' milliseconds, avg: '
-        + state.avg_response_time;
-
+    var serviceOkMsg = service.name + ' responded ' + 'OK!'.green;
+    var responseTimeMsg = state.elapsedTime + ' milliseconds';
     console.log (serviceOkMsg, responseTimeMsg.gray);
-    */
   }
 };
 
 function start (services, storage) {
 
-  var WatchMenFactory = require('./lib/watchmen');
-
   var watchmen = new WatchMenFactory(services, storage);
 
-  watchmen.on('service_error', eventHandlers.onServiceError);
-  watchmen.on('service_warning', eventHandlers.onServiceWarning);
-  watchmen.on('service_back', eventHandlers.onServiceBack);
-  watchmen.on('service_ok', eventHandlers.onServiceOk);
+  watchmen.on('new-outage', eventHandlers.onNewOutage);
+  watchmen.on('current-outage', eventHandlers.onCurrentOutage);
+
+  watchmen.on('latency-warning', eventHandlers.onLatencyWarning);
+  watchmen.on('service-back', eventHandlers.onServiceBack);
+  watchmen.on('service-ok', eventHandlers.onServiceOk);
 
   watchmen.start();
 
@@ -97,11 +102,18 @@ function start (services, storage) {
   });
 }
 
-require('./lib/services').load_services(function(err, services){
+storage.getServices({}, function(err, services){
   if (err) {
     console.error('error loading services'.red);
     exit(1);
   }
+
+  // inject pingService
+  services.map(function(service) {
+    service.pingServiceName = 'http'; // TODO temp
+    service.pingService = require('./lib/ping_services/' + service.pingServiceName);
+  });
+
   console.error(services.length + ' services loaded'.gray);
   start(services, storage);
 });

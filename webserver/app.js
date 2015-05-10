@@ -1,13 +1,16 @@
 var express = require('express');
 var app = express();
-var storage_factory = require ('../lib/storage/storage_factory');
-var storage = storage_factory.get_storage_instance();
+var storageFactory = require ('../lib/storage/storage-factory');
+var storage = storageFactory.getStorageInstance('development'); // TODO according to env
 var moment = require ('moment');
 var bodyParser = require('body-parser');
 var methodOverride = require('method-override');
 var errorHandler = require('errorhandler');
 var session = require('express-session');
 var compress = require('compression');
+var api = require('./routes/service-route')
+var report = require('./routes/report-route')
+var web = require('./routes/web-route')
 
 app.set('views', __dirname + '/views');
 app.set('view engine', 'ejs');
@@ -20,21 +23,23 @@ app.use(session({
   saveUninitialized: true,
   resave: true
 }));
-app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({ extended: false }));
 app.use(methodOverride());
 
-require('./auth').configureApp(app);
+require('./../lib/auth').configureApp(app);
 
 //-----------------------------------------
 // Import routes
 //-----------------------------------------
-require('./routes/web').add_routes(app);
-require('./routes/service').add_routes(app, storage);
+app.use('/api/report', report.getRoutes(storage));
+app.use('/api', api.getRoutes(storage));
+app.use('/', web.getRoutes(storage));
 
 app.use(express.static(__dirname + '/public'));
 
 if (process.env.NODE_ENV === 'development') {
+  console.log('development mode');
   app.use(errorHandler());
 }
 

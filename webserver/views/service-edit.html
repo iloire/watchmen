@@ -1,0 +1,47 @@
+<%- include header.html %>
+
+<div ng-if="errorLoadingServices" class="alert alert-danger" role="alert">
+    <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
+    <span>{{errorLoadingServices}}</span>
+</div>
+
+<div class="container-fluid" ng-show="!loading">
+    <div class="row">
+
+        <h2>Edit service</h2>
+
+<h3>Need to reuse same view</h3>
+        <form>
+            <div class="form-group">
+                <label for="service-name">Name</label>
+                <input type="text" class="form-control" id="service-name" placeholder="Enter service name (i.e: Apple Inc)">
+            </div>
+            <div class="form-group">
+                <label for="url">URL</label>
+                <input type="text" class="form-control" id="url" placeholder="Enter URL">
+            </div>
+            <div class="form-group">
+                <label for="service-port">Port</label>
+                <input type="number" class="form-control" id="service-port" placeholder="80">
+            </div>
+            <div class="form-group">
+                <label for="service-interval">Interval (seconds)</label>
+                <input type="number" class="form-control" id="service-interval" placeholder="20">
+            </div>
+            <div class="form-group">
+                <label for="service-warning-latency">Latency warning</label>
+                <input type="number" class="form-control" id="service-warning-latency" placeholder="2000">
+            </div>
+            <div class="form-group">
+                <label for="service-alert-to">Alert to</label>
+                <input type="text" class="form-control" id="service-alert-to" placeholder="admin@mydomain.com, dev@domain.com">
+            </div>
+            <div class="checkbox">
+                <label>
+                    <input type="checkbox"> Enabled
+                </label>
+            </div>
+            <button type="submit" class="btn btn-default">Save</button>
+        </form>
+    </div>
+</div>

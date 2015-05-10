@@ -13,7 +13,7 @@
   <body>
 
   <div class="container-fluid">
-      <div ng-view class="view-frame"></div>
+      <div class="view-frame" ui-view></div>
   </div>
 
   <script type="text/ng-template" id="service-detail.html">
@@ -22,6 +22,14 @@
 
   <script type="text/ng-template" id="service-list.html">
     <%- include service-list.html %>
+  </script>
+
+  <script type="text/ng-template" id="service-add.html">
+    <%- include service-add.html %>
+  </script>
+
+  <script type="text/ng-template" id="service-edit.html">
+    <%- include service-edit.html %>
   </script>
 
   <script type="text/ng-template" id="header.html">
@@ -34,7 +42,7 @@
     <% if (user) { %>
       logged as <%=user%>
     <% } else { %>
-      <a href="/auth/google">Sign In with Google</a> - 
+      <a href="/auth/google">Sign In with Google</a> -
     <% } %>
     |
     <a target="_blank" href="https://github.com/iloire/WatchMen">watchmen source code (github)</a> |

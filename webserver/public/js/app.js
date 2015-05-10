@@ -5,27 +5,38 @@
     /* App Module */
 
     var watchmenApp = angular.module('watchmenApp', [
-        'ngRoute',
+        'ui.router',
         'angularSpinner',
         'ngTable', // table sorting and pagination
         'angularMoment',
+        'angularMSTime',
         'watchmenControllers',
-        'watchmenServices'
+        'watchmenFactories'
     ]);
 
-    watchmenApp.config(['$routeProvider', '$locationProvider',
-        function($routeProvider, $locationProvider) {
+    watchmenApp.config(function($stateProvider, $locationProvider, $urlRouterProvider) {
 
-            $locationProvider.html5Mode(true);
+        $locationProvider.html5Mode(true);
 
-            $routeProvider.
-                when('/details/:host/:service', {
-                    templateUrl: 'service-detail.html',
-                    controller: 'ServiceDetailCtrl'
-                }).
-                otherwise({
-                    templateUrl: 'service-list.html',
-                    controller: 'ServiceListCtrl'
-                });
-        }]);
+        $stateProvider.state('services', {
+            url: '/services',
+            templateUrl: 'service-list.html',
+            controller: 'ServiceListCtrl'
+        }).state('viewService', {
+            url: '/services/:id/view',
+            templateUrl: 'service-detail.html',
+            controller: 'ServiceDetailCtrl'
+        }).state('newService', {
+            url: '/services/add',
+            templateUrl: 'service-add.html',
+            controller: 'ServiceAddCtrl'
+        }).state('editService', {
+            url: '/services/:id/edit',
+            templateUrl: 'service-edit.html',
+            controller: 'ServiceEditCtrl'
+        });
+
+        $urlRouterProvider.when('/', '/services');
+    });
+
 })();

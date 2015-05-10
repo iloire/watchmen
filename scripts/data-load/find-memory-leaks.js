@@ -1,21 +1,25 @@
-var storage_mocked = require ('./../../test/lib/mock/storage_mocked');
+/**
+ * This script helps finding memory leaks in watchmen while during pings
+ * It uses a mocked storage.
+ */
+var storageMocked = require ('./../../test/lib/mock/storage-mocked');
 var debug = require('debug')('data-load');
 
 var Watchmen = require('../../lib/watchmen.js');
-var mocked_ping_service = require('../../test/lib/mock/request_mocked');
+var mockedPingService = require('../../test/lib/mock/request-mocked');
 
-var watchmen = new Watchmen(null, new storage_mocked(null));
+var watchmen = new Watchmen(null, new storageMocked(null));
 
 var service = {
   host : { host: 'www.correcthost.com', port:'80', name : 'test'},
   url : '/',
-  ping_interval: 4,
-  failed_ping_interval: 5,
-  warning_if_takes_more_than: 1500, //miliseconds
+  interval: 4000,
+  failedInterval: 5000,
+  warningThreshold: 1500, //miliseconds
   method : 'get',
-  expected : {statuscode: 200, contains: ''},
+  expected : { statuscode: 200, contains: '' },
 
-  ping_service: mocked_ping_service // mock
+  ping_service: mockedPingService // mock // TODO
 };
 
 var numberTimes = 100000;

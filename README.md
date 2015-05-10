@@ -244,6 +244,13 @@ module.exports = {
 ```
     $ redis-server redis.conf
 ```
+##### Data schema
+
+```
+services set with service id's
+service:<serviceId> hashMap with service details
+```
+
 ### d) Add custom logic
 
 Example: log in the console and send email if there is an outage:

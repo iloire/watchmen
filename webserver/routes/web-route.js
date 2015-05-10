@@ -1,6 +1,9 @@
 var config = require('../../config/web');
+var express = require('express');
 
-module.exports.add_routes = function (app){
+module.exports.getRoutes = function (){
+
+  var router = express.Router();
 
   function serveIndex(req, res){
     res.render('index.html', {
@@ -8,13 +11,16 @@ module.exports.add_routes = function (app){
     });
   }
 
-  app.all('*', function(req, res, next){
+  router.all('*', function(req, res, next){
     res.locals.user = req.user;
     res.locals.baseUrl = config.baseUrl;
     res.locals.ga_analytics_ID = config.ga_analytics_ID;
     next();
   });
 
-  app.get('/details/*', serveIndex);
-  app.get('/', serveIndex);
+  router.get('/services', serveIndex);
+  router.get('/services/:id/view', serveIndex);
+  router.get('/', serveIndex);
+
+  return router;
 };

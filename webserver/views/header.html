@@ -5,6 +5,7 @@
         </div>
         <div class="navbar-collapse collapse">
             <div class="status-overview">
+                <a ng-if="false" ui-sref="newService" class="btn-primary btn-lg nodecoration">Add New Service</a>
                 <span ng-if="servicesDown>0" class="down">{{servicesDown}}
                     <span ng-if="servicesDown>1">services</span>
                     <span ng-if="servicesDown==1">service</span>

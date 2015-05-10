@@ -1,59 +1,6 @@
 <section class="section status-header row">
 
     <div class="uptime col-md-3">
-        <span ng-if="!service.enabled" title="Disabled" class="label label-default">Service disabled</span>
-        <span ng-if="service.enabled && status.uptime"
-              title="Up time: {{status.uptime}} %"
-              ng-class="{'label label-success':status.status=='success','label label-danger':status.status=='error','label label-default':!status.status}">
-
-            {{serviceDetails.status.uptime}} % uptime
-        </span>
-        <span ng-if="service.enabled && !status.uptime" title="Offline" class="label label-danger">Offline</span>
-        <div ng-if="service.enabled && status.up_since">
-            <span class="text-muted small">last change was
-                <span am-time-ago="status.up_since"></span>
-            </span>
-        </div>
     </div>
 
-    <div class="latency col-md-6" ng-if="status">
-        <div ng-if="latency_last_hour_mean">
-            <span title="AVG response time: {{latency_last_hour_mean}} milliseconds" class="label label-default">
-                {{latency_last_hour_mean}}
-            </span>
-            <div>
-                <span class="text-muted small">last hour</span>
-            </div>
-        </div>
-
-        <div ng-if="latency_last_24_hours_mean">
-            <span title="AVG response time: {{latency_last_24_hours_mean}} milliseconds" class="label label-default">
-                {{latency_last_24_hours_mean}}
-            </span>
-            <div>
-                <span class="text-muted small">last 24 hours</span>
-            </div>
-        </div>
-
-        <div ng-if="latency_last_week_mean">
-            <span title="AVG response time: {{latency_last_week_mean}} milliseconds" class="label label-default">
-                {{latency_last_week_mean}}
-            </span>
-            <div>
-                <span class="text-muted small">last week</span>
-            </div>
-        </div>
-
-    </div>
-
-    <div class="outages col-md-3">
-        <div ng-if="number_outages_last_24_hours">
-            <span title="AVG response time: {{number_outages_last_24_hours}} milliseconds" class="label label-danger">
-                {{number_outages_last_24_hours}}
-            </span>
-            <div>
-                <span class="text-muted small"> outages in the last 24 hours</span>
-            </div>
-        </div>
-    </div>
 </section>

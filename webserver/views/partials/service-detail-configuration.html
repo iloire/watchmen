@@ -8,33 +8,36 @@
                     Host
                 </td>
                 <td>
-                    {{serviceDetails.service.host.host}} (port {{serviceDetails.service.host.port}})
+                    {{serviceDetails.service.url}} (port {{serviceDetails.service.port}})
                 </td>
             </tr>
             <tr>
                 <td>Ping interval:</td>
                 <td><em>{{serviceDetails.service.host.ping_interval}}</em> seconds</td>
             </tr>
-            <tr ng-if="serviceDetails.service.warning_if_takes_more_than">
+            <tr ng-if="serviceDetails.service.warningThreshold">
                 <td>Latency threshold: </td>
-                <td><span title="latency threshold: {{serviceDetails.service.warning_if_takes_more_than}} seconds" class="label label-default">{{serviceDetails.service.warning_if_takes_more_than}}</span> milliseconds
-                            <span class="text-muted small">
-                            (if above, will trigger a warning event)
-                            </span>
-                </td>
-            </tr>
-            <tr ng-if="serviceDetails.service.expected && serviceDetails.service.expected.statuscode">
-                <td>Expected status code:</td>
                 <td>
-                    <span title="ping interval: {{serviceDetails.service.expected.statuscode}} seconds" class="label label-default">{{serviceDetails.service.expected.statuscode}}</span>
+                    <span title="latency threshold: {{serviceDetails.service.warningThreshold}} seconds" class="label label-default">
+                        {{serviceDetails.service.warningThreshold}}
+                    </span> milliseconds
+                    <span class="text-muted small">
+                    (if above, will trigger a warning event)
+                    </span>
                 </td>
             </tr>
-            <tr ng-if="serviceDetails.service.expected && serviceDetails.service.expected.statuscode">
-                <td>Expected text:</td>
-                <td>
-                    <em>{{serviceDetails.service.expected.contains}}</em>
-                </td>
-            </tr>
+            <!--<tr ng-if="serviceDetails.service.expected && serviceDetails.service.expected.statuscode">-->
+                <!--<td>Expected status code:</td>-->
+                <!--<td>-->
+                    <!--<span title="ping interval: {{serviceDetails.service.expected.statuscode}} seconds" class="label label-default">{{serviceDetails.service.expected.statuscode}}</span>-->
+                <!--</td>-->
+            <!--</tr>-->
+            <!--<tr ng-if="serviceDetails.service.expected && serviceDetails.service.expected.statuscode">-->
+                <!--<td>Expected text:</td>-->
+                <!--<td>-->
+                    <!--<em>{{serviceDetails.service.expected.contains}}</em>-->
+                <!--</td>-->
+            <!--</tr>-->
         </table>
     </div>
 </div>

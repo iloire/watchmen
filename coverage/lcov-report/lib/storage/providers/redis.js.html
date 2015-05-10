@@ -219,7 +219,7 @@ function StorageRedis(options){
 util.inherits(StorageRedis, require ('../base'));
 &nbsp;
 StorageRedis.prototype.get_status = function (service, callback){
-  this.redis.get(this._get_key(service), function(err, data){
+  this.redis.get(service.id, function(err, data){
     callback(err, err ? <span class="branch-0 cbranch-no" title="branch not covered" >null </span>: JSON.parse(data));
   });
 };
@@ -240,7 +240,7 @@ StorageRedis.prototype.update_status = function (service, status, callback){
 &nbsp;
   //2. save status
   delete status.events; //already saved in sorted set
-  multi.set(this._get_key(service), JSON.stringify(status));
+  multi.set(service.id, JSON.stringify(status));
 &nbsp;
   //3. cleanup. Remove older events
   var remove_events_older_than_seconds = isNaN(service.host.remove_events_older_than_seconds) ? REMOVE_EVENTS_OLDER_THAN_SECONDS : service.host.remove_events_older_than_seconds;
@@ -277,8 +277,8 @@ StorageRedis.prototype.report_one = function (service, callback){
 &nbsp;
   var multi = this.redis.multi();
 &nbsp;
-  multi.get(this._get_key(service));
-  multi.zrevrange(this._get_key(service) + ':events',0, -1);
+  multi.get(service.id);
+  multi.zrevrange(service.id + ':events',0, -1);
 &nbsp;
   multi.exec(function(err, replies) {
     <span class="missing-if-branch" title="else path not taken" >E</span>if (replies[0]){
