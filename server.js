@@ -108,10 +108,10 @@ storage.getServices({}, function(err, services){
     exit(1);
   }
 
-  // inject pingService
+  // inject pingservices
   services.map(function(service) {
-    service.pingServiceName = 'http'; // TODO temp
-    service.pingService = require('./lib/ping_services/' + service.pingServiceName);
+    var pingFactory = require('watchmen-ping-' + service.pingServiceName);
+    service.pingService = new pingFactory();
   });
 
   console.error(services.length + ' services loaded'.gray);

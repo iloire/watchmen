@@ -50,12 +50,14 @@
     "postmark": "1.0.x",
     "q": "^1.3.0",
     "redis": "^0.12.1",
-    "request": "^2.55.0",
     "shortid": "^2.2.2",
     "stream-spigot": "^3.0.5",
     "timestream-aggregates": "^0.1.7",
     "validator": "^3.39.0",
-    "debug": "^2.3.1"
+    "debug": "^2.3.1",
+
+    "watchmen-ping-http-head": "0.0.1",
+    "watchmen-ping-http-contains": "0.0.1"
   },
   "devDependencies": {
     "assert": "^1.3.0",

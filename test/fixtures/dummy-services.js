@@ -11,7 +11,7 @@ exports = module.exports = (function(){
       port: 443,
       timeout: 10000,
       warningThreshold: 3000,
-      pingServiceName: 'http',
+      pingServiceName: 'http-head',
       pingServiceOptions: {}
     }
   }

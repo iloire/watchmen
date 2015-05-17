@@ -275,6 +275,36 @@ watchmen.on('service_error', function(service, state){
 watchmen.start();
 ```
 
+## Ping Services
+
+Ping services are plugable as npm modules.
+For example, if you want to create a smtp ping service:
+
+### a) create a watchmen-ping-smtp module and publish it. This is how a simple HTTP ping service looks:
+
+    var request = require('request');
+
+    function PingService(){}
+
+    exports = module.exports = PingService;
+    
+    PingService.prototype.ping = function(service, callback){
+      var startTime = +new Date();
+      request.get({ method: 'HEAD', uri: service.url }, function(error, response, body){
+        callback(error, body, response, +new Date() - startTime);
+      });
+    };
+
+
+### b) npm install it in WatchMen:
+
+     npm install watchmen-ping-smtp
+
+### c) create a service that uses that ping service
+
+    service.PingServiceName = 'smtp'; // (ignore the 'watchmen-ping-' sufix)
+
+
 ## Tests
 
     $ npm test
