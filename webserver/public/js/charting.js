@@ -4,30 +4,44 @@
 
     window.Charting = window.Charting || {};
 
+
     /**
      * Renders a C3 chart
      * @param data
      */
     Charting.render = function (options) {
 
-        //console.log(options)
+        // latencyData = { labels : [1428220800000], data: [123] }
         var latencyData = parseArrayObjectsForCharting(options.latency);
+
+        var timeSerie = latencyData.labels;
         var outages = [];
-        for (var j = 0; j < latencyData.labels.length; j++) {
-            var down = false;
-            var time = latencyData.labels[j];
+        for (var j = 0; j < timeSerie.length; j++) {
+            var downtime = 0;
+            var time = timeSerie[j];
             for (var i = 0; i < options.outages.length; i++) {
                 var outage = options.outages[i];
-                if (time > outage.timestamp && time < outage.timestamp + outage.downtime) {
-                    down = true;
+                if (time >= outage.timestamp && (time < outage.timestamp + outage.downtime)) {
+                    downtime += outage.downtime;
                 }
             }
-            outages.push(down ? 1000 : 0);
+            outages.push(downtime);
         }
 
-        latencyData.labels.splice(0, 0, 'x');
+        timeSerie.splice(0, 0, 'x');
         latencyData.data.splice(0, 0, 'Latency');
+
+        var threshold = latencyData.data.slice();
+        threshold[0] = 'Threshold';
         outages.splice(0, 0, 'Outages');
+        threshold = threshold.map(function(item){
+            if (isNaN(item)){
+                return item;
+            }
+            else {
+                return options.threshold;
+            }
+        });
 
         return c3.generate({
             size: options.size,
@@ -38,18 +52,22 @@
             data: {
                 x: 'x',
                 columns: [
-                    latencyData.labels,
+                    timeSerie,
                     latencyData.data,
-                    outages
+                    outages,
+                    threshold
                 ],
                 types: {
                     Latency: 'area-spline',
-                    Outages: 'bar'
+                    Outages: 'bar',
+                    Threshold: 'spline'
                 },
                 colors: {
                     Latency: 'green',
-                    Outages: 'red'
-                }
+                    Outages: 'red',
+                    Threshold: 'orange'
+                },
+                groups: [['Latency','Outages']]
             },
             axis: {
                 y: {
@@ -69,7 +87,12 @@
                 format: {
                     title: function (d) { return moment(d).format('DD/MMM/YY HH:mm'); },
                     value: function (value, ratio, id) {
-                        return value + ' ms.';
+                        if (id == 'Outages') {
+                            return moment.duration(value).humanize();
+                        }
+                        else {
+                            return value + ' ms.'
+                        }
                     }
                 }
             }

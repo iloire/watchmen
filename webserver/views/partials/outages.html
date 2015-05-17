@@ -17,9 +17,12 @@
         <tbody>
         <tr ng-repeat="log in latestOutages">
             <td class="" data-title="'Message'" sortable="'msg'">
-                            <span class="error">
-                                {{log.error}}
-                            </span>
+                <span class="error">
+                    OUTAGE
+                </span>
+                <span class="text-muted">
+                    {{log.error}}
+                </span>
             </td>
             <td>
                 <span ms-time="log.downtime"></span>

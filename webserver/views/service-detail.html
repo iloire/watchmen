@@ -2,14 +2,21 @@
 
 <div class="details-page" ng-show="!loading">
 
-    <a style="float:right" href="/services" class="btn btn-default hidden-xs">
+    <a style="float:right" href="/services" class="hidden-xs">
         <span class="glyphicon glyphicon-chevron-left"></span> back to list
     </a>
 
-    <h2>{{serviceDetails.service.name}}
+    <h2>{{serviceDetails.service.name}}</h2>
+
+    <p>
+        <span class="text-muted">status:</span>
         <span ng-if="serviceDetails.status.currentOutage" title="Outage" class="label label-danger">down</span>
         <span ng-if="!serviceDetails.status.currentOutage" title="Enabled" class="label label-success">up</span>
-    </h2>
+    </p>
+    <p ng-if="serviceDetails.status.latestOutages[0]">
+        <span class="text-muted">last outage:</span>
+        <span am-time-ago="serviceDetails.status.latestOutages[0].timestamp"></span>
+    </p>
 
     <div class="section events row">
 
@@ -29,7 +36,7 @@
                         {{serviceDetails.status.lastHour.latency.mean}} <span class="caption">ms. avg latency</span>
                 </span>
 
-                <div id='chart-last-hour'></div>
+                <div class="chart" id='chart-last-hour'></div>
             </div>
 
             <div class="chart-wrapper" ng-show="showLast24Chart">
@@ -42,7 +49,7 @@
                         {{serviceDetails.status.last24Hours.latency.mean}} <span class="caption">ms. avg latency</span>
                 </span>
 
-                <div id='chart-last-24-hours'></div>
+                <div class="chart" id='chart-last-24-hours'></div>
             </div>
 
             <div class="chart-wrapper" ng-show="showLastWeekChart">
@@ -56,7 +63,7 @@
                         {{serviceDetails.status.lastWeek.latency.mean}} <span class="caption">ms. avg latency</span>
                 </span>
 
-                <div id='chart-last-week'></div>
+                <div class="chart" id='chart-last-week'></div>
             </div>
         </div>
     </div>

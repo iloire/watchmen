@@ -51,8 +51,8 @@ a {
   border-radius: 3px;
 }
 
-.details-page .outages-list {
-  border-radius: 10px;
+.details-page .chart {
+  margin-top: 5px;
 }
 .details-page .chart-wrapper span {
   margin-right: 10px;

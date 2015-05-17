@@ -47,30 +47,44 @@
 
     window.Charting = window.Charting || {};
 
+
     /**
      * Renders a C3 chart
      * @param data
      */
     Charting.render = function (options) {
 
-        //console.log(options)
+        // latencyData = { labels : [1428220800000], data: [123] }
         var latencyData = parseArrayObjectsForCharting(options.latency);
+
+        var timeSerie = latencyData.labels;
         var outages = [];
-        for (var j = 0; j < latencyData.labels.length; j++) {
-            var down = false;
-            var time = latencyData.labels[j];
+        for (var j = 0; j < timeSerie.length; j++) {
+            var downtime = 0;
+            var time = timeSerie[j];
             for (var i = 0; i < options.outages.length; i++) {
                 var outage = options.outages[i];
-                if (time > outage.timestamp && time < outage.timestamp + outage.downtime) {
-                    down = true;
+                if (time >= outage.timestamp && (time < outage.timestamp + outage.downtime)) {
+                    downtime += outage.downtime;
                 }
             }
-            outages.push(down ? 1000 : 0);
+            outages.push(downtime);
         }
 
-        latencyData.labels.splice(0, 0, 'x');
+        timeSerie.splice(0, 0, 'x');
         latencyData.data.splice(0, 0, 'Latency');
+
+        var threshold = latencyData.data.slice();
+        threshold[0] = 'Threshold';
         outages.splice(0, 0, 'Outages');
+        threshold = threshold.map(function(item){
+            if (isNaN(item)){
+                return item;
+            }
+            else {
+                return options.threshold;
+            }
+        });
 
         return c3.generate({
             size: options.size,
@@ -81,18 +95,22 @@
             data: {
                 x: 'x',
                 columns: [
-                    latencyData.labels,
+                    timeSerie,
                     latencyData.data,
-                    outages
+                    outages,
+                    threshold
                 ],
                 types: {
                     Latency: 'area-spline',
-                    Outages: 'bar'
+                    Outages: 'bar',
+                    Threshold: 'spline'
                 },
                 colors: {
                     Latency: 'green',
-                    Outages: 'red'
-                }
+                    Outages: 'red',
+                    Threshold: 'orange'
+                },
+                groups: [['Latency','Outages']]
             },
             axis: {
                 y: {
@@ -112,7 +130,12 @@
                 format: {
                     title: function (d) { return moment(d).format('DD/MMM/YY HH:mm'); },
                     value: function (value, ratio, id) {
-                        return value + ' ms.';
+                        if (id == 'Outages') {
+                            return moment.duration(value).humanize();
+                        }
+                        else {
+                            return value + ' ms.'
+                        }
                     }
                 }
             }
@@ -220,62 +243,6 @@
   });
 
 })();
-//(function() {
-//
-//    'use strict';
-//
-//    var EXPIRATION = 10 * 1000; //ms
-//    var SERVICES_LIST_CACHE_KEY = 'services-cache';
-//
-//    var watchmenServices = angular.module('watchmenServices', ['ngResource']);
-//
-//    watchmenServices.factory('Service', ['$resource', '$cacheFactory',
-//        function($resource, $cacheFactory) {
-//
-//            var cache = $cacheFactory('watchmen-Services');
-////
-//            return {
-//
-//
-//                getAll: function(cb) {
-//                    var services = cache.get(SERVICES_LIST_CACHE_KEY);
-//                    if (services) {
-//                        if (services.expiration < +new Date()){
-//                            services = null;
-//                        }
-//                        else {
-//                            return cb(services.data);
-//                        }
-//                    }
-//
-//                    if (!services) {
-//                        services = $resource('/api/services', {}, {
-//                            query: {
-//                                method: 'GET',
-//                                isArray: true
-//                            }
-//                        }).query(cb);
-//                        cache.put(SERVICES_LIST_CACHE_KEY, {
-//                            data: services,
-//                            expiration: +new Date() + EXPIRATION
-//                        });
-//                    }
-//                    console.log(services)
-//                    return services;
-//                },
-//                getDetails: function(options, cb){
-//                    return $resource('services?host=:host&service=:service', {}, {
-//                        query: {
-//                            method:'GET',
-//                            isArray:true,
-//                            cache: $cacheFactory.get('$http')
-//                        }
-//                    }).get(options, cb);
-//                }
-//            };
-//        }]);
-//})();
-
 angular.module('watchmenControllers', []);
 (function () {
 
@@ -318,6 +285,7 @@ angular.module('watchmenControllers', []);
 
           $scope.showLastHourChart = true;
           Charting.render({
+            threshold: data.service.warningThreshold,
             latency: latencyLastHour.list,
             outages: data.status.lastWeek.outages,
             id: '#chart-last-hour',
@@ -328,6 +296,7 @@ angular.module('watchmenControllers', []);
           if (latencyLast24Hours.list.length > 8) {
             $scope.showLast24Chart = true;
             Charting.render({
+              threshold: data.service.warningThreshold,
               latency: latencyLast24Hours.list,
               outages: data.status.lastWeek.outages,
               id: '#chart-last-24-hours',
@@ -338,6 +307,7 @@ angular.module('watchmenControllers', []);
           if (latencyLastWeek.list.length > 3) {
             $scope.showLastWeekChart = true;
             Charting.render({
+              threshold: data.service.warningThreshold,
               latency: latencyLastWeek.list,
               outages: data.status.lastWeek.outages,
               id: '#chart-last-week',
