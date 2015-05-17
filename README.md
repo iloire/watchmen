@@ -247,8 +247,11 @@ module.exports = {
 ##### Data schema
 
 ```
-services set with service id's
-service:<serviceId> hashMap with service details
+service - set with service id's
+service:<serviceId> - hashMap with service details
+service:<serviceId>:outages:current - current outage for a service (if any)
+service:<serviceId>:outages - sorted set with outages info
+service:<serviceId>:latency - sorted set with latency info
 ```
 
 ### d) Add custom logic
