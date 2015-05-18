@@ -16,36 +16,36 @@ var INITIAL_TIME = +new Date() - DEFAULT_PING_INTERVAL * NUMBER_PINGS_BACK;
 
 var watchmen;
 
-function generateDataForService(service, callback) {
-  var totalPings = 0;
-
-  debug(NUMBER_PINGS_BACK + ' pings back calculated for ' + service.name);
-
-  clock = sinon.useFakeTimers(INITIAL_TIME);
-
-  service.pingService = mockedPingService;
-
-  function ping(cb) {
-    var res = responseRandomizer.getRandomResponse(service);
-    mockedPingService.mockedResponse = res;
-    watchmen.ping({service: service}, function (err) {
-      totalPings++;
-      clock.tick(DEFAULT_PING_INTERVAL - res.latency);
-      cb(err);
-    });
-    clock.tick(res.latency);
-  }
-
-  async.whilst(
-      function () { return totalPings < NUMBER_PINGS_BACK; },
-      ping,
-      function (err) {
-        callback(err);
-      }
-  );
-}
-
 function run(programOptions, callback) {
+
+  function generateDataForService(service, callback) {
+    var totalPings = 0;
+
+    debug(NUMBER_PINGS_BACK + ' pings back calculated for ' + service.name);
+
+    clock = sinon.useFakeTimers(INITIAL_TIME);
+
+    service.pingService = mockedPingService;
+
+    function ping(cb) {
+      var res = responseRandomizer.getRandomResponse(service, programOptions.targetUptime);
+      mockedPingService.mockedResponse = res;
+      watchmen.ping({service: service}, function (err) {
+        totalPings++;
+        clock.tick(DEFAULT_PING_INTERVAL - res.latency);
+        cb(err);
+      });
+      clock.tick(res.latency);
+    }
+
+    async.whilst(
+        function () { return totalPings < NUMBER_PINGS_BACK; },
+        ping,
+        function (err) {
+          callback(err);
+        }
+    );
+  }
 
   function populatedata(services, cb) {
     debug('populating data for ' + services.length + ' services');
@@ -105,6 +105,7 @@ var program = require('commander');
 program
     .option('-f, --filter [filter]', 'Filter services to add dummy data to (by name)')
     .option('-e, --env [env]', 'Storage environment key')
+    .option('-u, --target-uptime [targetUptime]', 'targetUptime')
     .parse(process.argv);
 
 run(program, function () {
