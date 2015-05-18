@@ -1,120 +1,174 @@
-(function(){
+(function () {
 
-    'use strict';
+  'use strict';
 
-    window.Charting = window.Charting || {};
+  window.Charting = window.Charting || {};
 
+  var MINUTE = 60 * 1000;
+  var HOUR = 60 * MINUTE;
 
-    /**
-     * Renders a C3 chart
-     * @param data
-     */
-    Charting.render = function (options) {
+  Charting.renderOutages = function (options) {
 
-        // latencyData = { labels : [1428220800000], data: [123] }
-        var latencyData = parseArrayObjectsForCharting(options.latency);
+    var outagesData = parseArrayObjectsForCharting(options.outages, 'timestamp', 'downtime');
+    var outagesSerie = outagesData.data;
+    var timeSerie = outagesData.time;
+    
+    timeSerie.splice(0, 0, +new Date() - 24 * HOUR);
+    timeSerie.push(+new Date());
 
-        var timeSerie = latencyData.labels;
-        var outages = [];
-        for (var j = 0; j < timeSerie.length; j++) {
-            var downtime = 0;
-            var time = timeSerie[j];
-            for (var i = 0; i < options.outages.length; i++) {
-                var outage = options.outages[i];
-                if (time >= outage.timestamp && (time < outage.timestamp + outage.downtime)) {
-                    downtime += outage.downtime;
-                }
-            }
-            outages.push(downtime);
+    outagesSerie.splice(0, 0, 0);
+    outagesSerie.push(0);
+
+    // create labels
+    timeSerie.splice(0, 0, 'x');
+    outagesSerie.splice(0, 0, 'Outages');
+    
+    return c3.generate({
+      size: options.size,
+      bindto: options.id,
+      legend: {
+        show: false
+      },
+      data: {
+        x: 'x',
+        columns: [
+          timeSerie,
+          outagesSerie
+        ],
+        types: {
+          Outages: 'bar'
+        },
+        colors: {
+          Outages: 'red'
         }
+      },
+      axis: {
+        y: {
 
-        timeSerie.splice(0, 0, 'x');
-        latencyData.data.splice(0, 0, 'Latency');
-
-        var threshold = latencyData.data.slice();
-        threshold[0] = 'Threshold';
-        outages.splice(0, 0, 'Outages');
-        threshold = threshold.map(function(item){
-            if (isNaN(item)){
-                return item;
+        },
+        x: {
+          min: +new Date() - 24 * HOUR,
+          max: +new Date(),
+          type: 'timeseries',
+          tick: {
+            format: options.x_format || '%H:%M'
+          }
+        }
+      },
+      tooltip: {
+        format: {
+          title: function (d) {
+            return moment(d).format('DD/MMM/YY HH:mm');
+          },
+          value: function (value, ratio, id) {
+            if (id == 'Outages') {
+              return moment.duration(value).humanize();
             }
             else {
-                return options.threshold;
+              return value + ' ms.'
             }
-        });
-
-        return c3.generate({
-            size: options.size,
-            bindto: options.id,
-            legend: {
-                show: false
-            },
-            data: {
-                x: 'x',
-                columns: [
-                    timeSerie,
-                    latencyData.data,
-                    outages,
-                    threshold
-                ],
-                types: {
-                    Latency: 'area-spline',
-                    Outages: 'bar',
-                    Threshold: 'spline'
-                },
-                colors: {
-                    Latency: 'green',
-                    Outages: 'red',
-                    Threshold: 'orange'
-                },
-                groups: [['Latency','Outages']]
-            },
-            axis: {
-                y: {
-                    max: options.max || 0,
-                    tick: {
-                        values: [1000, 2000, 3000, 4000, 5000, 7000, 10000, 15000, 20000, 30000]
-                    }
-                },
-                x: {
-                    type: 'timeseries',
-                    tick: {
-                        format: options.x_format || '%H:%M'
-                    }
-                }
-            },
-            tooltip: {
-                format: {
-                    title: function (d) { return moment(d).format('DD/MMM/YY HH:mm'); },
-                    value: function (value, ratio, id) {
-                        if (id == 'Outages') {
-                            return moment.duration(value).humanize();
-                        }
-                        else {
-                            return value + ' ms.'
-                        }
-                    }
-                }
-            }
-        });
-    };
-
-    /**
-     * Converts [{t: 1428220800000, l: 123.23}]
-     *
-     * into
-     *
-     * { labels : [1428220800000], data: [123] }
-     *
-     */
-    function parseArrayObjectsForCharting  (arr) {
-        var labels = [];
-        var data = [];
-        for (var i = 0; i < arr.length; i++) {
-            labels.push([arr[i].t]);
-            data.push(Math.round([arr[i].l]));
+          }
         }
-        return { labels : labels, data: data };
+      }
+    });
+  };
+
+  /**
+   * Renders a C3 chart
+   * @param data
+   */
+  Charting.render = function (options) {
+
+    var latencyData = parseArrayObjectsForCharting(options.latency, 't', 'l');
+
+    var latencySerie = latencyData.data;
+    var timeSerie = latencyData.time;
+
+    timeSerie.splice(0, 0, 'x');
+    latencySerie.splice(0, 0, 'Latency');
+
+    var threshold = latencySerie.slice();
+    threshold[0] = 'Threshold';
+    threshold = threshold.map(function (item) {
+      if (isNaN(item)) {
+        return item;
+      }
+      else {
+        return options.threshold;
+      }
+    });
+
+    return c3.generate({
+      size: options.size,
+      bindto: options.id,
+      legend: {
+        show: false
+      },
+      data: {
+        x: 'x',
+        columns: [
+          timeSerie,
+          latencySerie,
+          threshold
+        ],
+        types: {
+          Latency: 'area-spline',
+          Threshold: 'spline'
+        },
+        colors: {
+          Latency: 'green',
+          Threshold: 'orange'
+        },
+        groups: [['Latency', 'Outages']]
+      },
+      axis: {
+        y: {
+          max: options.max || 0,
+          tick: {
+            values: [1000, 2000, 3000, 4000, 5000, 7000, 10000, 15000, 20000, 30000]
+          }
+        },
+        x: {
+          type: 'timeseries',
+          tick: {
+            format: options.x_format || '%H:%M'
+          }
+        }
+      },
+      tooltip: {
+        format: {
+          title: function (d) {
+            return moment(d).format('DD/MMM/YY HH:mm');
+          },
+          value: function (value, ratio, id) {
+            if (id == 'Outages') {
+              return moment.duration(value).humanize();
+            }
+            else {
+              return value + ' ms.'
+            }
+          }
+        }
+      }
+    });
+  };
+
+  /**
+   * Converts [{t: 1428220800000, l: 123.23}]
+   *
+   * into
+   *
+   * { time : [1428220800000], data: [123] }
+   *
+   */
+  function parseArrayObjectsForCharting(arr, fieldTime, fieldData) {
+    var time = [];
+    var latency = [];
+    for (var i = 0; i < arr.length; i++) {
+      time.push([arr[i][fieldTime]]);
+      latency.push(Math.round([arr[i][fieldData]]));
     }
+    return {time: time, data: latency};
+  }
 
 })();
