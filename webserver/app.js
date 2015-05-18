@@ -1,7 +1,5 @@
 var express = require('express');
 var app = express();
-var storageFactory = require ('../lib/storage/storage-factory');
-var storage = storageFactory.getStorageInstance('development'); // TODO according to env
 var moment = require ('moment');
 var bodyParser = require('body-parser');
 var methodOverride = require('method-override');
@@ -11,6 +9,8 @@ var compress = require('compression');
 var api = require('./routes/service-route')
 var report = require('./routes/report-route')
 var web = require('./routes/web-route')
+var storageFactory = require ('../lib/storage/storage-factory');
+var storage = storageFactory.getStorageInstance('development'); // TODO according to env
 
 app.set('views', __dirname + '/views');
 app.set('view engine', 'ejs');
