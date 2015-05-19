@@ -389,20 +389,24 @@ angular.module('watchmenControllers', []);
         $timeout(function(){
 
           //experimental
-          Charting.renderOutages({
-            outages: data.status.last24Hours.outages, // last hour??
-            id: '#chart-outages-last-hour',
-            size: chartSize
-          });
+          if (data.status.last24Hours.outages.length > 0) {
+            Charting.renderOutages({
+              outages: data.status.last24Hours.outages,
+              id: '#chart-outages-last-24hour',
+              size: chartSize
+            });
+          }
 
-          $scope.showLastHourChart = true;
-          Charting.renderLatency({
-            threshold: data.service.warningThreshold,
-            latency: latencyLastHour.list,
-            id: '#chart-last-hour',
-            size: chartSize,
-            max: max
-          });
+          if (latencyLastHour.list.length > 0) { // at least one successful ping
+            $scope.showLastHourChart = true;
+            Charting.renderLatency({
+              threshold: data.service.warningThreshold,
+              latency: latencyLastHour.list,
+              id: '#chart-last-hour',
+              size: chartSize,
+              max: max
+            });
+          }
 
           if (latencyLast24Hours.list.length > 8) {
             $scope.showLast24Chart = true;
@@ -414,7 +418,8 @@ angular.module('watchmenControllers', []);
               max: max
             });
           }
-          if (latencyLastWeek.list.length > 3) {
+
+          if (latencyLastWeek.list.length > 1) {
             $scope.showLastWeekChart = true;
             Charting.renderLatency({
               threshold: data.service.warningThreshold,
