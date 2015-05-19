@@ -8,15 +8,21 @@
 
     <h2>{{serviceDetails.service.name}}</h2>
 
-    <p>
-        <span class="text-muted">status:</span>
-        <span ng-if="serviceDetails.status.currentOutage" title="Outage" class="label label-danger">down</span>
-        <span ng-if="!serviceDetails.status.currentOutage" title="Enabled" class="label label-success">up</span>
-    </p>
-    <p ng-if="serviceDetails.status.latestOutages[0]">
-        <span class="text-muted">last outage:</span>
-        <span am-time-ago="serviceDetails.status.latestOutages[0].timestamp"></span>
-    </p>
+    <div class="status">
+        <div ng-if="!serviceDetails.status.currentOutage">
+            <span title="Enabled" class="up">Site is Up!</span>
+            <span ng-if="serviceDetails.status.latestOutages[0]">
+                Last outage happened
+                <span am-time-ago="serviceDetails.status.latestOutages[0].timestamp"></span>
+            </span>
+        </div>
+
+        <div ng-if="serviceDetails.status.currentOutage">
+            <span title="Outage" class="down">Site is DOWN!.</span>
+                Outage ocurred
+            <span am-time-ago="serviceDetails.status.currentOutage.timestamp"></span>
+        </div>
+    </div>
 
     <div class="section events row">
 
