@@ -41,12 +41,11 @@
           Charting.renderOutages({
             outages: data.status.last24Hours.outages, // last hour??
             id: '#chart-outages-last-hour',
-            size: chartSize,
-            max: max
+            size: chartSize
           });
 
           $scope.showLastHourChart = true;
-          Charting.render({
+          Charting.renderLatency({
             threshold: data.service.warningThreshold,
             latency: latencyLastHour.list,
             id: '#chart-last-hour',
@@ -56,7 +55,7 @@
 
           if (latencyLast24Hours.list.length > 8) {
             $scope.showLast24Chart = true;
-            Charting.render({
+            Charting.renderLatency({
               threshold: data.service.warningThreshold,
               latency: latencyLast24Hours.list,
               id: '#chart-last-24-hours',
@@ -66,7 +65,7 @@
           }
           if (latencyLastWeek.list.length > 3) {
             $scope.showLastWeekChart = true;
-            Charting.render({
+            Charting.renderLatency({
               threshold: data.service.warningThreshold,
               latency: latencyLastWeek.list,
               id: '#chart-last-week',
