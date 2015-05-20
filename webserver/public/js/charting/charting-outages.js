@@ -21,7 +21,7 @@
       size: options.size,
       bindto: options.id,
       legend: {
-        show: false
+        position: 'right'
       },
       data: {
         x: 'x',
@@ -49,15 +49,10 @@
       tooltip: {
         format: {
           title: function (d) {
-            return moment(d).format('DD/MMM/YY HH:mm');
+            return moment(d).format('DD/MMM/YY HH:mm') + ' (' + moment(d).fromNow() + ')';
           },
           value: function (value, ratio, id) {
-            if (id == 'Outages') {
-              return moment.duration(value).humanize();
-            }
-            else {
-              return value + ' ms.';
-            }
+            return moment.duration(value * 1000).humanize();
           }
         }
       }

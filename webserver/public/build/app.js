@@ -173,7 +173,7 @@
       tooltip: {
         format: {
           title: function (d) {
-            return moment(d).format('DD/MMM/YY HH:mm');
+            return moment(d).format('DD/MMM/YY HH:mm') + ' (' + moment(d).fromNow() + ')';
           },
           value: function (value, ratio, id) {
             if (id == 'Outages') {
@@ -243,15 +243,10 @@
       tooltip: {
         format: {
           title: function (d) {
-            return moment(d).format('DD/MMM/YY HH:mm');
+            return moment(d).format('DD/MMM/YY HH:mm') + ' (' + moment(d).fromNow() + ')';
           },
           value: function (value, ratio, id) {
-            if (id == 'Outages') {
-              return moment.duration(value).humanize();
-            }
-            else {
-              return value + ' ms.';
-            }
+            return moment.duration(value * 1000).humanize();
           }
         }
       }
@@ -272,7 +267,8 @@
   Charting.renderOutages = function (options) {
 
     var outagesData = parseArrayObjectsForCharting(options.outages, 'timestamp', 'downtime');
-    var outagesSerie = outagesData.data;
+    var outagesSerie = outagesData.data.map(function(y) { return y / 1000 }); // seconds
+    
     var timeSerie = outagesData.time;
 
     timeSerie.splice(0, 0, +new Date() - 24 * HOUR);
@@ -393,7 +389,7 @@ angular.module('watchmenControllers', []);
             Charting.renderOutages({
               outages: data.status.last24Hours.outages,
               id: '#chart-outages-last-24hour',
-              size: chartSize
+              size: {height: 100}
             });
           }
 

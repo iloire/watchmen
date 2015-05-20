@@ -42,7 +42,7 @@
             Charting.renderOutages({
               outages: data.status.last24Hours.outages,
               id: '#chart-outages-last-24hour',
-              size: chartSize
+              size: {height: 100}
             });
           }
 

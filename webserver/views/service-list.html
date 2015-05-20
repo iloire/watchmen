@@ -17,14 +17,14 @@
         <table ng-table="tableParams" class="table-services table sorted table-striped table-condensed">
             <tbody>
 
-            <tr ng-class={'result-disabled':row.service.enabled===false,'result-success':!service.currentOutage,'result-error':service.currentOutage} ng-repeat="row in $data | filter:query">
+            <tr ng-class={'result-disabled':row.service.enabled===false,'result-success':!row.status.currentOutage,'result-error':row.status.currentOutage} ng-repeat="row in $data | filter:query">
                 <td data-title="'Status'" sortable="'status.currentOutage'">
                     <span ng-if="row.status.currentOutage" class="label label-danger">offline</span>
                     <span ng-if="!row.status.currentOutage" class="label label-success">online</span>
                 </td>
 
                 <td class="result-uptime"  data-title="'Uptime last 24h'" sortable="'status.last24Hours.uptime'">
-                    <a ng-if="row.status.last24Hours.uptime" class="name" href="/services/{{row.service.id}}/view">
+                    <a class="name" href="/services/{{row.service.id}}/view">
                         <span>{{row.status.last24Hours.uptime}}%</span>
                     </a>
                 </td>

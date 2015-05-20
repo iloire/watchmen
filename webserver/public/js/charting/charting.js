@@ -10,7 +10,8 @@
   Charting.renderOutages = function (options) {
 
     var outagesData = parseArrayObjectsForCharting(options.outages, 'timestamp', 'downtime');
-    var outagesSerie = outagesData.data;
+    var outagesSerie = outagesData.data.map(function(y) { return y / 1000 }); // seconds
+    
     var timeSerie = outagesData.time;
 
     timeSerie.splice(0, 0, +new Date() - 24 * HOUR);
