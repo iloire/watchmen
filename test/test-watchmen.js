@@ -36,7 +36,7 @@ describe('watchmen', function () {
     mockedPing.mockedResponse = ERROR_RESPONSE;
     var failedTimestamp = +new Date();
 
-    var watchmen = new Watchmen(null, new mockedStorage());
+    var watchmen = new Watchmen([service], new mockedStorage());
     watchmen.on('new-outage', function (service, outageData) {
       assert.equal(outageData.error, 'mocked error', 'should have error property');
       assert.equal(outageData.timestamp, failedTimestamp, 'should have timestamp property');
@@ -50,7 +50,7 @@ describe('watchmen', function () {
     mockedPing.mockedResponse = ERROR_RESPONSE;
     var failedTimestamp = +new Date();
     var called = false;
-    var watchmen = new Watchmen(null, new mockedStorage());
+    var watchmen = new Watchmen([service], new mockedStorage());
     watchmen.on('current-outage', function (service, outageData) {
       assert.equal(outageData.error, 'mocked error', 'should have error property');
       assert.equal(outageData.timestamp, failedTimestamp, 'should have timestamp property');
@@ -67,7 +67,7 @@ describe('watchmen', function () {
 
   it('should emit "service-ok" when ping success', function (done) {
     mockedPing.mockedResponse = SUCCESS_RESPONSE;
-    var watchmen = new Watchmen(null, new mockedStorage(null));
+    var watchmen = new Watchmen([service], new mockedStorage(null));
     watchmen.on('service-ok', function (service, data) {
       assert.equal(data.elapsedTime, 300);
       done();
@@ -79,7 +79,7 @@ describe('watchmen', function () {
 
   it('should always emit "ping" after a ping', function (done) {
     mockedPing.mockedResponse = SUCCESS_RESPONSE;
-    var watchmen = new Watchmen(null, new mockedStorage(null));
+    var watchmen = new Watchmen([service], new mockedStorage(null));
     watchmen.on('ping', function (service, data) {
       assert.equal(data.elapsedTime, 300);
       done();
@@ -96,7 +96,7 @@ describe('watchmen', function () {
       error: 'some error'
     };
 
-    var watchmen = new Watchmen(null, new mockedStorage({currentOutage: currentOutage}));
+    var watchmen = new Watchmen([service], new mockedStorage({currentOutage: currentOutage}));
     watchmen.on('service-back', function (service, outageData) {
       assert.equal(outageData.timestamp, INITIAL_TIME);
       done();
@@ -108,7 +108,7 @@ describe('watchmen', function () {
 
   it('should emit "warning" when ping takes too long', function (done) {
     mockedPing.mockedResponse = LATENCY_WARNING_RESPONSE;
-    var watchmen = new Watchmen(null, new mockedStorage(null));
+    var watchmen = new Watchmen([service], new mockedStorage(null));
     watchmen.on('latency-warning', function (service, data) {
       assert.equal(data.elapsedTime, 1600);
       done();
