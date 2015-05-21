@@ -2,6 +2,7 @@ var colors = require('colors');
 var pluginLoader = require('./lib/plugin-loader');
 var storageFactory = require('./lib/storage/storage-factory');
 var WatchMenFactory = require('./lib/watchmen');
+var sentinelFactory = require('./lib/sentinel');
 
 var PLUGINS_LOCATION = "plugins/monitor";
 
@@ -13,17 +14,14 @@ storage.getServices({}, function (err, services) {
     return exit(1);
   }
 
-  // inject ping services
-  services = services.map(function (service) {
-    var pingFactory = require('watchmen-ping-' + service.pingServiceName);
-    service.pingService = new pingFactory();
-  });
-
   var watchmen = new WatchMenFactory(services, storage);
 
   pluginLoader.loadPlugins(watchmen, {location: PLUGINS_LOCATION}, function () {
-    watchmen.start();
+    watchmen.startAll();
     console.log('\nwatchmen has started. ' + services.length + ' services loaded\n');
+
+    var sentinel = new sentinelFactory(storage, watchmen, {interval: 10000});
+    sentinel.watch();
   });
 
 });
