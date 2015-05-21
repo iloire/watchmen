@@ -15,9 +15,6 @@ describe('service validator', function() {
       timeout: 10000,
       warningThreshold: 3000,
       pingServiceName: 'http',
-      pingServiceOptions: {
-        option1: 'value1'
-      }
     }
   });
 
@@ -77,17 +74,6 @@ describe('service validator', function() {
 
   it('should have a "pingServiceName" field', function(){
     checkNonEmpty('pingServiceName');
-  });
-
-  it('should have a "pingServiceOptions" field', function(){
-    checkNonEmpty('pingServiceName');
-  });
-
-  it('should have an object type on "pingServiceOptions" field', function(){
-    service.pingServiceOptions = 'I am a string';
-    var errors = serviceValidator.validate(service);
-    assert.equal(errors.length, 1, JSON.stringify(errors));
-    assert.equal(errors[0].field, 'pingServiceOptions');
   });
 
   function checkNonEmpty(field){

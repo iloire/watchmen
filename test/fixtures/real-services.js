@@ -9,8 +9,7 @@ exports = module.exports = (function(){
     failureInterval: MIN,
     timeout: 10000,
     warningThreshold: 3000,
-    pingServiceName: 'http-head',
-    pingServiceOptions: {}
+    pingServiceName: 'http-head'
   };
 
   function generateService (service){
