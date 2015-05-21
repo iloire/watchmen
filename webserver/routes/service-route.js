@@ -14,7 +14,6 @@ module.exports.getRoutes = function (storage){
     router.post('/services', function(req, res){
         var service = req.body;
 
-        debug('loading services');
         var errors = serviceValidator.validate(service);
         if (errors.length) {
             return res.status(400).json({ errors: errors });
@@ -23,10 +22,38 @@ module.exports.getRoutes = function (storage){
             if (err) {
                 return res.status(500).json({ error: err });
             }
-            debug('loading loaded');
             return res.status(200).json({ id: id });
         });
     });
+
+    /**
+     * Delete service
+     */
+    //TODO: auth
+    router.delete('/services/:id', function(req, res){
+        var id = req.params.id;
+        if (!id) {
+            return res.status(400).json({ error: 'ID parameter not found' });
+        }
+        storage.getService(id, function(err, service){
+            if (err) {
+                return res.status(500).json({ error: err });
+            }
+
+            if (!service) {
+                return res.status(400).json({ error: 'service not found' });
+            }
+
+            storage.deleteService(id, function(err){
+                if (err) {
+                    return res.status(500).json({ error: err });
+                }
+                return res.status(200).json({ id: id });
+            });
+        });
+    });
+
+
 
     /**
      * Load service
