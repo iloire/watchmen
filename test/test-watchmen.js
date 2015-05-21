@@ -42,7 +42,8 @@ describe('watchmen', function () {
       assert.equal(outageData.timestamp, failedTimestamp, 'should have timestamp property');
       done(null);
     });
-    watchmen.ping({service: service, timestamp: failedTimestamp}, function (err) {});
+    watchmen.ping({service: service, timestamp: failedTimestamp}, function (err) {
+    });
     clock.tick(ERROR_RESPONSE.latency);
   });
 
@@ -117,4 +118,29 @@ describe('watchmen', function () {
     });
     clock.tick(LATENCY_WARNING_RESPONSE.latency);
   });
+
+  it('should start a service by ID', function (done) {
+    var watchmen = new Watchmen([service], new mockedStorage(null));
+    watchmen._launch = function(service){
+      assert.equal(service.running, true);
+      done();
+    };
+    watchmen.start();
+  });
+
+  it('start should not throw errors if there are not services', function (done) {
+    var watchmen = new Watchmen([], new mockedStorage(null));
+    watchmen._launch = function(){
+      done('not called');
+    };
+    watchmen.start();
+    done();
+  });
+
+  it('stop should not throw errors if there are not services', function (done) {
+    var watchmen = new Watchmen([], new mockedStorage(null));
+    watchmen.stop();
+    done();
+  });
+
 });
