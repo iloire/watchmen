@@ -12,7 +12,6 @@ module.exports.getRoutes = function (storage){
    * Load service report
    */
 
-  // TODO: auth
   router.get('/services/:id', function(req, res){
     if (!req.params.id) {
       return res.status(400).json({ error: 'ID parameter not found' });
@@ -30,7 +29,6 @@ module.exports.getRoutes = function (storage){
    * Load services report
    */
 
-  // TODO: auth
   router.get('/services', function(req, res){
     reporter.getServices({}, function (err, services){
       if (err) {

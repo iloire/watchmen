@@ -10,7 +10,7 @@ module.exports.getRoutes = function (storage){
     /**
      * Add service
      */
-    //TODO: auth
+
     router.post('/services', function(req, res){
         var service = req.body;
 
@@ -29,7 +29,7 @@ module.exports.getRoutes = function (storage){
     /**
      * Delete service
      */
-    //TODO: auth
+
     router.delete('/services/:id', function(req, res){
         var id = req.params.id;
         if (!id) {
@@ -102,7 +102,6 @@ module.exports.getRoutes = function (storage){
      * Load services
      */
 
-    // TODO: filter by auth
     router.get('/services', function(req, res){
         storage.getServices({}, function (err, services){
             if (err) {
@@ -115,5 +114,4 @@ module.exports.getRoutes = function (storage){
     });
 
     return router;
-
 };
