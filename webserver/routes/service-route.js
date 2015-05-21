@@ -54,6 +54,32 @@ module.exports.getRoutes = function (storage){
     });
 
 
+    /**
+     * Rest service data
+     */
+
+    router.post('/services/:id/reset', function(req, res){
+        var id = req.params.id;
+        if (!id) {
+            return res.status(400).json({ error: 'ID parameter not found' });
+        }
+        storage.getService(id, function(err, service){
+            if (err) {
+                return res.status(500).json({ error: err });
+            }
+
+            if (!service) {
+                return res.status(400).json({ error: 'service not found' });
+            }
+
+            storage.resetService(id, function(err){
+                if (err) {
+                    return res.status(500).json({ error: err });
+                }
+                return res.status(200).json({ id: id });
+            });
+        });
+    });
 
     /**
      * Load service
