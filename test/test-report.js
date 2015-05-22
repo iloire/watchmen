@@ -12,7 +12,7 @@ describe('reporting', function () {
   var HOUR = MINUTE * 60; //ms
   var DAY = HOUR * 24; //ms
 
-  var services, service;
+  var service;
   var storage = new redisStorage_class({port: 6666, host: '127.0.0.1', db: 0});
   var reporter;
   var INITIAL_TIME = 946684800000;
@@ -52,10 +52,9 @@ describe('reporting', function () {
       populator.populate(servicesFixtures, storage, function (err) {
         assert.ifError(err);
 
-        storage.getServices({}, function (err, _services) {
+        storage.getService(servicesFixtures[0].id, function (err, _service) {
           assert.ifError(err);
-          services = _services;
-          service = services[0];
+          service = _service;
           done();
         });
       });
@@ -77,7 +76,7 @@ describe('reporting', function () {
       });
     });
 
-    describe('outages', function(){
+    describe('outages', function () {
 
       it('should get current outage information', function (done) {
         var outageData = {
@@ -94,10 +93,10 @@ describe('reporting', function () {
         });
       });
 
-      it('should return latest 10 outages', function(done){
+      it('should return latest 10 outages', function (done) {
         var outageData = [];
         for (var i = 0; i < 20; i++) {
-          outageData.push({ error: 'my error' });
+          outageData.push({error: 'my error'});
         }
         var outageDuration = 4 * MINUTE, outageInterval = HOUR;
         addOutageRecords(service, outageData, outageDuration, outageInterval, function () {
@@ -110,10 +109,10 @@ describe('reporting', function () {
       });
 
 
-      it('should return latest outages max one week old', function(done){
+      it('should return latest outages max one week old', function (done) {
         var outageData = [];
         for (var i = 0; i < 10; i++) {
-          outageData.push({ error: 'my error' });
+          outageData.push({error: 'my error'});
         }
         var outageDuration = 4 * MINUTE, outageInterval = DAY;
         addOutageRecords(service, outageData, outageDuration, outageInterval, function () {
