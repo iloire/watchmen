@@ -10,20 +10,23 @@ var responseRandomizer = require('./lib/response-randomizer');
 
 var DEFAULT_PING_INTERVAL = 1000 * 60 * 1; // ms
 var DEFAULT_NUMBER_DAYS_BACK = 7;
-var NUMBER_PINGS_BACK = DEFAULT_NUMBER_DAYS_BACK * 1000 * 60 * 60 * 24 / DEFAULT_PING_INTERVAL;
-
-var INITIAL_TIME = +new Date() - DEFAULT_PING_INTERVAL * NUMBER_PINGS_BACK;
 
 var watchmen;
 
 function run(programOptions, callback) {
 
+  var pingInterval = programOptions.pingInterval ||  DEFAULT_PING_INTERVAL;
+  var numberDaysBack = programOptions.numberDaysBack ||  DEFAULT_NUMBER_DAYS_BACK;
+  var numberPingsBack = numberDaysBack * 1000 * 60 * 60 * 24 / pingInterval;
+  var initialTime = +new Date() - pingInterval * numberPingsBack;
+
+  debug('ping interval:' + pingInterval);
+  debug('number days back:' + numberDaysBack);
+
   function generateDataForService(service, callback) {
     var totalPings = 0;
 
-    debug(NUMBER_PINGS_BACK + ' pings back calculated for ' + service.name);
-
-    clock = sinon.useFakeTimers(INITIAL_TIME);
+    clock = sinon.useFakeTimers(initialTime);
 
     service.pingService = mockedPingService;
 
@@ -39,7 +42,7 @@ function run(programOptions, callback) {
     }
 
     async.whilst(
-        function () { return totalPings < NUMBER_PINGS_BACK; },
+        function () { return totalPings < numberPingsBack; },
         ping,
         function (err) {
           callback(err);
@@ -68,7 +71,7 @@ function run(programOptions, callback) {
 
     debug('database flushed');
 
-    clock = sinon.useFakeTimers(INITIAL_TIME);
+    clock = sinon.useFakeTimers(initialTime);
 
     populator.populate(services, storage, function (err) {
       if (err) {
@@ -106,6 +109,8 @@ program
     .option('-f, --filter [filter]', 'Filter services to add dummy data to (by name)')
     .option('-e, --env [env]', 'Storage environment key')
     .option('-u, --target-uptime [targetUptime]', 'targetUptime')
+    .option('-p, --ping-interval [pingInterval]', 'Ping interval')
+    .option('-d, --number-days-back [numberDaysBack]', 'Number of days back when populating database')
     .parse(process.argv);
 
 run(program, function () {
