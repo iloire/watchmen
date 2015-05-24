@@ -22,8 +22,8 @@ describe('watchmen', function () {
       url: '/',
       interval: 4 * 1000,
       failureInterval: 5 * 1000,
-      warningThreshold: 1500, //miliseconds
-      pingService: mockedPing // mock
+      warningThreshold: 1500,
+      pingService: mockedPing
     };
   });
 

@@ -55,7 +55,7 @@ module.exports.getRoutes = function (storage){
 
 
     /**
-     * Rest service data
+     * Reset service data
      */
 
     router.post('/services/:id/reset', function(req, res){
@@ -108,7 +108,6 @@ module.exports.getRoutes = function (storage){
                 console.error(err);
                 return res.status(500).json({ error: err });
             }
-            console.log(services)
             res.json(services);
         });
     });
