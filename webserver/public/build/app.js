@@ -11,7 +11,8 @@
         'angularMoment',
         'angularMSTime',
         'watchmenControllers',
-        'watchmenFactories'
+        'watchmenFactories',
+        'ngResource'
     ]);
 
     watchmenApp.config(function($stateProvider, $locationProvider, $urlRouterProvider) {
@@ -45,8 +46,16 @@
 
   'use strict';
 
-  angular.module('watchmenFactories', ['ngResource']).factory('Service', function($resource) {
-    return $resource('http://ec2-54-204-149-175.compute-1.amazonaws.com:3334/api/report/services/:id');
+  angular.module('watchmenFactories', []);
+
+  var factories = angular.module('watchmenFactories');
+
+  factories.factory('Report', function($resource) {
+    return $resource('/api/report/services/:id');
+  });
+
+  factories.factory('Service', function($resource) {
+    return $resource('/api/services/:id');
   });
 
 })();
@@ -142,7 +151,7 @@
       size: options.size,
       bindto: options.id,
       legend: {
-        show: false
+        position: 'right'
       },
       data: {
         x: 'x',
@@ -215,7 +224,7 @@
       size: options.size,
       bindto: options.id,
       legend: {
-        show: false
+        position: 'right'
       },
       data: {
         x: 'x',
@@ -353,17 +362,57 @@ angular.module('watchmenControllers', []);
   var watchmenControllers = angular.module('watchmenControllers');
 
   /**
+   * Add service
+   */
+
+  watchmenControllers.controller('ServiceAddCtrl', ['$scope', '$state', '$filter', '$stateParams', 'Service',
+    function ($scope, $state, $filter, $stateParams, Service) {
+      $scope.service = new Service();
+
+      // defaults
+      $scope.service.timeout = 10000;
+      $scope.service.warningThreshold = 5000;
+      $scope.service.interval = 60000;
+      $scope.service.failureInterval = 30000;
+      $scope.service.port = 80;
+      $scope.service.pingServiceName = 'http-head';
+
+      $scope.addService = function () {
+        $scope.service.$save(function () {
+          $state.go('services');
+        }, function(response){
+          console.log(response);
+          $scope.serviceAddErrors = response.data.errors;
+        });
+      };
+
+      $scope.cancel = function () {
+        $state.go('services');
+      }
+
+    }]);
+
+})();
+
+(function () {
+
+  'use strict';
+
+
+  var watchmenControllers = angular.module('watchmenControllers');
+
+  /**
    * Service details
    */
 
-  watchmenControllers.controller('ServiceDetailCtrl', ['$scope', '$filter', '$stateParams', 'Service', 'ngTableUtils', 'usSpinnerService', '$timeout',
-    function ($scope, $filter, $stateParams, Service, ngTableUtils, usSpinnerService,$timeout) {
+  watchmenControllers.controller('ServiceDetailCtrl', ['$scope', '$filter', '$stateParams', 'Report', 'ngTableUtils', 'usSpinnerService', '$timeout',
+    function ($scope, $filter, $stateParams, Report, ngTableUtils, usSpinnerService,$timeout) {
 
       usSpinnerService.spin('spinner-1');
       $scope.loading = true;
       $scope.showConfig = false;
 
-      $scope.serviceDetails = Service.get({id: $stateParams.id}, function (data) {
+      $scope.serviceDetails = Report.get({id: $stateParams.id}, function (data) {
         usSpinnerService.stop('spinner-1');
         $scope.loading = false;
 
@@ -443,8 +492,8 @@ angular.module('watchmenControllers', []);
   var watchmenControllers = angular.module('watchmenControllers');
 
   watchmenControllers.controller('ServiceListCtrl',
-      ['$scope', '$filter', '$timeout', 'Service', 'usSpinnerService', 'ngTableUtils',
-        function ($scope, $filter, $timeout, Service, usSpinnerService, ngTableUtils) {
+      ['$scope', '$filter', '$timeout', 'Report', 'usSpinnerService', 'ngTableUtils',
+        function ($scope, $filter, $timeout, Report, usSpinnerService, ngTableUtils) {
 
           var transition = {
             loading: function () {
@@ -463,12 +512,12 @@ angular.module('watchmenControllers', []);
           $scope[key] = [];
           $scope.tableParams = ngTableUtils.createngTableParams(key, $scope, $filter, 25);
 
-          (function tick($scope, Service) {
+          (function tick($scope, Report) {
 
             function scheduleNextTick() {
               $timeout.cancel(timer);
               timer = $timeout(function () {
-                tick($scope, Service);
+                tick($scope, Report);
               }, SERVICES_POLLING_INTERVAL);
             }
 
@@ -478,7 +527,7 @@ angular.module('watchmenControllers', []);
               scheduleNextTick();
             }
 
-            $scope.services = Service.query(function (services) {
+            $scope.services = Report.query(function (services) {
               $scope[key] = services;
               $scope.tableParams.reload();
 
@@ -487,7 +536,7 @@ angular.module('watchmenControllers', []);
               scheduleNextTick();
             }, errorHandler);
 
-          })($scope, Service);
+          })($scope, Report);
 
         }]);
 })();

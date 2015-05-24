@@ -8,8 +8,8 @@
   var watchmenControllers = angular.module('watchmenControllers');
 
   watchmenControllers.controller('ServiceListCtrl',
-      ['$scope', '$filter', '$timeout', 'Service', 'usSpinnerService', 'ngTableUtils',
-        function ($scope, $filter, $timeout, Service, usSpinnerService, ngTableUtils) {
+      ['$scope', '$filter', '$timeout', 'Report', 'usSpinnerService', 'ngTableUtils',
+        function ($scope, $filter, $timeout, Report, usSpinnerService, ngTableUtils) {
 
           var transition = {
             loading: function () {
@@ -28,12 +28,12 @@
           $scope[key] = [];
           $scope.tableParams = ngTableUtils.createngTableParams(key, $scope, $filter, 25);
 
-          (function tick($scope, Service) {
+          (function tick($scope, Report) {
 
             function scheduleNextTick() {
               $timeout.cancel(timer);
               timer = $timeout(function () {
-                tick($scope, Service);
+                tick($scope, Report);
               }, SERVICES_POLLING_INTERVAL);
             }
 
@@ -43,7 +43,7 @@
               scheduleNextTick();
             }
 
-            $scope.services = Service.query(function (services) {
+            $scope.services = Report.query(function (services) {
               $scope[key] = services;
               $scope.tableParams.reload();
 
@@ -52,7 +52,7 @@
               scheduleNextTick();
             }, errorHandler);
 
-          })($scope, Service);
+          })($scope, Report);
 
         }]);
 })();

@@ -51,6 +51,7 @@ a {
   border-radius: 3px;
 }
 
+
 .details-page .status .up {
   color: green;
   font-weight: bold;
@@ -90,6 +91,9 @@ a {
 }
 .details-page .table-logs td:first-child {
   width: 70%;
+}
+.details-page .outages thead td {
+  color: #c2c2c2;
 }
 
 .error,
@@ -164,4 +168,10 @@ a {
   right: 0px;
   padding: 10px 12px;
   pointer-events: none;
+}
+
+input.ng-dirty.ng-invalid,
+input.ng-touched.ng-invalid {
+  color: red;
+  border-color: red;
 }

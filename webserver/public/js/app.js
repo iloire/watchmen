@@ -11,7 +11,8 @@
         'angularMoment',
         'angularMSTime',
         'watchmenControllers',
-        'watchmenFactories'
+        'watchmenFactories',
+        'ngResource'
     ]);
 
     watchmenApp.config(function($stateProvider, $locationProvider, $urlRouterProvider) {

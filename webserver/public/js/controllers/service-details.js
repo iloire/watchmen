@@ -9,14 +9,14 @@
    * Service details
    */
 
-  watchmenControllers.controller('ServiceDetailCtrl', ['$scope', '$filter', '$stateParams', 'Service', 'ngTableUtils', 'usSpinnerService', '$timeout',
-    function ($scope, $filter, $stateParams, Service, ngTableUtils, usSpinnerService,$timeout) {
+  watchmenControllers.controller('ServiceDetailCtrl', ['$scope', '$filter', '$stateParams', 'Report', 'ngTableUtils', 'usSpinnerService', '$timeout',
+    function ($scope, $filter, $stateParams, Report, ngTableUtils, usSpinnerService,$timeout) {
 
       usSpinnerService.spin('spinner-1');
       $scope.loading = true;
       $scope.showConfig = false;
 
-      $scope.serviceDetails = Service.get({id: $stateParams.id}, function (data) {
+      $scope.serviceDetails = Report.get({id: $stateParams.id}, function (data) {
         usSpinnerService.stop('spinner-1');
         $scope.loading = false;
 
