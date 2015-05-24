@@ -2,10 +2,10 @@
   "author": "Iván Loire <ivan@iloire.com> (http://iloire.com/)",
   "name": "watchmen",
   "scripts": {
-    "precoverage": "npm install;redis-server test/redis.conf",
+    "precoverage": "npm install;redis-server test/redis.test.conf",
     "coverage": "./node_modules/istanbul/lib/cli.js cover ./node_modules/mocha/bin/_mocha -- --ui bdd -R spec -t 5000",
     "postcoverage": "kill `cat test/redis.pid`",
-    "pretest": "redis-server test/redis.conf",
+    "pretest": "redis-server test/redis.test.conf",
     "test": "mocha -R list -b test/*.js;kill `cat test/redis.pid`",
     "posttest": "kill `cat test/redis.pid`",
     "prestart": "npm install",
