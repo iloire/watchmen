@@ -98,7 +98,10 @@ function run(programOptions, callback) {
 
         debug('program started');
 
-        populatedata(services, callback);
+        populatedata(services, function(err){
+          storage.quit();
+          callback(err);
+        });
 
       });
     });
@@ -118,6 +121,5 @@ program
 
 run(program, function () {
   debug('done!');
-  storage.quit();
   process.exit(0);
 });
