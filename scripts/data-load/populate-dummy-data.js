@@ -4,9 +4,9 @@ var debug = require('debug')('data-load');
 var watchmenFactory = require('../../lib/watchmen.js');
 var mockedPingService = require('../../test/lib/mock/request-mocked');
 var storageFactory = require('../../lib/storage/storage-factory');
-var services = require('../../test/fixtures/dummy-services');
 var populator = require('../../test/lib/util/populator');
 var responseRandomizer = require('./lib/response-randomizer');
+var dummyServiceGenerator = require('../../test/fixtures/dummy-services');
 
 var DEFAULT_PING_INTERVAL = 1000 * 60 * 1; // ms
 var DEFAULT_NUMBER_DAYS_BACK = 7;
@@ -19,6 +19,7 @@ function run(programOptions, callback) {
   var numberDaysBack = programOptions.numberDaysBack ||  DEFAULT_NUMBER_DAYS_BACK;
   var numberPingsBack = numberDaysBack * 1000 * 60 * 60 * 24 / pingInterval;
   var initialTime = +new Date() - pingInterval * numberPingsBack;
+  var services = dummyServiceGenerator.generate(programOptions.numberServices || 20);
 
   debug('ping interval:' + pingInterval);
   debug('number days back:' + numberDaysBack);
@@ -111,6 +112,8 @@ program
     .option('-u, --target-uptime [targetUptime]', 'targetUptime')
     .option('-p, --ping-interval [pingInterval]', 'Ping interval')
     .option('-d, --number-days-back [numberDaysBack]', 'Number of days back when populating database')
+    .option('-s, --number-services [numberServices]', 'Number of services')
+
     .parse(process.argv);
 
 run(program, function () {

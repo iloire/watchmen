@@ -1,6 +1,6 @@
 var storageFactory = require('../../lib/storage/storage-factory');
 var populator = require('../../test/lib/util/populator');
-
+var dummyServiceGenerator = require('../../test/fixtures/dummy-services');
 var services;
 
 function run(program){
@@ -13,11 +13,11 @@ function run(program){
   }
 
   if (program.real) {
-    console.log('Pupulating real services...');
+    console.log('Populating real services...');
     services = require('../../test/fixtures/real-services');
   } else {
-    console.log('Pupulating real services...');
-    services = require('../../test/fixtures/dummy-services');
+    console.log('Populating real services...');
+    services = dummyServiceGenerator.generate(program.numberServices || 20);
   }
 
   populator.populate(services, storage, function(err){
@@ -35,6 +35,7 @@ var program = require('commander');
 program
     .option('-r, --real', 'User real data')
     .option('-e, --env [env]', 'Storage environment key')
+    .option('-s, --number-services [numberServices]', 'Number of services')
     .parse(process.argv);
 
 run(program);

@@ -6,7 +6,7 @@ exports = module.exports = (function(){
   return {
 
     /**
-     * Utility to populate a list of services using the storage
+     * Utility to populate a list of services using the provided storage
      * @param services
      * @param storage
      * @param callback

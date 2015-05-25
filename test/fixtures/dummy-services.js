@@ -1,7 +1,5 @@
 exports = module.exports = (function(){
 
-  var NUMBER_SERVICES = 300;
-
   function generateDummyService (i){
     return {
       name: 'service n' + i,
@@ -15,11 +13,14 @@ exports = module.exports = (function(){
     }
   }
 
-  var services = [];
-  for (var i = 0; i < NUMBER_SERVICES; i++) {
-    services.push(generateDummyService(i));
-  }
-
-  return services;
+  return {
+    generate : function(number){
+      var services = [];
+      for (var i = 0; i < number; i++) {
+        services.push(generateDummyService(i));
+      }
+      return services;
+    }
+  };
 
 })();

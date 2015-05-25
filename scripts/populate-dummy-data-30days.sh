@@ -1,2 +1,2 @@
 export set DEBUG='data-load'
-node data-load/populate-dummy-data.js -d 30
+node data-load/populate-dummy-data.js -d 30 -s 30

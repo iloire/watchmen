@@ -4,7 +4,7 @@ var sinon = require('sinon');
 var redisStorage_class = require('../lib/storage/providers/redis');
 var reportService = require('../lib/reporter');
 var populator = require('./lib/util/populator');
-var servicesFixtures = require('./fixtures/dummy-services');
+var dummyServiceGenerator = require('./fixtures/dummy-services');
 
 describe('reporting', function () {
 
@@ -46,6 +46,8 @@ describe('reporting', function () {
     clock = sinon.useFakeTimers(INITIAL_TIME);
 
     reporter = new reportService(storage);
+
+    servicesFixtures = dummyServiceGenerator.generate(1);
 
     storage.flush_database(function () {
 
