@@ -52,6 +52,7 @@
 
   factories.factory('Report', function($resource) {
     return $resource('/api/report/services/:id');
+    //return $resource('http://ec2-54-204-149-175.compute-1.amazonaws.com:3334/api/report/services/:id');
   });
 
   factories.factory('Service', function($resource) {
@@ -406,7 +407,7 @@ angular.module('watchmenControllers', []);
    */
 
   watchmenControllers.controller('ServiceDetailCtrl', ['$scope', '$filter', '$stateParams', 'Report', 'ngTableUtils', 'usSpinnerService', '$timeout',
-    function ($scope, $filter, $stateParams, Report, ngTableUtils, usSpinnerService,$timeout) {
+    function ($scope, $filter, $stateParams, Report, ngTableUtils, usSpinnerService, $timeout) {
 
       usSpinnerService.spin('spinner-1');
       $scope.loading = true;
@@ -419,31 +420,38 @@ angular.module('watchmenControllers', []);
         $scope.latestOutages = data.status.latestOutages;
 
         // charting
-        var chartSize = {height: 150};
-
         var latencyLastHour = data.status.lastHour.latency;
         var latencyLast24Hours = data.status.last24Hours.latency;
         var latencyLastWeek = data.status.lastWeek.latency;
 
-        var maxLastHour = _.max(latencyLastHour.list, function(item) {return item.l;});
-        var maxLast24Hours = _.max(latencyLast24Hours.list, function(item) {return item.l;});
-        var maxLastWeek = _.max(latencyLastWeek.list, function(item) {return item.l;});
+        var maxLastHour = _.max(latencyLastHour.list, function (item) {
+          return item.l;
+        });
+        var maxLast24Hours = _.max(latencyLast24Hours.list, function (item) {
+          return item.l;
+        });
+        var maxLastWeek = _.max(latencyLastWeek.list, function (item) {
+          return item.l;
+        });
 
         var max = _.max([maxLastHour.l, maxLast24Hours.l, maxLastWeek.l]);
+        var defaultChartWidth = $('.view-frame').width();
+        var chartSize = {height: 150, width: defaultChartWidth};
 
-        $timeout(function(){
+        $timeout(function () {
 
           //experimental
           if (data.status.last24Hours.outages.length > 0) {
             Charting.renderOutages({
               outages: data.status.last24Hours.outages,
               id: '#chart-outages-last-24hour',
-              size: {height: 100}
+              size: {height: 100, width: defaultChartWidth}
             });
           }
 
           if (latencyLastHour.list.length > 0) { // at least one successful ping
             $scope.showLastHourChart = true;
+
             Charting.renderLatency({
               threshold: data.service.warningThreshold,
               latency: latencyLastHour.list,
@@ -475,7 +483,7 @@ angular.module('watchmenControllers', []);
               max: max
             });
           }
-        },0);
+        }, 0);
       });
 
     }]);
