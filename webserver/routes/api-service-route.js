@@ -7,11 +7,19 @@ module.exports.getRoutes = function (storage){
 
     var router = express.Router();
 
+    var requireAdmin = function(req, res, next){
+        if (req.user && req.user.isAdmin){
+            next();
+        } else {
+            return res.status(401).json({ error: 'auth required' });
+        }
+    };
+
     /**
      * Add service
      */
 
-    router.post('/services', function(req, res){
+    router.post('/services', requireAdmin, function(req, res){
         var service = req.body;
 
         var errors = serviceValidator.validate(service);
@@ -30,10 +38,10 @@ module.exports.getRoutes = function (storage){
      * Delete service
      */
 
-    router.delete('/services/:id', function(req, res){
+    router.delete('/services/:id', requireAdmin, function(req, res){
         var id = req.params.id;
         if (!id) {
-            return res.status(400).json({ error: 'ID parameter not found' });
+            return res.status(404).json({ error: 'ID parameter not found' });
         }
         storage.getService(id, function(err, service){
             if (err) {
@@ -41,7 +49,7 @@ module.exports.getRoutes = function (storage){
             }
 
             if (!service) {
-                return res.status(400).json({ error: 'service not found' });
+                return res.status(404).json({ error: 'service not found' });
             }
 
             storage.deleteService(id, function(err){
@@ -58,10 +66,10 @@ module.exports.getRoutes = function (storage){
      * Reset service data
      */
 
-    router.post('/services/:id/reset', function(req, res){
+    router.post('/services/:id/reset', requireAdmin, function(req, res){
         var id = req.params.id;
         if (!id) {
-            return res.status(400).json({ error: 'ID parameter not found' });
+            return res.status(404).json({ error: 'ID parameter not found' });
         }
         storage.getService(id, function(err, service){
             if (err) {
@@ -69,7 +77,7 @@ module.exports.getRoutes = function (storage){
             }
 
             if (!service) {
-                return res.status(400).json({ error: 'service not found' });
+                return res.status(404).json({ error: 'service not found' });
             }
 
             storage.resetService(id, function(err){
@@ -87,9 +95,12 @@ module.exports.getRoutes = function (storage){
 
     router.get('/services/:id', function(req, res){
         if (!req.params.id) {
-            return res.status(400).json({ error: 'ID parameter not found' });
+            return res.status(404).json({ error: 'ID parameter not found' });
         }
         storage.getService(req.params.id, function (err, service){
+            if (!service) {
+                return res.status(404).json({ error: 'Service not found' });
+            }
             if (err) {
                 console.error(err);
                 return res.status(500).json({ error: err });

@@ -64,16 +64,18 @@
     "gulp": "^3.8.11",
     "gulp-concat": "^2.5.2",
     "gulp-filter": "^2.0.2",
+    "gulp-if": "^1.2.5",
     "gulp-jshint": "^1.10.0",
+    "gulp-less": "^3.0.2",
     "gulp-load-plugins": "^0.9.0",
     "gulp-minify-css": "^1.0.0",
     "gulp-uglify": "^1.2.0",
     "gulp-watch": "^4.2.4",
-    "gulp-if": "^1.2.5",
-    "gulp-less": "^3.0.2",
     "istanbul": "0.3.x",
     "main-bower-files": "^2.6.2",
     "mocha": "^2.2.5",
-    "sinon": "^1.14.1"
+    "passport-mock": "0.0.3",
+    "sinon": "^1.14.1",
+    "supertest": "^1.0.1"
   }
 }

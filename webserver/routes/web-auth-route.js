@@ -1,10 +1,15 @@
-var config = require('../config/web');
+var config = require('../../config/web');
 var passport = require('passport');
 var url = require('url');
 
 var GoogleStrategy = require( 'passport-google-oauth2' ).Strategy;
 
 module.exports = (function (){
+
+  function isAdmin(email){
+    var admins = (process.env.WATCHMEN_ADMINS || '').split(',').map(function(email){ return email.trim (); });
+    return admins.indexOf(email)>-1;
+  }
 
   return {
     
@@ -21,7 +26,8 @@ module.exports = (function (){
           callbackURL: url.resolve(config.public_host_name, '/auth/google/callback')
         },
         function(request, accessToken, refreshToken, profile, done) {
-          done(null, profile.emails[0].value);
+          var email = profile.emails[0].value;
+          done(null, { email : email, isAdmin: isAdmin(email) });
         }
       ));
 
@@ -46,27 +52,12 @@ module.exports = (function (){
           // successful authentication
           res.redirect('/');
       });
-    },
 
-    /**
-     * Filter authorized servers according to service's authorization settings
-     * @param  {Array} services
-     * @param  {String} userId
-     * @return {Array} services after authorization filters
-     */
-
-    filterAuthorizedServers: function(services, userId) {
-      return services.filter(function(service){
-        if (!service.restrictedTo){
-          return true;
-        } else {
-          return service.restrictedTo.filter(function(user){
-            return user === userId;
-          }).length > 0;
-        }
+      app.get('/logout', function (req, res){
+        req.logOut();
+        res.redirect('/');
       });
     }
-
   };
 
 }());

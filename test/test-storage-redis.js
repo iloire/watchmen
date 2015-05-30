@@ -2,12 +2,12 @@ var assert = require ('assert');
 var async = require('async');
 var sinon = require('sinon');
 
-var redisStorage_class = require('../lib/storage/providers/redis');
+var storageFactory = require ('../lib/storage/storage-factory');
+var redisStorage = storageFactory.getStorageInstance('test');
 
 describe('redis storage', function(){
 
   var service;
-  var redisStorage = new redisStorage_class({ port: 6666, host: '127.0.0.1', db: 0 });
   var INITIAL_TIME = 946684800;
 
   beforeEach(function(done){

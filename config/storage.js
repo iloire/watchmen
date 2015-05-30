@@ -22,13 +22,13 @@ exports = module.exports = {
     }
   },
 
-  development2: {
+  test: {
     provider : 'redis',
     options : {
       'redis' : {
-        port: 1216,
+        port: 6666,
         host: '127.0.0.1',
-        db: 3
+        db: 5
       }
     }
   }

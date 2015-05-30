@@ -6,7 +6,8 @@ var sentinelFactory = require('./lib/sentinel');
 
 var PLUGINS_LOCATION = "plugins/monitor";
 
-var storage = storageFactory.getStorageInstance('development'); // TODO: correct flag according to env
+var storage = storageFactory.getStorageInstance(process.env.NODE_ENV || 'development');
+
 storage.getServices({}, function (err, services) {
   if (err) {
     console.error('error loading services'.red);

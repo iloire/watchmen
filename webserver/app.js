@@ -6,65 +6,46 @@ var methodOverride = require('method-override');
 var errorHandler = require('errorhandler');
 var session = require('express-session');
 var compress = require('compression');
-var api = require('./routes/service-route')
-var report = require('./routes/report-route')
+var api = require('./routes/api-service-route')
+var report = require('./routes/api-report-route')
 var web = require('./routes/web-route')
-var storageFactory = require ('../lib/storage/storage-factory');
-var storage = storageFactory.getStorageInstance('development'); // TODO according to env
+var auth = require('./routes/web-auth-route');
 
-app.set('views', __dirname + '/views');
-app.set('view engine', 'ejs');
+exports = module.exports = function(storage){
 
-app.engine('.html', require('ejs').renderFile);
+  app.set('views', __dirname + '/views');
+  app.set('view engine', 'ejs');
+  app.engine('.html', require('ejs').renderFile);
 
-app.use(compress());
-app.use(session({
-  secret: 'myBigSecret',
-  saveUninitialized: true,
-  resave: true
-}));
-app.use(bodyParser.json());
-app.use(bodyParser.urlencoded({ extended: false }));
-app.use(methodOverride());
+  app.use(compress());
+  app.use(session({
+    secret: 'myBigSecret',
+    saveUninitialized: true,
+    resave: true
+  }));
+  app.use(bodyParser.json());
+  app.use(bodyParser.urlencoded({ extended: false }));
+  app.use(methodOverride());
 
-require('./../lib/auth').configureApp(app);
+  auth.configureApp(app);
 
-app.all('/*', function(req, res, next) {
-  res.header("Access-Control-Allow-Origin", "*");
-  res.header("Access-Control-Allow-Headers", "X-Requested-With");
-  next();
-});
+  app.all('/*', function(req, res, next) {
+    res.header("Access-Control-Allow-Origin", "*");
+    res.header("Access-Control-Allow-Headers", "X-Requested-With");
+    next();
+  });
 
-//-----------------------------------------
-// Import routes
-//-----------------------------------------
-app.use('/api/report', report.getRoutes(storage));
-app.use('/api', api.getRoutes(storage));
-app.use('/', web.getRoutes(storage));
+  app.use('/api/report', report.getRoutes(storage));
+  app.use('/api', api.getRoutes(storage));
+  app.use('/', web.getRoutes(storage));
 
-app.use(express.static(__dirname + '/public'));
+  app.use(express.static(__dirname + '/public'));
 
-if (process.env.NODE_ENV === 'development') {
-  console.log('development mode');
-  app.use(errorHandler());
-}
-
-//-----------------------------------------
-// Start server
-//-----------------------------------------
-var port = parseInt(process.argv[2], 10) || 3000;
-var server = app.listen(port, function () {
-
-  if (server.address()) {
-    console.log("watchmen server listening on port %d in %s mode", port, app.settings.env);
-  } else {
-    console.log ('something went wrong... couldn\'t listen to that port.');
-    process.exit(1);
+  if (process.env.NODE_ENV === 'development') {
+    console.log('development mode');
+    app.use(errorHandler());
   }
 
-  process.on('SIGINT', function () {
-    console.log('stopping web server.. bye!');
-    server.close();
-    process.exit(0);
-  });
-});
+  return app;
+
+};
