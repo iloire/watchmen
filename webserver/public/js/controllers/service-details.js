@@ -12,14 +12,32 @@
   watchmenControllers.controller('ServiceDetailCtrl', ['$scope', '$filter', '$stateParams', 'Report', 'ngTableUtils', 'usSpinnerService', '$timeout',
     function ($scope, $filter, $stateParams, Report, ngTableUtils, usSpinnerService, $timeout) {
 
-      usSpinnerService.spin('spinner-1');
-      $scope.loading = true;
+      function loading(){
+        usSpinnerService.spin('spinner-1');
+        $scope.loading = true;
+      }
+
+      function loaded(){
+        usSpinnerService.stop('spinner-1');
+        $scope.loading = false;
+      }
+  
+      function errHandler (err){
+        console.log(err);
+        loaded();
+        var msg = err.statusText;
+        if (err.data && err.data.error){
+          msg = err.data.error;
+        }
+        $scope.errorLoadingService = msg;
+      }
+
+      loading();
       $scope.showConfig = false;
 
       $scope.serviceDetails = Report.get({id: $stateParams.id}, function (data) {
-        usSpinnerService.stop('spinner-1');
-        $scope.loading = false;
 
+        loaded();
         $scope.latestOutages = data.status.latestOutages;
 
         // charting
@@ -87,7 +105,7 @@
             });
           }
         }, 0);
-      });
+      }, errHandler);
 
     }]);
 

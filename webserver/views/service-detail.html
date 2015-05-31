@@ -1,6 +1,11 @@
 <%- include header.html %>
 
-<div class="details-page" ng-show="!loading">
+<div ng-if="errorLoadingService" class="alert alert-danger" role="alert">
+    <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
+    <span>{{errorLoadingService}}</span>
+</div>
+
+<div class="details-page" ng-show="!loading && !errorLoadingService">
 
     <a style="float:right" href="/services" class="hidden-xs">
         <span class="glyphicon glyphicon-chevron-left"></span> back to list
