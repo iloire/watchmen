@@ -1,1 +1,560 @@
-!function(){"use strict";var e=angular.module("watchmenApp",["ui.router","angularSpinner","ngTable","angularMoment","angularMSTime","watchmenControllers","watchmenFactories","ngResource"]);e.config(function(e,t,r){t.html5Mode(!0),e.state("services",{url:"/services",templateUrl:"service-list.html",controller:"ServiceListCtrl"}).state("viewService",{url:"/services/:id/view",templateUrl:"service-detail.html",controller:"ServiceDetailCtrl"}).state("newService",{url:"/services/add",templateUrl:"service-add.html",controller:"ServiceAddCtrl"}).state("editService",{url:"/services/:id/edit",templateUrl:"service-edit.html",controller:"ServiceEditCtrl"}),r.when("/","/services")})}(),function(){"use strict";angular.module("watchmenFactories",[]);var e=angular.module("watchmenFactories");e.factory("Report",function(e){return e("/api/report/services/:id")}),e.factory("Service",function(e){return e("/api/services/:id")})}(),function(){"use strict";var e=!1;angular.module("watchmenFactories").factory("ngTableUtils",function(t){function r(t,r){var n={page:1,count:r||10,debugMode:!0};return e&&window.localStorage&&window.localStorage.getItem(t)?JSON.parse(window.localStorage.getItem(t)):n}function n(e,n,a,i){return new t(r(e,i),{total:n[e].length,getData:function(t,r){var i=n[e];r.total(i.length);var o=r.sorting()?a("orderBy")(i,r.orderBy()):i,s=o.slice((r.page()-1)*r.count(),r.page()*r.count());t.resolve(s);var l={sorting:r.sorting(),count:r.count(),page:r.page()};window.localStorage&&window.localStorage.setItem(e,JSON.stringify(l))}})}return{createngTableParams:n}})}(),function(){"use strict";window.Charting=window.Charting||{},Charting.generateLatencyChart=function(e){return c3.generate({size:e.size,bindto:e.id,legend:{position:"right"},data:{x:"x",columns:e.columns,types:{Latency:"area-spline",Threshold:"spline"},colors:{Latency:"green",Threshold:"orange"}},axis:{y:{max:isNaN(e.max)?0:e.max,tick:{values:[200,500,1e3,2e3,3e3,4e3,5e3,7e3,1e4,15e3,2e4,3e4]}},x:{type:"timeseries",tick:{format:e.x_format||"%H:%M"}}},tooltip:{format:{title:function(e){return moment(e).format("DD/MMM/YY HH:mm")+" ("+moment(e).fromNow()+")"},value:function(e,t,r){return"Outages"==r?moment.duration(e).humanize():e+" ms."}}}})}}(),function(){"use strict";window.Charting=window.Charting||{};var e=6e4,t=60*e;Charting.generateOutagesChart=function(e){return c3.generate({size:e.size,bindto:e.id,legend:{position:"right"},data:{x:"x",columns:e.columns,types:{Outages:"bar"},colors:{Outages:"red"}},axis:{y:{},x:{min:+new Date-24*t,max:+new Date,type:"timeseries",tick:{format:e.x_format||"%H:%M"}}},tooltip:{format:{title:function(e){return moment(e).format("DD/MMM/YY HH:mm")+" ("+moment(e).fromNow()+")"},value:function(e,t,r){return moment.duration(1e3*e).humanize()}}}})}}(),function(){"use strict";function e(e,t,r){for(var n=[],a=[],i=0;i<e.length;i++)n.push([e[i][t]]),a.push(Math.round([e[i][r]]));return{time:n,data:a}}window.Charting=window.Charting||{};var t=6e4,r=60*t;Charting.renderOutages=function(t){var n=e(t.outages,"timestamp","downtime"),a=n.data.map(function(e){return e/1e3}),i=n.time;return i.splice(0,0,+new Date-24*r),i.push(+new Date),a.splice(0,0,0),a.push(0),i.splice(0,0,"x"),a.splice(0,0,"Outages"),Charting.generateOutagesChart({size:t.size,id:t.id,x_format:t.x_format,columns:[i,a],max:t.max})},Charting.renderLatency=function(t){var r=e(t.latency,"t","l"),n=r.data,a=r.time;a.splice(0,0,"x"),n.splice(0,0,"Latency");var i=n.slice();return i[0]="Threshold",i=i.map(function(e){return isNaN(e)?e:t.threshold}),Charting.generateLatencyChart({size:t.size,id:t.id,x_format:t.x_format,columns:[a,n,i],max:t.max})}}(),angular.module("watchmenControllers",[]),function(){"use strict";var e=angular.module("watchmenControllers");e.controller("ServiceAddCtrl",["$scope","$state","$filter","$stateParams","Service",function(e,t,r,n,a){e.service=new a,e.service.timeout=1e4,e.service.warningThreshold=5e3,e.service.interval=6e4,e.service.failureInterval=3e4,e.service.port=80,e.service.pingServiceName="http-head",e.addService=function(){e.service.$save(function(){t.go("services")},function(t){console.log(t),e.serviceAddErrors=t.data.errors})},e.cancel=function(){t.go("services")}}])}(),function(){"use strict";var e=angular.module("watchmenControllers");e.controller("ServiceDetailCtrl",["$scope","$filter","$stateParams","Report","ngTableUtils","usSpinnerService","$timeout",function(e,t,r,n,a,i,o){i.spin("spinner-1"),e.loading=!0,e.showConfig=!1,e.serviceDetails=n.get({id:r.id},function(t){i.stop("spinner-1"),e.loading=!1,e.latestOutages=t.status.latestOutages;var r=t.status.lastHour.latency,n=t.status.last24Hours.latency,a=t.status.lastWeek.latency,s=_.max(r.list,function(e){return e.l}),l=_.max(n.list,function(e){return e.l}),c=_.max(a.list,function(e){return e.l}),u=_.max([s.l,l.l,c.l]),d=$(".view-frame").width(),m={height:150,width:d};o(function(){t.status.last24Hours.outages.length>0&&Charting.renderOutages({outages:t.status.last24Hours.outages,id:"#chart-outages-last-24hour",size:{height:100,width:d}}),r.list.length>0&&(e.showLastHourChart=!0,Charting.renderLatency({threshold:t.service.warningThreshold,latency:r.list,id:"#chart-last-hour",size:m,max:u})),n.list.length>8&&(e.showLast24Chart=!0,Charting.renderLatency({threshold:t.service.warningThreshold,latency:n.list,id:"#chart-last-24-hours",size:m,max:u})),a.list.length>1&&(e.showLastWeekChart=!0,Charting.renderLatency({threshold:t.service.warningThreshold,latency:a.list,id:"#chart-last-week",size:m,x_format:"%d/%m",max:u}))},0)})}])}(),function(){"use strict";var e,t=3e3,r=angular.module("watchmenControllers");r.controller("ServiceListCtrl",["$scope","$filter","$timeout","Report","Service","usSpinnerService","ngTableUtils",function(r,n,a,i,o,s,l){function c(){a.cancel(e),e=a(function(){d(c,u)},t)}function u(e){r.errorLoadingServices="Error loading data from remote server",console.error(e),c()}function d(e,t){r.services=i.query(function(t){r[m]=t,r.tableParams.reload(),r.errorLoadingServices=null,g.loaded(),e()},t)}var m="tableServicesData";r[m]=[],r.tableParams=l.createngTableParams(m,r,n,25);var g={loading:function(){s.spin("spinner-1"),r.loading=!0},loaded:function(){s.stop("spinner-1"),r.loading=!1}};g.loading(),r["delete"]=function(e){confirm("Are you sure?")&&o["delete"]({id:e},function(){d(function(){},function(){r.errorLoadingServices="Error loading data from remote server"})})},d(c,u)}])}();
+(function(){
+
+    'use strict';
+
+    /* App Module */
+
+    var watchmenApp = angular.module('watchmenApp', [
+        'ui.router',
+        'angularSpinner',
+        'ngTable', // table sorting and pagination
+        'angularMoment',
+        'angularMSTime',
+        'watchmenControllers',
+        'watchmenFactories',
+        'ngResource'
+    ]);
+
+    watchmenApp.config(function($stateProvider, $locationProvider, $urlRouterProvider) {
+
+        $locationProvider.html5Mode(true);
+
+        $stateProvider.state('services', {
+            url: '/services',
+            templateUrl: 'service-list.html',
+            controller: 'ServiceListCtrl'
+        }).state('viewService', {
+            url: '/services/:id/view',
+            templateUrl: 'service-detail.html',
+            controller: 'ServiceDetailCtrl'
+        }).state('newService', {
+            url: '/services/add',
+            templateUrl: 'service-add.html',
+            controller: 'ServiceAddCtrl'
+        }).state('editService', {
+            url: '/services/:id/edit',
+            templateUrl: 'service-edit.html',
+            controller: 'ServiceEditCtrl'
+        });
+
+        $urlRouterProvider.when('/', '/services');
+    });
+
+})();
+
+(function () {
+
+  'use strict';
+
+  angular.module('watchmenFactories', []);
+
+  var factories = angular.module('watchmenFactories');
+
+  factories.factory('Report', function($resource) {
+    return $resource('/api/report/services/:id');
+    //return $resource('http://ec2-54-204-149-175.compute-1.amazonaws.com:3334/api/report/services/:id');
+  });
+
+  factories.factory('Service', function($resource) {
+    return $resource('/api/services/:id');
+  });
+
+})();
+(function () {
+
+  'use strict';
+
+  var SAVE_PARAMS_IN_LOCALSTORAGE = false;
+
+  angular.module('watchmenFactories').factory('ngTableUtils', function(ngTableParams) {
+
+    /**
+     * Returns local stored or default parameters for ngTable.
+     * @param key
+     * @param pageSize
+     * @returns {Object} parameters
+     */
+
+    function getDefaultParameters(key, pageSize) {
+      var defaults = {
+        page: 1,
+        count: pageSize || 10,
+        debugMode: true
+      };
+
+      if (SAVE_PARAMS_IN_LOCALSTORAGE && window.localStorage) {
+        if (window.localStorage.getItem(key)) {
+          return JSON.parse(window.localStorage.getItem(key));
+        } else {
+          return defaults;
+        }
+      }
+      else {
+        return defaults;
+      }
+    }
+
+    function createngTableParams(key, $scope, $filter, count) {
+      return new ngTableParams(getDefaultParameters(key, count),
+          {
+
+            total: $scope[key].length, // length of data
+
+            getData: function ($defer, params) {
+
+              var data = $scope[key];
+
+              params.total(data.length); // needed for pagination
+
+              var orderedData = params.sorting() ? $filter('orderBy')(data, params.orderBy()) : data;
+
+              var paginatedData = orderedData.slice((params.page() - 1) * params.count(), params.page() * params.count());
+
+              $defer.resolve(paginatedData);
+
+              var paramsForStorage = {
+                sorting: params.sorting(),
+                count: params.count(),
+                page: params.page()
+              };
+
+              if (window.localStorage) {
+                window.localStorage.setItem(key, JSON.stringify(paramsForStorage));
+              }
+            }
+          });
+    }
+
+    return {
+      createngTableParams: createngTableParams
+    };
+
+  });
+
+})();
+(function () {
+
+  'use strict';
+
+  window.Charting = window.Charting || {};
+
+  /**
+   *
+   * @param options.size
+   * @param options.id
+   * @param options.columns
+   * @param options.x_format
+   * @returns {*}
+   */
+  Charting.generateLatencyChart = function (options) {
+
+    return c3.generate({
+      size: options.size,
+      bindto: options.id,
+      legend: {
+        position: 'right'
+      },
+      data: {
+        x: 'x',
+        columns: options.columns,
+        types: {
+          Latency: 'area-spline',
+          Threshold: 'spline'
+        },
+        colors: {
+          Latency: 'green',
+          Threshold: 'orange'
+        }
+      },
+      axis: {
+        y: {
+          max: isNaN(options.max) ? 0 : options.max,
+          tick: {
+            values: [200, 500, 1000, 2000, 3000, 4000, 5000, 7000, 10000, 15000, 20000, 30000]
+          }
+        },
+        x: {
+          type: 'timeseries',
+          tick: {
+            format: options.x_format || '%H:%M'
+          }
+        }
+      },
+      tooltip: {
+        format: {
+          title: function (d) {
+            return moment(d).format('DD/MMM/YY HH:mm') + ' (' + moment(d).fromNow() + ')';
+          },
+          value: function (value, ratio, id) {
+            if (id == 'Outages') {
+              return moment.duration(value).humanize();
+            }
+            else {
+              return value + ' ms.';
+            }
+          }
+        }
+      }
+    });
+
+  };
+
+
+})();
+
+(function () {
+
+  'use strict';
+
+  window.Charting = window.Charting || {};
+
+  var MINUTE = 60 * 1000;
+  var HOUR = 60 * MINUTE;
+
+  /**
+   *
+   * @param options.size
+   * @param options.id
+   * @param options.columns
+   * @param options.x_format
+   * @returns {*}
+   */
+  Charting.generateOutagesChart = function (options) {
+
+    return c3.generate({
+      size: options.size,
+      bindto: options.id,
+      legend: {
+        position: 'right'
+      },
+      data: {
+        x: 'x',
+        columns: options.columns,
+        types: {
+          Outages: 'bar'
+        },
+        colors: {
+          Outages: 'red'
+        }
+      },
+      axis: {
+        y: {
+
+        },
+        x: {
+          min: +new Date() - 24 * HOUR,
+          max: +new Date(),
+          type: 'timeseries',
+          tick: {
+            format: options.x_format || '%H:%M'
+          }
+        }
+      },
+      tooltip: {
+        format: {
+          title: function (d) {
+            return moment(d).format('DD/MMM/YY HH:mm') + ' (' + moment(d).fromNow() + ')';
+          },
+          value: function (value, ratio, id) {
+            return moment.duration(value * 1000).humanize();
+          }
+        }
+      }
+    });
+  };
+
+})();
+
+(function () {
+
+  'use strict';
+
+  window.Charting = window.Charting || {};
+
+  var MINUTE = 60 * 1000;
+  var HOUR = 60 * MINUTE;
+
+  Charting.renderOutages = function (options) {
+
+    var outagesData = parseArrayObjectsForCharting(options.outages, 'timestamp', 'downtime');
+    var outagesSerie = outagesData.data.map(function(y) { return y / 1000; }); // seconds
+    
+    var timeSerie = outagesData.time;
+
+    timeSerie.splice(0, 0, +new Date() - 24 * HOUR);
+    timeSerie.push(+new Date());
+
+    outagesSerie.splice(0, 0, 0);
+    outagesSerie.push(0);
+
+    // create labels
+    timeSerie.splice(0, 0, 'x');
+    outagesSerie.splice(0, 0, 'Outages');
+
+    return Charting.generateOutagesChart({
+      size: options.size,
+      id: options.id,
+      x_format: options.x_format,
+      columns: [timeSerie, outagesSerie],
+      max: options.max
+    });
+  };
+
+  /**
+   * Renders a C3 chart
+   * @param data
+   */
+  Charting.renderLatency = function (options) {
+
+    var latencyData = parseArrayObjectsForCharting(options.latency, 't', 'l');
+
+    var latencySerie = latencyData.data;
+    var timeSerie = latencyData.time;
+
+    timeSerie.splice(0, 0, 'x');
+    latencySerie.splice(0, 0, 'Latency');
+
+    var threshold = latencySerie.slice();
+    threshold[0] = 'Threshold';
+    threshold = threshold.map(function (item) {
+      if (isNaN(item)) {
+        return item;
+      }
+      else {
+        return options.threshold;
+      }
+    });
+
+    return Charting.generateLatencyChart({
+      size: options.size,
+      id: options.id,
+      x_format: options.x_format,
+      columns: [timeSerie, latencySerie, threshold],
+      max: options.max
+    });
+  };
+
+  /**
+   * Converts [{t: 1428220800000, l: 123.23}]
+   *
+   * into
+   *
+   * { time : [1428220800000], data: [123] }
+   *
+   */
+  function parseArrayObjectsForCharting(arr, fieldTime, fieldData) {
+    var time = [];
+    var latency = [];
+    for (var i = 0; i < arr.length; i++) {
+      time.push([arr[i][fieldTime]]);
+      latency.push(Math.round([arr[i][fieldData]]));
+    }
+    return {time: time, data: latency};
+  }
+
+})();
+
+angular.module('watchmenControllers', []);
+(function () {
+
+  'use strict';
+
+
+  var watchmenControllers = angular.module('watchmenControllers');
+
+  /**
+   * Add service
+   */
+
+  watchmenControllers.controller('ServiceAddCtrl', ['$scope', '$state', '$filter', '$stateParams', 'Service',
+    function ($scope, $state, $filter, $stateParams, Service) {
+      $scope.service = new Service();
+
+      // defaults
+      $scope.service.timeout = 10000;
+      $scope.service.warningThreshold = 5000;
+      $scope.service.interval = 60000;
+      $scope.service.failureInterval = 30000;
+      $scope.service.port = 80;
+      $scope.service.pingServiceName = 'http-head';
+
+      $scope.addService = function () {
+        $scope.service.$save(function () {
+          $state.go('services');
+        }, function(response){
+          console.log(response);
+          $scope.serviceAddErrors = response.data.errors;
+        });
+      };
+
+      $scope.cancel = function () {
+        $state.go('services');
+      };
+
+    }]);
+
+})();
+
+(function () {
+
+  'use strict';
+
+
+  var watchmenControllers = angular.module('watchmenControllers');
+
+  /**
+   * Service details
+   */
+
+  watchmenControllers.controller('ServiceDetailCtrl', ['$scope', '$filter', '$stateParams', 'Report', 'ngTableUtils', 'usSpinnerService', '$timeout',
+    function ($scope, $filter, $stateParams, Report, ngTableUtils, usSpinnerService, $timeout) {
+
+      usSpinnerService.spin('spinner-1');
+      $scope.loading = true;
+      $scope.showConfig = false;
+
+      $scope.serviceDetails = Report.get({id: $stateParams.id}, function (data) {
+        usSpinnerService.stop('spinner-1');
+        $scope.loading = false;
+
+        $scope.latestOutages = data.status.latestOutages;
+
+        // charting
+        var latencyLastHour = data.status.lastHour.latency;
+        var latencyLast24Hours = data.status.last24Hours.latency;
+        var latencyLastWeek = data.status.lastWeek.latency;
+
+        var maxLastHour = _.max(latencyLastHour.list, function (item) {
+          return item.l;
+        });
+        var maxLast24Hours = _.max(latencyLast24Hours.list, function (item) {
+          return item.l;
+        });
+        var maxLastWeek = _.max(latencyLastWeek.list, function (item) {
+          return item.l;
+        });
+
+        var max = _.max([maxLastHour.l, maxLast24Hours.l, maxLastWeek.l]);
+        var defaultChartWidth = $('.view-frame').width();
+        var chartSize = {height: 150, width: defaultChartWidth};
+
+        $timeout(function () {
+
+          //experimental
+          if (data.status.last24Hours.outages.length > 0) {
+            Charting.renderOutages({
+              outages: data.status.last24Hours.outages,
+              id: '#chart-outages-last-24hour',
+              size: {height: 100, width: defaultChartWidth}
+            });
+          }
+
+          if (latencyLastHour.list.length > 0) { // at least one successful ping
+            $scope.showLastHourChart = true;
+
+            Charting.renderLatency({
+              threshold: data.service.warningThreshold,
+              latency: latencyLastHour.list,
+              id: '#chart-last-hour',
+              size: chartSize,
+              max: max
+            });
+          }
+
+          if (latencyLast24Hours.list.length > 8) {
+            $scope.showLast24Chart = true;
+            Charting.renderLatency({
+              threshold: data.service.warningThreshold,
+              latency: latencyLast24Hours.list,
+              id: '#chart-last-24-hours',
+              size: chartSize,
+              max: max
+            });
+          }
+
+          if (latencyLastWeek.list.length > 1) {
+            $scope.showLastWeekChart = true;
+            Charting.renderLatency({
+              threshold: data.service.warningThreshold,
+              latency: latencyLastWeek.list,
+              id: '#chart-last-week',
+              size: chartSize,
+              x_format: '%d/%m',
+              max: max
+            });
+          }
+        }, 0);
+      });
+
+    }]);
+
+})();
+
+(function () {
+
+  'use strict';
+
+  var SERVICES_POLLING_INTERVAL = 3000;
+  var timer;
+
+  var watchmenControllers = angular.module('watchmenControllers');
+
+  watchmenControllers.controller('ServiceListCtrl',
+      ['$scope', '$filter', '$timeout', 'Report', 'Service', 'usSpinnerService', 'ngTableUtils',
+        function ($scope, $filter, $timeout, Report, Service, usSpinnerService, ngTableUtils) {
+
+          var key = 'tableServicesData';
+          $scope[key] = [];
+          $scope.tableParams = ngTableUtils.createngTableParams(key, $scope, $filter, 25);
+
+          function scheduleNextTick() {
+            $timeout.cancel(timer);
+            timer = $timeout(function () {
+              reload(scheduleNextTick, loadServicesErrHandler);
+            }, SERVICES_POLLING_INTERVAL);
+          }
+
+          function loadServicesErrHandler(err) {
+            $scope.errorLoadingServices = "Error loading data from remote server";
+            console.error(err);
+            scheduleNextTick();
+          }
+
+          function reload(doneCb, errorHandler){
+            $scope.services = Report.query(function (services) {
+              $scope[key] = services;
+              $scope.tableParams.reload();
+
+              $scope.errorLoadingServices = null; // reset error
+              transition.loaded();
+              doneCb();
+            }, errorHandler);
+          }
+
+          var transition = {
+            loading: function () {
+              usSpinnerService.spin('spinner-1');
+              $scope.loading = true;
+            },
+            loaded: function () {
+              usSpinnerService.stop('spinner-1');
+              $scope.loading = false;
+            }
+          };
+
+          transition.loading();
+
+          $scope.delete = function(id){
+            if (confirm('Are you sure?')) {
+              Service.delete ({id: id}, function(){
+                reload(function(){}, function(){ //TODO: refactor reload
+                  $scope.errorLoadingServices = "Error loading data from remote server";
+                });
+              });
+            }
+          };
+
+          reload(scheduleNextTick, loadServicesErrHandler);
+
+        }]);
+})();

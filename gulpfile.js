@@ -71,7 +71,8 @@ gulp.task('less', function () {
 
 gulp.task('build', function () {
   less();
-  js(true);
+  // TODO: fix string injection based syntax to be able to minify angular code
+  js(false);
   bowerJS(true);
 });
 

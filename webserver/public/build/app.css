@@ -51,6 +51,10 @@ a {
   border-radius: 3px;
 }
 
+.service-add .descr {
+  color: #c2c2c2;
+  padding-top: 0.4em;
+}
 
 .details-page .status .up {
   color: green;
