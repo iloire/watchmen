@@ -17,18 +17,11 @@ describe('service route', function () {
     {id: 1, email: 'admin@domain.com', isAdmin: true},
     {id: 2, email: 'user@domain.com', isAdmin: false}
   ];
-  var agent = request.agent(app);
 
-  var VALID_SERVICE = {
-    name: 'my new service',
-    pingServiceName: 'http-head',
-    url: 'http://apple.com',
-    timeout: 10000,
-    port: 80,
-    interval: 60000,
-    failureInterval: 30000,
-    warningThreshold: 30000
-  };
+  var API_ROOT = '/api';
+  
+  var agent = request.agent(app);
+  var validService;
 
   before(function (done) {
 
@@ -53,6 +46,19 @@ describe('service route', function () {
     server.close();
   });
 
+  beforeEach(function () {
+    validService = {
+      name: 'my new service',
+      pingServiceName: 'http-head',
+      url: 'http://apple.com',
+      timeout: 10000,
+      port: 80,
+      interval: 60000,
+      failureInterval: 30000,
+      warningThreshold: 30000
+    };
+  });
+
   describe('adding service', function () {
 
     describe('with an anonymous user', function () {
@@ -67,7 +73,7 @@ describe('service route', function () {
           interval: 1000
         };
         agent
-            .post('/api/services')
+            .post(API_ROOT + '/services')
             .set('Accept', 'application/json')
             .expect('Content-Type', /json/)
             .expect(401)
@@ -91,7 +97,7 @@ describe('service route', function () {
         };
 
         agent
-            .post('/api/services')
+            .post(API_ROOT + '/services')
             .set('Accept', 'application/json')
             .expect('Content-Type', /json/)
             .expect(400)
@@ -104,11 +110,11 @@ describe('service route', function () {
       it('should add the service if properties are correct', function (done) {
 
         agent
-            .post('/api/services')
+            .post(API_ROOT + '/services')
             .set('Accept', 'application/json')
             .expect('Content-Type', /json/)
             .expect(200)
-            .send(VALID_SERVICE)
+            .send(validService)
             .end(function (err, res) {
               if (err) {
                 return done(err);
@@ -129,7 +135,7 @@ describe('service route', function () {
           interval: 1000
         };
         agent
-            .post('/api/services')
+            .post(API_ROOT + '/services')
             .set('Accept', 'application/json')
             .expect('Content-Type', /json/)
             .expect(401)
@@ -151,7 +157,7 @@ describe('service route', function () {
 
       it('should require auth', function (done) {
         agent
-            .delete('/api/services/222')
+            .delete(API_ROOT + '/services/222')
             .set('Accept', 'application/json')
             .expect('Content-Type', /json/)
             .expect(401)
@@ -170,7 +176,7 @@ describe('service route', function () {
 
       it('should return 404 if service is not found', function (done) {
         agent
-            .delete('/api/services/222')
+            .delete(API_ROOT + '/services/222')
             .set('Accept', 'application/json')
             .expect('Content-Type', /json/)
             .expect(404)
@@ -181,10 +187,10 @@ describe('service route', function () {
       });
 
       it('should delete the service', function (done) {
-        storage.addService(VALID_SERVICE, function (err, id) {
+        storage.addService(validService, function (err, id) {
           assert.ifError(err);
           agent
-              .delete('/api/services/' + id)
+              .delete(API_ROOT + '/services/' + id)
               .set('Accept', 'application/json')
               .expect('Content-Type', /json/)
               .expect(200)
@@ -214,10 +220,10 @@ describe('service route', function () {
       });
 
       it('should not have permissions', function (done) {
-        storage.addService(VALID_SERVICE, function (err, id) {
+        storage.addService(validService, function (err, id) {
           assert.ifError(err);
           agent
-              .delete('/api/services/' + id)
+              .delete(API_ROOT + '/services/' + id)
               .set('Accept', 'application/json')
               .expect('Content-Type', /json/)
               .expect(401)
@@ -240,7 +246,7 @@ describe('service route', function () {
 
       it('should require auth', function (done) {
         agent
-            .post('/api/services/222/reset')
+            .post(API_ROOT + '/services/222/reset')
             .set('Accept', 'application/json')
             .expect('Content-Type', /json/)
             .expect(401)
@@ -259,7 +265,7 @@ describe('service route', function () {
 
       it('should return 404 if service is not found', function (done) {
         agent
-            .post('/api/services/222/reset')
+            .post(API_ROOT + '/services/222/reset')
             .set('Accept', 'application/json')
             .expect('Content-Type', /json/)
             .expect(404)
@@ -270,10 +276,10 @@ describe('service route', function () {
       });
 
       it('should reset the service', function (done) {
-        storage.addService(VALID_SERVICE, function (err, id) {
+        storage.addService(validService, function (err, id) {
           assert.ifError(err);
           agent
-              .post('/api/services/' + id + '/reset')
+              .post(API_ROOT + '/services/' + id + '/reset')
               .set('Accept', 'application/json')
               .expect('Content-Type', /json/)
               .expect(200)
@@ -295,7 +301,7 @@ describe('service route', function () {
 
       it('should not have permissions', function (done) {
         agent
-            .post('/api/services/222/reset')
+            .post(API_ROOT + '/services/222/reset')
             .set('Accept', 'application/json')
             .expect('Content-Type', /json/)
             .expect(401)
@@ -317,16 +323,16 @@ describe('service route', function () {
       });
 
       it('should not require auth', function (done) {
-        storage.addService(VALID_SERVICE, function (err, id) {
+        storage.addService(validService, function (err, id) {
           assert.ifError(err);
           agent
-              .get('/api/services/' + id)
+              .get(API_ROOT + '/services/' + id)
               .set('Accept', 'application/json')
               .expect('Content-Type', /json/)
               .expect(200)
               .send()
               .end(function (err, res) {
-                assert.equal(res.body.interval, VALID_SERVICE.interval);
+                assert.equal(res.body.interval, validService.interval);
                 done(err);
               });
         });
@@ -334,7 +340,7 @@ describe('service route', function () {
 
       it('should return 404 if the service does not exist', function (done) {
         agent
-            .get('/api/services/22222')
+            .get(API_ROOT + '/services/22222')
             .set('Accept', 'application/json')
             .expect('Content-Type', /json/)
             .expect(404)
@@ -343,6 +349,63 @@ describe('service route', function () {
               done(err);
             });
       });
+
+      it('should have not access if restrictions are applied', function (done) {
+        validService.restrictedTo = "other@domain.com";
+        storage.addService(validService, function (err, id) {
+          assert.ifError(err);
+          agent
+              .get(API_ROOT + '/services/' + id)
+              .set('Accept', 'application/json')
+              .expect('Content-Type', /json/)
+              .expect(404)
+              .send()
+              .end(function (err, res) {
+                done(err);
+              });
+        });
+      });
+
+    });
+
+    describe('with an authenticated user', function () {
+
+      before(function (done) {
+        agent.get('/login/test/2').expect(200, done);
+      });
+
+      it('should have not access if restrictions are applied but user is not included', function (done) {
+        validService.restrictedTo = "other@domain.com";
+        storage.addService(validService, function (err, id) {
+          assert.ifError(err);
+          agent
+              .get(API_ROOT + '/services/' + id)
+              .set('Accept', 'application/json')
+              .expect('Content-Type', /json/)
+              .expect(404)
+              .send()
+              .end(function (err, res) {
+                done(err);
+              });
+        });
+      });
+
+      it('should have access if restrictions include the current user', function (done) {
+        validService.restrictedTo = "user@domain.com";
+        storage.addService(validService, function (err, id) {
+          assert.ifError(err);
+          agent
+              .get(API_ROOT + '/services/' + id)
+              .set('Accept', 'application/json')
+              .expect('Content-Type', /json/)
+              .expect(200)
+              .send()
+              .end(function (err, res) {
+                done(err);
+              });
+        });
+      });
+
     });
   });
 
@@ -356,22 +419,23 @@ describe('service route', function () {
 
       it('should not require auth', function (done) {
         storage.flush_database(function () {
-          storage.addService(VALID_SERVICE, function (err, id) {
+          storage.addService(validService, function (err, id) {
             assert.ifError(err);
             agent
-                .get('/api/services')
+                .get(API_ROOT + '/services')
                 .set('Accept', 'application/json')
                 .expect('Content-Type', /json/)
                 .expect(200)
                 .send()
                 .end(function (err, res) {
                   assert.equal(res.body.length, 1);
-                  assert.equal(res.body[0].interval, VALID_SERVICE.interval);
+                  assert.equal(res.body[0].interval, validService.interval);
                   done(err);
                 });
           });
         });
       });
+
     });
   });
 

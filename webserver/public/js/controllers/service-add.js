@@ -32,7 +32,7 @@
 
       $scope.cancel = function () {
         $state.go('services');
-      }
+      };
 
     }]);
 

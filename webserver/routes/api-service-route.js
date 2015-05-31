@@ -2,6 +2,7 @@ var moment = require('moment');
 var express = require('express');
 var debug = require('debug')('service-route');
 var serviceValidator = require('./../../lib/service-validator');
+var accessFilter = require('./../../lib/service-access-filter');
 
 module.exports.getRoutes = function (storage){
 
@@ -98,12 +99,15 @@ module.exports.getRoutes = function (storage){
             return res.status(404).json({ error: 'ID parameter not found' });
         }
         storage.getService(req.params.id, function (err, service){
-            if (!service) {
-                return res.status(404).json({ error: 'Service not found' });
-            }
             if (err) {
                 console.error(err);
                 return res.status(500).json({ error: err });
+            }
+
+            service = accessFilter.filterServices(service, req.user ? req.user.email : null);
+
+            if (!service) {
+                return res.status(404).json({ error: 'Service not found' });
             }
             res.json(service);
         });
@@ -119,7 +123,9 @@ module.exports.getRoutes = function (storage){
                 console.error(err);
                 return res.status(500).json({ error: err });
             }
-            res.json(services);
+            // for small number of services (hundreds) we can go away with post database query filtering.
+            // if you are managing thousands of services you may to index users/services for better performance
+            res.json(accessFilter.filterServices(services, req.user ? req.user.email : null));
         });
     });
 
