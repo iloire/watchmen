@@ -51,6 +51,7 @@
 
                 <% if (user && user.isAdmin) { %>
                 <td>
+                    <button class="btn btn-danger btn-sm" ng-click="reset(row.service.id)">reset</button>
                     <button class="btn btn-danger btn-sm" ng-click="delete(row.service.id)">delete</button>
                 </td>
                 <% } %>

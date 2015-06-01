@@ -50,13 +50,19 @@
 
   var factories = angular.module('watchmenFactories');
 
-  factories.factory('Report', function($resource) {
+  factories.factory('Report', function ($resource) {
     return $resource('/api/report/services/:id');
     //return $resource('http://ec2-54-204-149-175.compute-1.amazonaws.com:3334/api/report/services/:id');
   });
 
-  factories.factory('Service', function($resource) {
-    return $resource('/api/services/:id');
+  factories.factory('Service', function ($resource) {
+    return $resource('/api/services/:id',
+        {id: '@id'}, {
+          reset: {
+            method: 'POST',
+            url: '/api/services/:id/reset'
+          }
+        });
   });
 
 })();
@@ -418,7 +424,7 @@ angular.module('watchmenControllers', []);
         usSpinnerService.stop('spinner-1');
         $scope.loading = false;
       }
-  
+
       function errHandler (err){
         console.log(err);
         loaded();
@@ -563,9 +569,19 @@ angular.module('watchmenControllers', []);
           transition.loading();
 
           $scope.delete = function(id){
-            if (confirm('Are you sure?')) {
+            if (confirm('Are you sure you want to delete this service and all its data?')) {
               Service.delete ({id: id}, function(){
-                reload(function(){}, function(){ //TODO: refactor reload
+                reload(function(){}, function(){
+                  $scope.errorLoadingServices = "Error loading data from remote server";
+                });
+              });
+            }
+          };
+
+          $scope.reset = function(id){
+            if (confirm('Are you sure you want to reset this service\'s data?')) {
+              Service.reset ({id: id}, function(){
+                reload(function(){}, function(){
                   $scope.errorLoadingServices = "Error loading data from remote server";
                 });
               });

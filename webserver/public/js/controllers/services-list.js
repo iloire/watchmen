@@ -53,9 +53,19 @@
           transition.loading();
 
           $scope.delete = function(id){
-            if (confirm('Are you sure?')) {
+            if (confirm('Are you sure you want to delete this service and all its data?')) {
               Service.delete ({id: id}, function(){
-                reload(function(){}, function(){ //TODO: refactor reload
+                reload(function(){}, function(){
+                  $scope.errorLoadingServices = "Error loading data from remote server";
+                });
+              });
+            }
+          };
+
+          $scope.reset = function(id){
+            if (confirm('Are you sure you want to reset this service\'s data?')) {
+              Service.reset ({id: id}, function(){
+                reload(function(){}, function(){
                   $scope.errorLoadingServices = "Error loading data from remote server";
                 });
               });
