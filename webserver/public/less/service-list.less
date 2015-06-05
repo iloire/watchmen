@@ -44,7 +44,6 @@
   }
 
   td a.name {
-    display: block;
     font-size: 1.2em;
   }
 
@@ -68,15 +67,15 @@
 
 .filter-container {
   margin: 10px 0;
-  position: relative;
 
-  input {
-    padding-right: 30px;
+  input.query {
+    padding-left:30px;
+    display:block;
   }
 
-  span {
+  span.icon {
     position: absolute;
-    right: 0px;
+    left: 10px;
     padding: 10px 12px;
     pointer-events: none;
   }

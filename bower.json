@@ -16,7 +16,8 @@
     "c3": "~0.4.10",
     "angular-ui-router": "~0.2.14",
     "angular-ms-time": "~1.0.0",
-    "lodash": "~3.8.0"
+    "lodash": "~3.8.0",
+    "components-font-awesome": "~4.3.0"
   },
   "resolutions": {
     "bootstrap": "~3.3.4"

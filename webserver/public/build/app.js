@@ -544,7 +544,7 @@ angular.module('watchmenControllers', []);
             scheduleNextTick();
           }
 
-          function reload(doneCb, errorHandler){
+          function reload(doneCb, errorHandler) {
             $scope.services = Report.query(function (services) {
               $scope[key] = services;
               $scope.tableParams.reload();
@@ -568,20 +568,29 @@ angular.module('watchmenControllers', []);
 
           transition.loading();
 
-          $scope.delete = function(id){
+          $scope.serviceFilter = function (row) {
+            if ($scope.filterRestrictedToMe && !row.service.restrictedTo) {
+              return false;
+            }
+            return row.service.name.indexOf($scope.query || '') > -1;
+          };
+
+          $scope.delete = function (id) {
             if (confirm('Are you sure you want to delete this service and all its data?')) {
-              Service.delete ({id: id}, function(){
-                reload(function(){}, function(){
+              Service.delete({id: id}, function () {
+                reload(function () {
+                }, function () {
                   $scope.errorLoadingServices = "Error loading data from remote server";
                 });
               });
             }
           };
 
-          $scope.reset = function(id){
+          $scope.reset = function (id) {
             if (confirm('Are you sure you want to reset this service\'s data?')) {
-              Service.reset ({id: id}, function(){
-                reload(function(){}, function(){
+              Service.reset({id: id}, function () {
+                reload(function () {
+                }, function () {
                   $scope.errorLoadingServices = "Error loading data from remote server";
                 });
               });

@@ -144,7 +144,6 @@ a {
   color: gray;
 }
 .table-services td a.name {
-  display: block;
   font-size: 1.2em;
 }
 .table-services span.label {
@@ -162,14 +161,14 @@ a {
 }
 .filter-container {
   margin: 10px 0;
-  position: relative;
 }
-.filter-container input {
-  padding-right: 30px;
+.filter-container input.query {
+  padding-left: 30px;
+  display: block;
 }
-.filter-container span {
+.filter-container span.icon {
   position: absolute;
-  right: 0px;
+  left: 10px;
   padding: 10px 12px;
   pointer-events: none;
 }

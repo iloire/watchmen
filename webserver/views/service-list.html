@@ -8,14 +8,27 @@
 <div class="container-fluid" ng-show="!loading">
     <div class="row">
         <div class="filter-container">
-            <span class="glyphicon glyphicon-search"></span>
-            <input ng-model="query" class="form-control" placeholder="filter by host name"/>
+            <% if (user){ %>
+            <div class="row">
+                <div class="col-md-10">
+                    <span class="icon glyphicon glyphicon-search"></span>
+                    <input ng-model="query" class="query form-control" placeholder="filter by host name"/>
+                </div>
+                <div class="col-md-2">
+                    <input ng-model="filterRestrictedToMe" id="filterRestrictedToMe" type="checkbox"/>
+                    <label for="filterRestrictedToMe">restricted to me</label>
+                </div>
+            </div>
+            <% } else {%>
+            <input ng-model="query" class="query form-control" placeholder="filter by host name"/>
+            <% } %>
         </div>
 
         <table ng-table="tableParams" class="table-services table sorted table-striped table-condensed">
             <tbody>
 
-            <tr ng-class={'result-disabled':row.service.enabled===false,'result-success':!row.status.currentOutage,'result-error':row.status.currentOutage} ng-repeat="row in $data | filter:query">
+            <tr ng-class={'result-disabled':row.service.enabled===false,'result-success':!row.status.currentOutage,'result-error':row.status.currentOutage}
+                ng-repeat="row in $data | filter:serviceFilter">
                 <td data-title="'Status'" sortable="'status.currentOutage'">
                     <span ng-if="row.status.currentOutage" class="label label-danger">offline</span>
                     <span ng-if="!row.status.currentOutage" class="label label-success">online</span>
@@ -32,6 +45,7 @@
                 </td>
 
                 <td data-title="'Host'" sortable="'service.name'">
+                    <i ng-if="row.service.restrictedTo" class="fa fa-lock"></i>
                     <a class="name" href="/services/{{row.service.id}}/view">
                         {{row.service.name}}
                     </a>

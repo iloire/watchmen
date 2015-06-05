@@ -21,7 +21,7 @@
         usSpinnerService.stop('spinner-1');
         $scope.loading = false;
       }
-  
+
       function errHandler (err){
         console.log(err);
         loaded();
