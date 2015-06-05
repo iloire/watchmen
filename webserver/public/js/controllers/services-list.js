@@ -13,7 +13,7 @@
 
           var key = 'tableServicesData';
           $scope[key] = [];
-          $scope.tableParams = ngTableUtils.createngTableParams(key, $scope, $filter, 25);
+          $scope.tableParams = ngTableUtils.createngTableParams(key, $scope, $filter);
 
           function scheduleNextTick() {
             $timeout.cancel(timer);

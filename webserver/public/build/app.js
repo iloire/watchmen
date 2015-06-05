@@ -70,7 +70,7 @@
 
   'use strict';
 
-  var SAVE_PARAMS_IN_LOCALSTORAGE = false;
+  var SAVE_PARAMS_IN_LOCALSTORAGE = true;
 
   angular.module('watchmenFactories').factory('ngTableUtils', function(ngTableParams) {
 
@@ -81,12 +81,8 @@
      * @returns {Object} parameters
      */
 
-    function getDefaultParameters(key, pageSize) {
-      var defaults = {
-        page: 1,
-        count: pageSize || 10,
-        debugMode: true
-      };
+    function getDefaultParameters(key) {
+      var defaults = {};
 
       if (SAVE_PARAMS_IN_LOCALSTORAGE && window.localStorage) {
         if (window.localStorage.getItem(key)) {
@@ -100,28 +96,18 @@
       }
     }
 
-    function createngTableParams(key, $scope, $filter, count) {
-      return new ngTableParams(getDefaultParameters(key, count),
+    function createngTableParams(key, $scope, $filter) {
+      return new ngTableParams(getDefaultParameters(key),
           {
-
             total: $scope[key].length, // length of data
-
+            counts: [],
             getData: function ($defer, params) {
-
               var data = $scope[key];
-
-              params.total(data.length); // needed for pagination
-
               var orderedData = params.sorting() ? $filter('orderBy')(data, params.orderBy()) : data;
-
-              var paginatedData = orderedData.slice((params.page() - 1) * params.count(), params.page() * params.count());
-
-              $defer.resolve(paginatedData);
+              $defer.resolve(orderedData);
 
               var paramsForStorage = {
-                sorting: params.sorting(),
-                count: params.count(),
-                page: params.page()
+                sorting: params.sorting()
               };
 
               if (window.localStorage) {
@@ -529,7 +515,7 @@ angular.module('watchmenControllers', []);
 
           var key = 'tableServicesData';
           $scope[key] = [];
-          $scope.tableParams = ngTableUtils.createngTableParams(key, $scope, $filter, 25);
+          $scope.tableParams = ngTableUtils.createngTableParams(key, $scope, $filter);
 
           function scheduleNextTick() {
             $timeout.cancel(timer);
