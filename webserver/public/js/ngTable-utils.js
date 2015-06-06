@@ -4,7 +4,7 @@
 
   var SAVE_PARAMS_IN_LOCALSTORAGE = true;
 
-  angular.module('watchmenFactories').factory('ngTableUtils', function(ngTableParams) {
+  angular.module('watchmenFactories').factory('ngTableUtils', function (ngTableParams) {
 
     /**
      * Returns local stored or default parameters for ngTable.
@@ -38,12 +38,10 @@
               var orderedData = params.sorting() ? $filter('orderBy')(data, params.orderBy()) : data;
               $defer.resolve(orderedData);
 
-              var paramsForStorage = {
-                sorting: params.sorting()
-              };
-
               if (window.localStorage) {
-                window.localStorage.setItem(key, JSON.stringify(paramsForStorage));
+                window.localStorage.setItem(key, JSON.stringify({
+                  sorting: params.sorting()
+                }));
               }
             }
           });
