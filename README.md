@@ -8,11 +8,11 @@
 - watchmen provides **customizable notifications** if service is down, the response time is over a predefined limit, etc..
 - the code base aims to be small, simple and easy to understand and modify.
 
-There is a <a href="http://letsnode.com/example-of-what-node-is-really-good-at" target="_blank">related blog post about watchmen here</a>.
+Check out this [blog post about watchmen](http://letsnode.com/example-of-what-node-is-really-good-at)
 
 # Demo
 
-Check the **web interface** in action: <a href="http://watchmen.letsnode.com" target="_blank">watchmen.letsnode.com</a>.
+Check the **web interface** in action: [watchmen.letsnode.com](http://watchmen.letsnode.com).
 
 ![List of hosts](https://github.com/iloire/WatchMen/raw/1.x/screenshots/watchmen-01.png)
 
