@@ -40,6 +40,12 @@
                     </a>
                 </td>
 
+                <td class="result-uptime"  data-title="'Uptime last week'" sortable="'status.lastWeek.uptime'">
+                    <a class="name" href="/services/{{row.service.id}}/view">
+                        <span>{{row.status.lastWeek.uptime}}%</span>
+                    </a>
+                </td>
+
                 <td header-class="'hidden-xs'" class="service hidden-xs" data-title="'Service'" sortable="'name'">
                     {{row.service.pingServiceName}}
                 </td>
