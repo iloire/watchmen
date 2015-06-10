@@ -97,7 +97,7 @@ describe('reporting', function () {
 
       it('should return latest 10 outages', function (done) {
         var outageData = [];
-        for (var i = 0; i < 20; i++) {
+        for (var i = 0; i < 12; i++) {
           outageData.push({error: 'my error'});
         }
         var outageDuration = 4 * MINUTE, outageInterval = HOUR;
