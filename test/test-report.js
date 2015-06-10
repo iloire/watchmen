@@ -291,6 +291,34 @@ describe('reporting', function () {
   });
 
   describe('services', function () {
+    it('should return number of outages from the past week', function (done) {
+      var outageData = [
+        // last week
+        {error: 'my error'},
+        {error: 'my error'},
+        {error: 'my error'},
+        {error: 'my error'},
+        {error: 'my error'},
+        {error: 'my error'},
+
+        // prev week
+        {error: 'my error'},
+        {error: 'my error'},
+        {error: 'my error'}
+      ];
+      var outageDuration = 1000, outageInterval = DAY;
+      addOutageRecords(service, outageData, outageDuration, outageInterval, function () {
+        reporter.getServices({}, function (err, servicesData) {
+          assert.ifError(err);
+          var _service = servicesData.filter(function (row) {
+            return row.service.id == service.id
+          })[0];
+          assert.equal(_service.status.lastWeek.numberOutages, 6);
+          done();
+        });
+      });
+    });
+
     it('should return number of outages last 24 hours', function (done) {
       var outageData = [
         {error: 'my error'},
