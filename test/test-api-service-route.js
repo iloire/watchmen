@@ -19,7 +19,7 @@ describe('service route', function () {
   ];
 
   var API_ROOT = '/api';
-  
+
   var agent = request.agent(app);
   var validService;
 
@@ -59,7 +59,7 @@ describe('service route', function () {
     };
   });
 
-  describe('adding service', function () {
+  describe('adding a service', function () {
 
     describe('with an anonymous user', function () {
 
@@ -143,6 +143,94 @@ describe('service route', function () {
             .end(function (err) {
               done(err);
             });
+      });
+    });
+  });
+
+  describe('updating a service', function () {
+
+    describe('with an anonymous user', function () {
+
+      before(function (done) {
+        agent.get('/logout').expect(302, done);
+      });
+
+      it('should require auth', function (done) {
+        storage.addService(validService, function (err, id) {
+          assert.ifError(err);
+          agent
+            .post(API_ROOT + '/services/' + id)
+            .set('Accept', 'application/json')
+            .expect('Content-Type', /json/)
+            .expect(401)
+            .send({})
+            .end(function (err) {
+              done(err);
+            });
+        });
+      });
+    });
+
+    describe('with an authenticated admin user', function () {
+      before(function (done) {
+        agent.get('/login/test/1').expect(200, done);
+      });
+
+      it('should return 400 if the service does not validate', function (done) {
+        delete validService.interval;
+        storage.addService(validService, function (err, id) {
+          assert.ifError(err);
+          agent
+            .post(API_ROOT + '/services/' + id)
+            .set('Accept', 'application/json')
+            .expect('Content-Type', /json/)
+            .expect(400)
+            .send(validService)
+            .end(function (err) {
+              done(err);
+            });
+        });
+      });
+
+      it('should update the service if properties are correct', function (done) {
+        validService.name = "updated name";
+        storage.addService(validService, function (err, id) {
+          assert.ifError(err);
+          agent
+            .post(API_ROOT + '/services/' + id)
+            .set('Accept', 'application/json')
+            .expect('Content-Type', /json/)
+            .expect(200)
+            .send(validService)
+            .end(function (err, res) {
+              if (err) {
+                return done(err);
+              }
+              assert.equal(res.body.name, "updated name");
+              done();
+            });
+        });
+      });
+    });
+
+    describe('with an authenticated normal user', function () {
+      before(function (done) {
+        agent.get('/login/test/2').expect(200, done);
+      });
+
+      it('should not have permissions', function (done) {
+        storage.addService(validService, function (err, id) {
+          assert.ifError(err);
+          agent
+            .post(API_ROOT + '/services/' + id)
+            .set('Accept', 'application/json')
+            .expect('Content-Type', /json/)
+            .expect(401)
+            .send({})
+            .end(function (err) {
+              done(err);
+            });
+        });
       });
     });
   });
