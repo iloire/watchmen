@@ -122,6 +122,322 @@
   });
 
 })();
+angular.module('watchmenControllers', []);
+(function () {
+
+  'use strict';
+
+
+  var watchmenControllers = angular.module('watchmenControllers');
+
+  /**
+   * Add service
+   */
+
+  watchmenControllers.controller('ServiceAddCtrl', ['$scope', '$state', '$filter', '$stateParams', 'Service',
+    function ($scope, $state, $filter, $stateParams, Service) {
+      $scope.service = new Service();
+
+      $scope.editServiceTitle = "New service";
+      // defaults
+      $scope.service.timeout = 10000;
+      $scope.service.warningThreshold = 5000;
+      $scope.service.interval = 60000;
+      $scope.service.failureInterval = 30000;
+      $scope.service.port = 80;
+      $scope.service.pingServiceName = 'http-head';
+
+      $scope.save = function () {
+        $scope.service.$save(function () {
+          $state.go('services');
+        }, function(response){
+          console.error(response);
+          if (response && response.data && response.data.errors) {
+            $scope.serviceAddErrors = response.data.errors;
+          }
+        });
+      };
+
+      $scope.cancel = function () {
+        $state.go('services');
+      };
+
+    }]);
+
+})();
+
+(function () {
+
+  'use strict';
+
+
+  var watchmenControllers = angular.module('watchmenControllers');
+
+  /**
+   * Service details
+   */
+
+  watchmenControllers.controller('ServiceDetailCtrl', ['$scope', '$filter', '$stateParams', 'Report', 'ngTableUtils', 'usSpinnerService', '$timeout',
+    function ($scope, $filter, $stateParams, Report, ngTableUtils, usSpinnerService, $timeout) {
+
+      function loading(){
+        usSpinnerService.spin('spinner-1');
+        $scope.loading = true;
+      }
+
+      function loaded(){
+        usSpinnerService.stop('spinner-1');
+        $scope.loading = false;
+      }
+
+      function errHandler (err){
+        console.log(err);
+        loaded();
+        var msg = err.statusText;
+        if (err.data && err.data.error){
+          msg = err.data.error;
+        }
+        $scope.errorLoadingService = msg;
+      }
+
+      loading();
+      $scope.showConfig = false;
+
+      $scope.serviceDetails = Report.get({id: $stateParams.id}, function (data) {
+
+        loaded();
+        $scope.latestOutages = data.status.latestOutages;
+
+        // charting
+        var latencyLastHour = data.status.lastHour.latency;
+        var latencyLast24Hours = data.status.last24Hours.latency;
+        var latencyLastWeek = data.status.lastWeek.latency;
+
+        var maxLastHour = _.max(latencyLastHour.list, function (item) {
+          return item.l;
+        });
+        var maxLast24Hours = _.max(latencyLast24Hours.list, function (item) {
+          return item.l;
+        });
+        var maxLastWeek = _.max(latencyLastWeek.list, function (item) {
+          return item.l;
+        });
+
+        var max = _.max([maxLastHour.l, maxLast24Hours.l, maxLastWeek.l]);
+        var defaultChartWidth = $('.view-frame').width();
+        var chartSize = {height: 150, width: defaultChartWidth};
+
+        $timeout(function () {
+
+          //experimental
+          if (data.status.last24Hours.outages.length > 0) {
+            Charting.renderOutages({
+              outages: data.status.last24Hours.outages,
+              id: '#chart-outages-last-24hour',
+              size: {height: 100, width: defaultChartWidth}
+            });
+          }
+
+          if (latencyLastHour.list.length > 0) { // at least one successful ping
+            $scope.showLastHourChart = true;
+
+            Charting.renderLatency({
+              threshold: data.service.warningThreshold,
+              latency: latencyLastHour.list,
+              id: '#chart-last-hour',
+              size: chartSize,
+              max: max
+            });
+          }
+
+          if (latencyLast24Hours.list.length > 8) {
+            $scope.showLast24Chart = true;
+            Charting.renderLatency({
+              threshold: data.service.warningThreshold,
+              latency: latencyLast24Hours.list,
+              id: '#chart-last-24-hours',
+              size: chartSize,
+              max: max
+            });
+          }
+
+          if (latencyLastWeek.list.length > 1) {
+            $scope.showLastWeekChart = true;
+            Charting.renderLatency({
+              threshold: data.service.warningThreshold,
+              latency: latencyLastWeek.list,
+              id: '#chart-last-week',
+              size: chartSize,
+              x_format: '%d/%m',
+              max: max
+            });
+          }
+        }, 0);
+      }, errHandler);
+
+    }]);
+
+})();
+
+(function () {
+
+  'use strict';
+
+
+  var watchmenControllers = angular.module('watchmenControllers');
+
+  /**
+   * Add service
+   */
+
+  watchmenControllers.controller('ServiceEditCtrl', ['$scope', '$state', '$filter', '$stateParams', 'Service', 'usSpinnerService',
+    function ($scope, $state, $filter, $stateParams, Service, usSpinnerService) {
+
+      function loading(){
+        usSpinnerService.spin('spinner-1');
+        $scope.loading = true;
+      }
+
+      function loaded(){
+        usSpinnerService.stop('spinner-1');
+        $scope.loading = false;
+      }
+
+      loading();
+
+      $scope.editServiceTitle = "Update service";
+
+      $scope.service = Service.get({id: $stateParams.id}, function(){
+        loaded();
+      }, function(err){
+        console.error(err);
+        loaded();
+      });
+
+      $scope.save = function () {
+        $scope.service.$save(function () {
+          $state.go('services');
+        }, function(response){
+          console.error(response);
+          if (response && response.data && response.data.errors) {
+            $scope.serviceAddErrors = response.data.errors;
+          }
+        });
+      };
+
+      $scope.cancel = function () {
+        $state.go('services');
+      };
+
+    }]);
+
+})();
+
+(function () {
+
+  'use strict';
+
+  var SERVICES_POLLING_INTERVAL = 3000;
+  var timer;
+
+  var watchmenControllers = angular.module('watchmenControllers');
+
+  watchmenControllers.controller('ServiceListCtrl',
+      function ($scope, $filter, $timeout, Report, Service, usSpinnerService, ngTableUtils) {
+
+        var key = 'tableServicesData';
+        $scope[key] = [];
+        $scope.tableParams = ngTableUtils.createngTableParams(key, $scope, $filter);
+
+        var filterToMeCheckboxIsPresent = document.getElementById('filterRestrictedToMe');
+        if (filterToMeCheckboxIsPresent && window.localStorage) {
+          var filterToMeStoredValue = (window.localStorage.getItem('filterRestrictedToMe') === 'true');
+          $timeout(function(){
+            filterToMeCheckboxIsPresent.checked = filterToMeStoredValue;
+            $scope.filterRestrictedToMe = filterToMeStoredValue;
+          }, 0);
+        }
+
+        $scope.$watch('filterRestrictedToMe',
+            function (newValue) {
+              if (window.localStorage) {
+                window.localStorage.setItem('filterRestrictedToMe', newValue);
+              }
+            }
+        );
+
+        function scheduleNextTick() {
+          $timeout.cancel(timer);
+          timer = $timeout(function () {
+            reload(scheduleNextTick, loadServicesErrHandler);
+          }, SERVICES_POLLING_INTERVAL);
+        }
+
+        function loadServicesErrHandler(err) {
+          $scope.errorLoadingServices = "Error loading data from remote server";
+          console.error(err);
+          scheduleNextTick();
+        }
+
+        function reload(doneCb, errorHandler) {
+          $scope.services = Report.query(function (services) {
+            $scope[key] = services;
+            $scope.tableParams.reload();
+
+            $scope.errorLoadingServices = null; // reset error
+            transition.loaded();
+            doneCb();
+          }, errorHandler);
+        }
+
+        var transition = {
+          loading: function () {
+            usSpinnerService.spin('spinner-1');
+            $scope.loading = true;
+          },
+          loaded: function () {
+            usSpinnerService.stop('spinner-1');
+            $scope.loading = false;
+          }
+        };
+
+        transition.loading();
+
+        $scope.serviceFilter = function (row) {
+          if ($scope.filterRestrictedToMe && !row.service.restrictedTo) {
+            return false;
+          }
+          return row.service.name.indexOf($scope.query || '') > -1;
+        };
+
+        $scope.delete = function (id) {
+          if (confirm('Are you sure you want to delete this service and all its data?')) {
+            Service.delete({id: id}, function () {
+              reload(function () {
+              }, function () {
+                $scope.errorLoadingServices = "Error loading data from remote server";
+              });
+            });
+          }
+        };
+
+        $scope.reset = function (id) {
+          if (confirm('Are you sure you want to reset this service\'s data?')) {
+            Service.reset({id: id}, function () {
+              reload(function () {
+              }, function () {
+                $scope.errorLoadingServices = "Error loading data from remote server";
+              });
+            });
+          }
+        };
+
+        reload(scheduleNextTick, loadServicesErrHandler);
+
+      });
+
+})();
+
 (function () {
 
   'use strict';
@@ -341,303 +657,5 @@
     }
     return {time: time, data: latency};
   }
-
-})();
-
-angular.module('watchmenControllers', []);
-(function () {
-
-  'use strict';
-
-
-  var watchmenControllers = angular.module('watchmenControllers');
-
-  /**
-   * Add service
-   */
-
-  watchmenControllers.controller('ServiceAddCtrl', ['$scope', '$state', '$filter', '$stateParams', 'Service',
-    function ($scope, $state, $filter, $stateParams, Service) {
-      $scope.service = new Service();
-
-      $scope.editServiceTitle = "New service";
-      // defaults
-      $scope.service.timeout = 10000;
-      $scope.service.warningThreshold = 5000;
-      $scope.service.interval = 60000;
-      $scope.service.failureInterval = 30000;
-      $scope.service.port = 80;
-      $scope.service.pingServiceName = 'http-head';
-
-      $scope.save = function () {
-        $scope.service.$save(function () {
-          $state.go('services');
-        }, function(response){
-          console.error(response);
-          if (response && response.data && response.data.errors) {
-            $scope.serviceAddErrors = response.data.errors;
-          }
-        });
-      };
-
-      $scope.cancel = function () {
-        $state.go('services');
-      };
-
-    }]);
-
-})();
-
-(function () {
-
-  'use strict';
-
-
-  var watchmenControllers = angular.module('watchmenControllers');
-
-  /**
-   * Service details
-   */
-
-  watchmenControllers.controller('ServiceDetailCtrl', ['$scope', '$filter', '$stateParams', 'Report', 'ngTableUtils', 'usSpinnerService', '$timeout',
-    function ($scope, $filter, $stateParams, Report, ngTableUtils, usSpinnerService, $timeout) {
-
-      function loading(){
-        usSpinnerService.spin('spinner-1');
-        $scope.loading = true;
-      }
-
-      function loaded(){
-        usSpinnerService.stop('spinner-1');
-        $scope.loading = false;
-      }
-
-      function errHandler (err){
-        console.log(err);
-        loaded();
-        var msg = err.statusText;
-        if (err.data && err.data.error){
-          msg = err.data.error;
-        }
-        $scope.errorLoadingService = msg;
-      }
-
-      loading();
-      $scope.showConfig = false;
-
-      $scope.serviceDetails = Report.get({id: $stateParams.id}, function (data) {
-
-        loaded();
-        $scope.latestOutages = data.status.latestOutages;
-
-        // charting
-        var latencyLastHour = data.status.lastHour.latency;
-        var latencyLast24Hours = data.status.last24Hours.latency;
-        var latencyLastWeek = data.status.lastWeek.latency;
-
-        var maxLastHour = _.max(latencyLastHour.list, function (item) {
-          return item.l;
-        });
-        var maxLast24Hours = _.max(latencyLast24Hours.list, function (item) {
-          return item.l;
-        });
-        var maxLastWeek = _.max(latencyLastWeek.list, function (item) {
-          return item.l;
-        });
-
-        var max = _.max([maxLastHour.l, maxLast24Hours.l, maxLastWeek.l]);
-        var defaultChartWidth = $('.view-frame').width();
-        var chartSize = {height: 150, width: defaultChartWidth};
-
-        $timeout(function () {
-
-          //experimental
-          if (data.status.last24Hours.outages.length > 0) {
-            Charting.renderOutages({
-              outages: data.status.last24Hours.outages,
-              id: '#chart-outages-last-24hour',
-              size: {height: 100, width: defaultChartWidth}
-            });
-          }
-
-          if (latencyLastHour.list.length > 0) { // at least one successful ping
-            $scope.showLastHourChart = true;
-
-            Charting.renderLatency({
-              threshold: data.service.warningThreshold,
-              latency: latencyLastHour.list,
-              id: '#chart-last-hour',
-              size: chartSize,
-              max: max
-            });
-          }
-
-          if (latencyLast24Hours.list.length > 8) {
-            $scope.showLast24Chart = true;
-            Charting.renderLatency({
-              threshold: data.service.warningThreshold,
-              latency: latencyLast24Hours.list,
-              id: '#chart-last-24-hours',
-              size: chartSize,
-              max: max
-            });
-          }
-
-          if (latencyLastWeek.list.length > 1) {
-            $scope.showLastWeekChart = true;
-            Charting.renderLatency({
-              threshold: data.service.warningThreshold,
-              latency: latencyLastWeek.list,
-              id: '#chart-last-week',
-              size: chartSize,
-              x_format: '%d/%m',
-              max: max
-            });
-          }
-        }, 0);
-      }, errHandler);
-
-    }]);
-
-})();
-
-(function () {
-
-  'use strict';
-
-
-  var watchmenControllers = angular.module('watchmenControllers');
-
-  /**
-   * Add service
-   */
-
-  watchmenControllers.controller('ServiceEditCtrl', ['$scope', '$state', '$filter', '$stateParams', 'Service',
-    function ($scope, $state, $filter, $stateParams, Service) {
-
-      $scope.editServiceTitle = "Update service";
-      $scope.service = Service.get({id: $stateParams.id});
-
-      $scope.save = function () {
-        $scope.service.$save(function () {
-          $state.go('services');
-        }, function(response){
-          console.error(response);
-          if (response && response.data && response.data.errors) {
-            $scope.serviceAddErrors = response.data.errors;
-          }
-        });
-      };
-
-      $scope.cancel = function () {
-        $state.go('services');
-      };
-
-    }]);
-
-})();
-
-(function () {
-
-  'use strict';
-
-  var SERVICES_POLLING_INTERVAL = 3000;
-  var timer;
-
-  var watchmenControllers = angular.module('watchmenControllers');
-
-  watchmenControllers.controller('ServiceListCtrl',
-      function ($scope, $filter, $timeout, Report, Service, usSpinnerService, ngTableUtils) {
-
-        var key = 'tableServicesData';
-        $scope[key] = [];
-        $scope.tableParams = ngTableUtils.createngTableParams(key, $scope, $filter);
-
-        var filterToMeCheckboxIsPresent = document.getElementById('filterRestrictedToMe');
-        if (filterToMeCheckboxIsPresent && window.localStorage) {
-          var filterToMeStoredValue = (window.localStorage.getItem('filterRestrictedToMe') === 'true');
-          $timeout(function(){
-            filterToMeCheckboxIsPresent.checked = filterToMeStoredValue;
-            $scope.filterRestrictedToMe = filterToMeStoredValue;
-          }, 0);
-        }
-
-        $scope.$watch('filterRestrictedToMe',
-            function (newValue) {
-              if (window.localStorage) {
-                window.localStorage.setItem('filterRestrictedToMe', newValue);
-              }
-            }
-        );
-
-        function scheduleNextTick() {
-          $timeout.cancel(timer);
-          timer = $timeout(function () {
-            reload(scheduleNextTick, loadServicesErrHandler);
-          }, SERVICES_POLLING_INTERVAL);
-        }
-
-        function loadServicesErrHandler(err) {
-          $scope.errorLoadingServices = "Error loading data from remote server";
-          console.error(err);
-          scheduleNextTick();
-        }
-
-        function reload(doneCb, errorHandler) {
-          $scope.services = Report.query(function (services) {
-            $scope[key] = services;
-            $scope.tableParams.reload();
-
-            $scope.errorLoadingServices = null; // reset error
-            transition.loaded();
-            doneCb();
-          }, errorHandler);
-        }
-
-        var transition = {
-          loading: function () {
-            usSpinnerService.spin('spinner-1');
-            $scope.loading = true;
-          },
-          loaded: function () {
-            usSpinnerService.stop('spinner-1');
-            $scope.loading = false;
-          }
-        };
-
-        transition.loading();
-
-        $scope.serviceFilter = function (row) {
-          if ($scope.filterRestrictedToMe && !row.service.restrictedTo) {
-            return false;
-          }
-          return row.service.name.indexOf($scope.query || '') > -1;
-        };
-
-        $scope.delete = function (id) {
-          if (confirm('Are you sure you want to delete this service and all its data?')) {
-            Service.delete({id: id}, function () {
-              reload(function () {
-              }, function () {
-                $scope.errorLoadingServices = "Error loading data from remote server";
-              });
-            });
-          }
-        };
-
-        $scope.reset = function (id) {
-          if (confirm('Are you sure you want to reset this service\'s data?')) {
-            Service.reset({id: id}, function () {
-              reload(function () {
-              }, function () {
-                $scope.errorLoadingServices = "Error loading data from remote server";
-              });
-            });
-          }
-        };
-
-        reload(scheduleNextTick, loadServicesErrHandler);
-
-      });
 
 })();
