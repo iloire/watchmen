@@ -41,6 +41,23 @@ describe('redis storage', function(){
       })
     });
 
+    it('should update service', function(done) {
+      var newService = {
+        interval: 1000
+      };
+      redisStorage.addService(newService, function(err, id){
+        redisStorage.getService(id, function(err, service) {
+          assert.equal(service.id, id);
+          assert.equal(service.interval, 1000);
+          service.interval = 2000;
+          redisStorage.updateService(service, function(err, service) {
+            assert.equal(service.interval, 2000);
+            done();
+          });
+        });
+      })
+    });
+
     it('should delete service object', function(done) {
       var newService = {
         interval: 1000
