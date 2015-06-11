@@ -26,8 +26,10 @@
         $scope.service.$save(function () {
           $state.go('services');
         }, function(response){
-          console.log(response);
-          $scope.serviceAddErrors = response.data.errors;
+          console.error(response);
+          if (response && response.data && response.data.errors) {
+            $scope.serviceAddErrors = response.data.errors;
+          }
         });
       };
 
