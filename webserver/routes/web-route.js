@@ -20,6 +20,7 @@ module.exports.getRoutes = function (){
 
   router.get('/services', serveIndex);
   router.get('/services/:id/view', serveIndex);
+  router.get('/services/:id/edit', serveIndex);
   router.get('/services/add', serveIndex);
   router.get('/', serveIndex);
 

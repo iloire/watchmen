@@ -57,7 +57,41 @@ module.exports.getRoutes = function (storage){
                 if (err) {
                     return res.status(500).json({ error: err });
                 }
-                return res.status(200).json({ id: id });
+                return res.json({ id: id });
+            });
+        });
+    });
+
+    /**
+     * Update service
+     */
+
+    router.post('/services/:id', requireAdmin, function(req, res){
+        
+        var id = req.params.id;
+        if (!id) {
+            return res.status(404).json({ error: 'ID parameter not found' });
+        }
+
+        var errors = serviceValidator.validate(req.body);
+        if (errors.length) {
+            return res.status(400).json({ errors: errors });
+        }
+
+        storage.getService(id, function(err, existingService){
+            if (err) {
+                return res.status(500).json({ error: err });
+            }
+
+            if (!existingService) {
+                return res.status(404).json({ error: 'service not found' });
+            }
+
+            storage.updateService(req.body, function(err, service){
+                if (err) {
+                    return res.status(500).json({ error: err });
+                }
+                return res.json(service);
             });
         });
     });
@@ -85,7 +119,7 @@ module.exports.getRoutes = function (storage){
                 if (err) {
                     return res.status(500).json({ error: err });
                 }
-                return res.status(200).json({ id: id });
+                return res.json({ id: id });
             });
         });
     });

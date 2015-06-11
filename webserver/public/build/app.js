@@ -29,7 +29,7 @@
             controller: 'ServiceDetailCtrl'
         }).state('newService', {
             url: '/services/add',
-            templateUrl: 'service-add.html',
+            templateUrl: 'service-edit.html',
             controller: 'ServiceAddCtrl'
         }).state('editService', {
             url: '/services/:id/edit',
@@ -360,6 +360,7 @@ angular.module('watchmenControllers', []);
     function ($scope, $state, $filter, $stateParams, Service) {
       $scope.service = new Service();
 
+      $scope.editServiceTitle = "New service";
       // defaults
       $scope.service.timeout = 10000;
       $scope.service.warningThreshold = 5000;
@@ -368,7 +369,7 @@ angular.module('watchmenControllers', []);
       $scope.service.port = 80;
       $scope.service.pingServiceName = 'http-head';
 
-      $scope.addService = function () {
+      $scope.save = function () {
         $scope.service.$save(function () {
           $state.go('services');
         }, function(response){
@@ -493,6 +494,40 @@ angular.module('watchmenControllers', []);
           }
         }, 0);
       }, errHandler);
+
+    }]);
+
+})();
+
+(function () {
+
+  'use strict';
+
+
+  var watchmenControllers = angular.module('watchmenControllers');
+
+  /**
+   * Add service
+   */
+
+  watchmenControllers.controller('ServiceEditCtrl', ['$scope', '$state', '$filter', '$stateParams', 'Service',
+    function ($scope, $state, $filter, $stateParams, Service) {
+
+      $scope.editServiceTitle = "Update service";
+      $scope.service = Service.get({id: $stateParams.id});
+
+      $scope.save = function () {
+        $scope.service.$save(function () {
+          $state.go('services');
+        }, function(response){
+          console.log(response);
+          $scope.serviceAddErrors = response.data.errors;
+        });
+      };
+
+      $scope.cancel = function () {
+        $state.go('services');
+      };
 
     }]);
 

@@ -51,11 +51,6 @@ a {
   border-radius: 3px;
 }
 
-.service-add .descr {
-  color: #c2c2c2;
-  padding-top: 0.4em;
-}
-
 .details-page .status .up {
   color: green;
   font-weight: bold;
@@ -98,6 +93,11 @@ a {
 }
 .details-page .outages thead td {
   color: #c2c2c2;
+}
+
+.service-edition .descr {
+  color: #c2c2c2;
+  padding-top: 0.4em;
 }
 
 .error,
@@ -171,6 +171,9 @@ a {
   left: 10px;
   padding: 10px 12px;
   pointer-events: none;
+}
+.filter-container div.filter-to-me {
+  padding-top: 5px;
 }
 
 input.ng-dirty.ng-invalid,

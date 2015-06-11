@@ -29,7 +29,7 @@
             controller: 'ServiceDetailCtrl'
         }).state('newService', {
             url: '/services/add',
-            templateUrl: 'service-add.html',
+            templateUrl: 'service-edit.html',
             controller: 'ServiceAddCtrl'
         }).state('editService', {
             url: '/services/:id/edit',
