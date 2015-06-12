@@ -8,7 +8,8 @@ var dummyServiceGenerator = require('./fixtures/dummy-services');
 
 describe('reporting', function () {
 
-  var MINUTE = 60 * 1000; //ms
+  var SECOND = 1000;
+  var MINUTE = SECOND * 60; //ms
   var HOUR = MINUTE * 60; //ms
   var DAY = HOUR * 24; //ms
 
@@ -125,6 +126,58 @@ describe('reporting', function () {
           });
         });
       });
+
+      it('should return last week outages', function (done) {
+        var outageData = [];
+        for (var i = 0; i < 10; i++) {
+          outageData.push({error: 'my error'});
+        }
+        var outageDuration = 1 * HOUR, outageInterval = DAY;
+        addOutageRecords(service, outageData, outageDuration, outageInterval, function () {
+          reporter.getService(service.id, function (err, data) {
+            assert.ifError(err);
+            assert.equal(data.status.lastWeek.outages.length, 6);
+            assert.equal(data.status.lastWeek.numberOutages, 6);
+            done();
+          });
+        });
+      });
+
+      it('should return last 24 hours outages', function (done) {
+        var outageData = [];
+        for (var i = 0; i < 40; i++) {
+          outageData.push({error: 'my error'});
+        }
+        var outageDuration = 1 * MINUTE, outageInterval = HOUR;
+        addOutageRecords(service, outageData, outageDuration, outageInterval, function () {
+          reporter.getService(service.id, function (err, data) {
+            assert.ifError(err);
+            assert.equal(data.status.last24Hours.outages.length, 23);
+            assert.equal(data.status.last24Hours.numberOutages, 23);
+            done();
+          });
+        });
+      });
+
+
+      // TODO: need to optimise report service to only query the DB once.
+
+      //it('should return last hour outages', function (done) {
+      //  var outageData = [];
+      //  for (var i = 0; i < 70; i++) {
+      //    outageData.push({error: 'my error'});
+      //  }
+      //  var outageDuration = 1 * SECOND, outageInterval = MINUTE;
+      //  addOutageRecords(service, outageData, outageDuration, outageInterval, function () {
+      //    reporter.getService(service.id, function (err, data) {
+      //      assert.ifError(err);
+      //      assert.equal(data.status.lastHour.outages.length, 59);
+      //      assert.equal(data.status.lastHour.numberOutages, 59);
+      //      done();
+      //    });
+      //  });
+      //});
+
     });
 
     describe('latency', function () {

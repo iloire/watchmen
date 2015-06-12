@@ -122,6 +122,138 @@
   });
 
 })();
+(function () {
+
+  'use strict';
+
+  window.Charting = window.Charting || {};
+
+  var MINUTE = 60 * 1000;
+
+  /**
+   * Renders a C3 chart
+   * @param data
+   */
+  Charting.render = function (options) {
+
+    var latencyData = parseArrayObjectsForCharting(options.latency, 't', 'l');
+
+    var latencySerie = latencyData.data;
+    var timeSerie = latencyData.time;
+
+    timeSerie.splice(0, 0, 'x');
+    latencySerie.splice(0, 0, 'Latency');
+
+    var outagesRegions = [];
+    if (options.outages) {
+      for (var i = 0; i < options.outages.length; i++) {
+        var outage = options.outages[i];
+        outagesRegions.push({
+          axis: 'x',
+          start: outage.timestamp,
+          end: outage.timestamp + outage.downtime,
+          class: 'region-outage',
+          opacity: 1
+        });
+      }
+    }
+
+    var regions = [
+      {axis: 'y', start: options.threshold, class: 'region-latency-warning'},
+    ].concat(outagesRegions);
+
+    return generateLatencyChart({
+      size: options.size,
+      id: options.id,
+      x_format: options.x_format,
+      columns: [timeSerie, latencySerie],
+      grid: {
+        y: {
+          lines: [
+            {value: options.threshold, text: 'Latency threshold'}
+          ]
+        }
+      },
+      regions: regions,
+      max: options.max
+    });
+  };
+
+  /**
+   * Converts [{t: 1428220800000, l: 123.23}]
+   *
+   * into
+   *
+   * { time : [1428220800000], data: [123] }
+   *
+   */
+  function parseArrayObjectsForCharting(arr, fieldTime, fieldData) {
+    var time = [];
+    var latency = [];
+    for (var i = 0; i < arr.length; i++) {
+      time.push([arr[i][fieldTime]]);
+      latency.push(Math.round([arr[i][fieldData]]));
+    }
+    return {time: time, data: latency};
+  }
+
+  function generateLatencyChart (options) {
+
+    return c3.generate({
+      size: options.size,
+      bindto: options.id,
+      legend: {
+        position: 'right'
+      },
+      data: {
+        x: 'x',
+        columns: options.columns,
+        types: {
+          Latency: 'area-spline',
+          Threshold: 'spline'
+        },
+        colors: {
+          Latency: 'green',
+          Threshold: 'orange'
+        }
+      },
+      axis: {
+        y: {
+          max: isNaN(options.max) ? 0 : options.max,
+          tick: {
+            values: [200, 500, 1000, 2000, 3000, 4000, 5000, 7000, 10000, 15000, 20000, 30000]
+          }
+        },
+        x: {
+          type: 'timeseries',
+          tick: {
+            format: options.x_format || '%H:%M'
+          }
+        }
+      },
+      grid: options.grid,
+      regions: options.regions,
+      tooltip: {
+        format: {
+          title: function (d) {
+            return moment(d).format('DD/MMM/YY HH:mm') + ' (' + moment(d).fromNow() + ')';
+          },
+          value: function (value, ratio, id) {
+            if (id == 'Outages') {
+              return moment.duration(value).humanize();
+            }
+            else {
+              return value + ' ms.';
+            }
+          }
+        }
+      }
+    });
+
+  }
+
+})();
+
 angular.module('watchmenControllers', []);
 (function () {
 
@@ -229,21 +361,12 @@ angular.module('watchmenControllers', []);
 
         $timeout(function () {
 
-          //experimental
-          if (data.status.last24Hours.outages.length > 0) {
-            Charting.renderOutages({
-              outages: data.status.last24Hours.outages,
-              id: '#chart-outages-last-24hour',
-              size: {height: 100, width: defaultChartWidth}
-            });
-          }
-
           if (latencyLastHour.list.length > 0) { // at least one successful ping
             $scope.showLastHourChart = true;
-
-            Charting.renderLatency({
+            Charting.render({
               threshold: data.service.warningThreshold,
               latency: latencyLastHour.list,
+              outages: data.status.lastHour.outages,
               id: '#chart-last-hour',
               size: chartSize,
               max: max
@@ -252,9 +375,10 @@ angular.module('watchmenControllers', []);
 
           if (latencyLast24Hours.list.length > 8) {
             $scope.showLast24Chart = true;
-            Charting.renderLatency({
+            Charting.render({
               threshold: data.service.warningThreshold,
               latency: latencyLast24Hours.list,
+              outages: data.status.last24Hours.outages,
               id: '#chart-last-24-hours',
               size: chartSize,
               max: max
@@ -263,9 +387,10 @@ angular.module('watchmenControllers', []);
 
           if (latencyLastWeek.list.length > 1) {
             $scope.showLastWeekChart = true;
-            Charting.renderLatency({
+            Charting.render({
               threshold: data.service.warningThreshold,
               latency: latencyLastWeek.list,
+              outages: data.status.lastWeek.outages,
               id: '#chart-last-week',
               size: chartSize,
               x_format: '%d/%m',
@@ -435,227 +560,5 @@ angular.module('watchmenControllers', []);
         reload(scheduleNextTick, loadServicesErrHandler);
 
       });
-
-})();
-
-(function () {
-
-  'use strict';
-
-  window.Charting = window.Charting || {};
-
-  /**
-   *
-   * @param options.size
-   * @param options.id
-   * @param options.columns
-   * @param options.x_format
-   * @returns {*}
-   */
-  Charting.generateLatencyChart = function (options) {
-
-    return c3.generate({
-      size: options.size,
-      bindto: options.id,
-      legend: {
-        position: 'right'
-      },
-      data: {
-        x: 'x',
-        columns: options.columns,
-        types: {
-          Latency: 'area-spline',
-          Threshold: 'spline'
-        },
-        colors: {
-          Latency: 'green',
-          Threshold: 'orange'
-        }
-      },
-      axis: {
-        y: {
-          max: isNaN(options.max) ? 0 : options.max,
-          tick: {
-            values: [200, 500, 1000, 2000, 3000, 4000, 5000, 7000, 10000, 15000, 20000, 30000]
-          }
-        },
-        x: {
-          type: 'timeseries',
-          tick: {
-            format: options.x_format || '%H:%M'
-          }
-        }
-      },
-      tooltip: {
-        format: {
-          title: function (d) {
-            return moment(d).format('DD/MMM/YY HH:mm') + ' (' + moment(d).fromNow() + ')';
-          },
-          value: function (value, ratio, id) {
-            if (id == 'Outages') {
-              return moment.duration(value).humanize();
-            }
-            else {
-              return value + ' ms.';
-            }
-          }
-        }
-      }
-    });
-
-  };
-
-
-})();
-
-(function () {
-
-  'use strict';
-
-  window.Charting = window.Charting || {};
-
-  var MINUTE = 60 * 1000;
-  var HOUR = 60 * MINUTE;
-
-  /**
-   *
-   * @param options.size
-   * @param options.id
-   * @param options.columns
-   * @param options.x_format
-   * @returns {*}
-   */
-  Charting.generateOutagesChart = function (options) {
-
-    return c3.generate({
-      size: options.size,
-      bindto: options.id,
-      legend: {
-        position: 'right'
-      },
-      data: {
-        x: 'x',
-        columns: options.columns,
-        types: {
-          Outages: 'bar'
-        },
-        colors: {
-          Outages: 'red'
-        }
-      },
-      axis: {
-        y: {
-
-        },
-        x: {
-          min: +new Date() - 24 * HOUR,
-          max: +new Date(),
-          type: 'timeseries',
-          tick: {
-            format: options.x_format || '%H:%M'
-          }
-        }
-      },
-      tooltip: {
-        format: {
-          title: function (d) {
-            return moment(d).format('DD/MMM/YY HH:mm') + ' (' + moment(d).fromNow() + ')';
-          },
-          value: function (value, ratio, id) {
-            return moment.duration(value * 1000).humanize();
-          }
-        }
-      }
-    });
-  };
-
-})();
-
-(function () {
-
-  'use strict';
-
-  window.Charting = window.Charting || {};
-
-  var MINUTE = 60 * 1000;
-  var HOUR = 60 * MINUTE;
-
-  Charting.renderOutages = function (options) {
-
-    var outagesData = parseArrayObjectsForCharting(options.outages, 'timestamp', 'downtime');
-    var outagesSerie = outagesData.data.map(function(y) { return y / 1000; }); // seconds
-    
-    var timeSerie = outagesData.time;
-
-    timeSerie.splice(0, 0, +new Date() - 24 * HOUR);
-    timeSerie.push(+new Date());
-
-    outagesSerie.splice(0, 0, 0);
-    outagesSerie.push(0);
-
-    // create labels
-    timeSerie.splice(0, 0, 'x');
-    outagesSerie.splice(0, 0, 'Outages');
-
-    return Charting.generateOutagesChart({
-      size: options.size,
-      id: options.id,
-      x_format: options.x_format,
-      columns: [timeSerie, outagesSerie],
-      max: options.max
-    });
-  };
-
-  /**
-   * Renders a C3 chart
-   * @param data
-   */
-  Charting.renderLatency = function (options) {
-
-    var latencyData = parseArrayObjectsForCharting(options.latency, 't', 'l');
-
-    var latencySerie = latencyData.data;
-    var timeSerie = latencyData.time;
-
-    timeSerie.splice(0, 0, 'x');
-    latencySerie.splice(0, 0, 'Latency');
-
-    var threshold = latencySerie.slice();
-    threshold[0] = 'Threshold';
-    threshold = threshold.map(function (item) {
-      if (isNaN(item)) {
-        return item;
-      }
-      else {
-        return options.threshold;
-      }
-    });
-
-    return Charting.generateLatencyChart({
-      size: options.size,
-      id: options.id,
-      x_format: options.x_format,
-      columns: [timeSerie, latencySerie, threshold],
-      max: options.max
-    });
-  };
-
-  /**
-   * Converts [{t: 1428220800000, l: 123.23}]
-   *
-   * into
-   *
-   * { time : [1428220800000], data: [123] }
-   *
-   */
-  function parseArrayObjectsForCharting(arr, fieldTime, fieldData) {
-    var time = [];
-    var latency = [];
-    for (var i = 0; i < arr.length; i++) {
-      time.push([arr[i][fieldTime]]);
-      latency.push(Math.round([arr[i][fieldData]]));
-    }
-    return {time: time, data: latency};
-  }
 
 })();

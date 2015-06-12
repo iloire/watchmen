@@ -61,21 +61,12 @@
 
         $timeout(function () {
 
-          //experimental
-          if (data.status.last24Hours.outages.length > 0) {
-            Charting.renderOutages({
-              outages: data.status.last24Hours.outages,
-              id: '#chart-outages-last-24hour',
-              size: {height: 100, width: defaultChartWidth}
-            });
-          }
-
           if (latencyLastHour.list.length > 0) { // at least one successful ping
             $scope.showLastHourChart = true;
-
-            Charting.renderLatency({
+            Charting.render({
               threshold: data.service.warningThreshold,
               latency: latencyLastHour.list,
+              outages: data.status.lastHour.outages,
               id: '#chart-last-hour',
               size: chartSize,
               max: max
@@ -84,9 +75,10 @@
 
           if (latencyLast24Hours.list.length > 8) {
             $scope.showLast24Chart = true;
-            Charting.renderLatency({
+            Charting.render({
               threshold: data.service.warningThreshold,
               latency: latencyLast24Hours.list,
+              outages: data.status.last24Hours.outages,
               id: '#chart-last-24-hours',
               size: chartSize,
               max: max
@@ -95,9 +87,10 @@
 
           if (latencyLastWeek.list.length > 1) {
             $scope.showLastWeekChart = true;
-            Charting.renderLatency({
+            Charting.render({
               threshold: data.service.warningThreshold,
               latency: latencyLastWeek.list,
+              outages: data.status.lastWeek.outages,
               id: '#chart-last-week',
               size: chartSize,
               x_format: '%d/%m',
