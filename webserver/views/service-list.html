@@ -40,13 +40,13 @@
                     </a>
                 </td>
 
-                <td class="result-uptime"  data-title="'Uptime last week'" sortable="'status.lastWeek.uptime'">
+                <td header-class="'hidden-sm hidden-xs'" class="hidden-sm hidden-xs result-uptime"  data-title="'Uptime last week'" sortable="'status.lastWeek.uptime'">
                     <a class="name" href="/services/{{row.service.id}}/view">
                         <span>{{row.status.lastWeek.uptime}}%</span>
                     </a>
                 </td>
 
-                <td header-class="'hidden-xs'" class="service hidden-xs" data-title="'Service'" sortable="'name'">
+                <td header-class="'hidden-sm hidden-xs'" class="service hidden-sm hidden-xs" data-title="'Service'" sortable="'name'">
                     {{row.service.pingServiceName}}
                 </td>
 
@@ -63,7 +63,7 @@
                     </span>
                 </td>
 
-                <td header-class="'hidden-sm hidden-xs'" class="outages hidden-sm hidden-xs" data-title="'Number outages last 24h'" sortable="'status.last24Hours.numberOutages'">
+                <td header-class="'hidden-sm hidden-xs'" class="outages hidden-sm hidden-xs" data-title="'Outages last 24h'" sortable="'status.last24Hours.numberOutages'">
                     <span class="label label-danger" ng-if="row.status.last24Hours.numberOutages">
                         {{row.status.last24Hours.numberOutages}}
                     </span>
