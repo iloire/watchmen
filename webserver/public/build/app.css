@@ -13,7 +13,15 @@
   fill: red;
 }
 .c3-region.region-latency-warning {
-  fill: yellow;
+  fill: orange;
+}
+.c3-ygrid-line.threshold line {
+  stroke: orange;
+  stroke-width: 2px;
+}
+.c3-ygrid-line.threshold text {
+  fill: orange;
+  font-size: 1.5em;
 }
 
 footer {

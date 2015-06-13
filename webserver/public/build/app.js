@@ -170,7 +170,7 @@
       grid: {
         y: {
           lines: [
-            {value: options.threshold, text: 'Latency threshold'}
+            {value: options.threshold, text: 'latency threshold', class: 'threshold'}
           ]
         }
       },
