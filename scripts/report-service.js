@@ -43,6 +43,7 @@ function run(program, cb){
 }
 
 program
+    .option('-e, --env [env]', 'Storage environment key')
     .option('-s, --service-id <id>', 'Storage environment key')
     .parse(process.argv);
 
