@@ -209,12 +209,10 @@
         x: 'x',
         columns: options.columns,
         types: {
-          Latency: 'area-spline',
-          Threshold: 'spline'
+          Latency: 'area-spline'
         },
         colors: {
-          Latency: 'green',
-          Threshold: 'orange'
+          Latency: 'green'
         }
       },
       axis: {
