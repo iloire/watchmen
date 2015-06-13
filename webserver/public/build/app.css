@@ -19,6 +19,28 @@
   stroke: orange;
   stroke-width: 2px;
 }
+.chart {
+  margin-top: 5px;
+  margin-left: -10px;
+}
+.chart-wrapper {
+  /*-- Tooltip overrides --*/
+}
+.chart-wrapper span {
+  margin-right: 10px;
+  font-size: 1.1em;
+}
+.chart-wrapper span .caption {
+  color: #c2c2c2;
+  font-size: 0.9em;
+}
+.chart-wrapper .c3-tooltip tr {
+  border: 1px solid #c2c2c2;
+  border-radius: 4px;
+}
+.chart-wrapper .c3-tooltip th {
+  background-color: #333;
+}
 .c3-ygrid-line.threshold text {
   fill: orange;
   font-size: 1.5em;
@@ -72,27 +94,6 @@ body {
 .details-page .status .down {
   color: red;
   font-weight: bold;
-}
-.details-page .chart {
-  margin-top: 5px;
-}
-.details-page .chart-wrapper {
-  /*-- Tooltip overrides --*/
-}
-.details-page .chart-wrapper span {
-  margin-right: 10px;
-  font-size: 1.1em;
-}
-.details-page .chart-wrapper span .caption {
-  color: #c2c2c2;
-  font-size: 0.9em;
-}
-.details-page .chart-wrapper .c3-tooltip tr {
-  border: 1px solid #c2c2c2;
-  border-radius: 4px;
-}
-.details-page .chart-wrapper .c3-tooltip th {
-  background-color: #333;
 }
 .details-page h2 {
   margin: 10px 0;
