@@ -334,6 +334,7 @@ angular.module('watchmenControllers', []);
 
       loading();
       $scope.showConfig = false;
+      $scope.isAdmin = window.isAdmin;
 
       $scope.serviceDetails = Report.get({id: $stateParams.id}, function (data) {
 

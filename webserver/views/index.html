@@ -37,6 +37,7 @@
 
   <footer>
     <% if (user) { %>
+      <script>window.isAdmin=<%=user.isAdmin%>;</script>
       logged as <%=user.email%> (<a target="_self" href="/logout">logout</a>)
     <% } else { %>
       <a target="_self" href="/auth/google">Sign In with Google</a>
