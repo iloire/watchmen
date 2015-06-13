@@ -79,7 +79,7 @@
       size: options.size,
       bindto: options.id,
       legend: {
-        position: 'right'
+        show: false
       },
       data: {
         x: 'x',
