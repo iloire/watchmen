@@ -324,7 +324,7 @@ describe('reporting', function () {
         });
       });
 
-      it('should round uptimes to two decimal points', function (done) {
+      it('should round uptimes to three decimal points', function (done) {
         var outageData = [
           {error: 'my error'},
           {error: 'my error'},
@@ -334,7 +334,7 @@ describe('reporting', function () {
         addOutageRecords(service, outageData, outageDuration, outageInterval, function () {
           reporter.getService(service.id, function (err, data) {
             assert.ifError(err);
-            assert.equal(data.status.lastWeek.uptime, 66.67); // real value without rounding would be 66.66666666666
+            assert.equal(data.status.lastWeek.uptime, 66.667); // real value without rounding would be 66.66666666666
             done();
           });
         });
