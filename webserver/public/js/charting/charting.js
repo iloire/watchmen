@@ -85,7 +85,7 @@
         x: 'x',
         columns: options.columns,
         types: {
-          Latency: 'area-spline'
+          Latency: 'area'
         },
         colors: {
           Latency: 'green'
