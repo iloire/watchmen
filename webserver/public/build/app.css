@@ -1,49 +1,47 @@
-.c3-line-Latency {
+.chart-wrapper .chart {
+  margin-top: 5px;
+  margin-left: -10px;
+  /*-- Tooltip overrides --*/
+}
+.chart-wrapper .chart .c3-line-Latency {
   stroke-width: 1px;
 }
-.c3 .c3-axis-x path,
-.c3 .c3-axis-x line {
+.chart-wrapper .chart .c3 .c3-axis-x path,
+.chart-wrapper .chart .c3 .c3-axis-x line {
   stroke: #c2c2c2;
 }
-.c3 .c3-axis-y path,
-.c3 .c3-axis-y line {
+.chart-wrapper .chart .c3 .c3-axis-y path,
+.chart-wrapper .chart .c3 .c3-axis-y line {
   stroke: #c2c2c2;
 }
-.c3-region.region-outage {
+.chart-wrapper .chart .c3-region.region-outage {
   fill: red;
 }
-.c3-region.region-latency-warning {
+.chart-wrapper .chart .c3-region.region-latency-warning {
   fill: orange;
 }
-.c3-ygrid-line.threshold line {
+.chart-wrapper .chart .c3-ygrid-line.threshold line {
   stroke: orange;
   stroke-width: 2px;
 }
-.chart {
-  margin-top: 5px;
-  margin-left: -10px;
+.chart-wrapper .chart .c3-ygrid-line.threshold text {
+  fill: orange;
+  font-size: 1.5em;
 }
-.chart-wrapper {
-  /*-- Tooltip overrides --*/
-}
-.chart-wrapper span {
+.chart-wrapper .chart span {
   margin-right: 10px;
   font-size: 1.1em;
 }
-.chart-wrapper span .caption {
+.chart-wrapper .chart span .caption {
   color: #c2c2c2;
   font-size: 0.9em;
 }
-.chart-wrapper .c3-tooltip tr {
+.chart-wrapper .chart .c3-tooltip tr {
   border: 1px solid #c2c2c2;
   border-radius: 4px;
 }
-.chart-wrapper .c3-tooltip th {
+.chart-wrapper .chart .c3-tooltip th {
   background-color: #333;
-}
-.c3-ygrid-line.threshold text {
-  fill: orange;
-  font-size: 1.5em;
 }
 
 footer {
