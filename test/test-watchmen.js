@@ -163,6 +163,11 @@ describe('watchmen', function () {
       done();
     });
 
+    it('should not throw errors if options are not provided', function () {
+      var watchmen = new Watchmen([service], new mockedStorage(null));
+      watchmen.startAll();
+    });
+
   });
 
   describe('stop', function(){
