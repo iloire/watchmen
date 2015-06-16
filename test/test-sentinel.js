@@ -27,11 +27,4 @@ describe('sentinel', function () {
     assert.equal(modifiedServices.length, 1);
   });
 
-  it('should filter ignored fields', function () {
-    var dbServices = [{id: '1', pingService: 'val1'}, {id: '2', pingService: 'val1'}];
-    var runningServices =  [{id: '1', pingService: 'val1'}, {id: '2', pingService: 'val2'}];
-    var sentinel = new sentinelFactory([], null);
-    var modifiedServices = sentinel._findModified(dbServices, runningServices);
-    assert.equal(modifiedServices.length, 0);
-  });
 });

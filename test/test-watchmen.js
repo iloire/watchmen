@@ -127,7 +127,8 @@ describe('watchmen', function () {
       watchmen._launch = function () {
         done(); // service ping is invoked
       };
-      watchmen.startAll();
+      watchmen.startAll({ randomDelayOnInit: 1 });
+      clock.tick(1);
       assert.ok(service.running);
     });
 
