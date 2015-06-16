@@ -125,23 +125,23 @@ body {
 .warnings {
   color: orange;
 }
-.table-services tr.result-disabled,
-.table-services tr.result-disabled a {
-  background-color: #f5f5f5;
-  color: gray !important;
-  opacity: 0.5;
-}
-.table-services tr.result-success a {
+.table-services tr.result-success .result-uptime a {
   color: green;
 }
-.table-services tr.result-error a {
+.table-services tr.result-error .result-uptime a {
   color: red;
 }
-.table-services tr.result-warning {
+.table-services tr.result-warning .result-uptime a {
   color: orange;
+}
+.table-services .result-uptime {
+  font-size: 1.3em;
 }
 .table-services th {
   text-align: left;
+}
+.table-services td {
+  font-size: 120%;
 }
 .table-services td.outages {
   color: red;
@@ -152,25 +152,9 @@ body {
 .table-services td.service {
   text-transform: uppercase;
   margin-top: 20px;
-  font-size: 1.2em;
   opacity: 0.6;
+  font-size: 100%;
   color: gray;
-}
-.table-services td a.name {
-  font-size: 1.2em;
-}
-.table-services span.label {
-  font-size: 1.0em;
-  line-height: 2.0em;
-}
-.table-services .last_check {
-  color: #ccc;
-}
-.table-services .time-ago {
-  font-size: 0.9em;
-}
-.table-services td.result-uptime span {
-  font-size: 1.3em;
 }
 .filter-container {
   margin: 10px 0;

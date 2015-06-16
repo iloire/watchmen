@@ -13,7 +13,7 @@
 
     <h2>
         <i title="restricted to me" ng-if="serviceDetails.service.restrictedTo" class="fa fa-lock"></i> {{serviceDetails.service.name}}
-        <a class="edit-link" ng-if="isAdmin" href="/services/{{serviceDetails.service.id}}/edit">edit</a>
+        <a class="edit-link" ng-if="isAdmin" href="/services/{{serviceDetails.service.id}}/edit"><i class="fa fa-edit"></i> edit</a>
     </h2>
 
     <div class="status">

@@ -5,26 +5,28 @@
 
 .table-services {
 
-  tr.result-disabled, tr.result-disabled a {
-    background-color: #f5f5f5;
-    color:gray !important;
-    opacity:0.5;
-  }
-
-  tr.result-success a {
+  tr.result-success .result-uptime a {
     color:green;
   }
 
-  tr.result-error a {
+  tr.result-error .result-uptime a {
     color: red;
   }
 
-  tr.result-warning  {
+  tr.result-warning .result-uptime  a {
     color: orange;
+  }
+
+  .result-uptime {
+    font-size: 1.3em;
   }
 
   th {
     text-align: left;
+  }
+
+  td {
+    font-size:120%;
   }
 
   td.outages {
@@ -38,30 +40,9 @@
   td.service {
     text-transform: uppercase;
     margin-top: 20px;
-    font-size: 1.2em;
     opacity: 0.6;
+    font-size:100%;
     color: gray;
-  }
-
-  td a.name {
-    font-size: 1.2em;
-  }
-
-  span.label {
-    font-size: 1.0em;
-    line-height: 2.0em;
-  }
-
-  .last_check{
-    color:#ccc;
-  }
-
-  .time-ago {
-    font-size: 0.9em;
-  }
-
-  td.result-uptime span{
-    font-size:1.3em;
   }
 }
 

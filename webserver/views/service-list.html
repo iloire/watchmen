@@ -34,13 +34,13 @@
                     <span ng-if="!row.status.currentOutage" class="label label-success">online</span>
                 </td>
 
-                <td class="result-uptime"  data-title="'Uptime last 24h'" sortable="'status.last24Hours.uptime'">
+                <td class="result-uptime"  data-title="'last 24h'" sortable="'status.last24Hours.uptime'">
                     <a class="name" href="/services/{{row.service.id}}/view">
                         <span>{{row.status.last24Hours.uptime}}%</span>
                     </a>
                 </td>
 
-                <td header-class="'hidden-sm hidden-xs'" class="hidden-sm hidden-xs result-uptime"  data-title="'Uptime last week'" sortable="'status.lastWeek.uptime'">
+                <td class="result-uptime hidden-sm hidden-xs" header-class="'hidden-sm hidden-xs'"  data-title="'last week'" sortable="'status.lastWeek.uptime'">
                     <a class="name" href="/services/{{row.service.id}}/view">
                         <span>{{row.status.lastWeek.uptime}}%</span>
                     </a>
@@ -70,10 +70,10 @@
                 </td>
 
                 <% if (user && user.isAdmin) { %>
-                <td>
-                    <a class="btn btn-sm" href="services/{{row.service.id}}/edit">edit</a>
-                    <button class="btn btn-danger btn-sm" ng-click="reset(row.service.id)">reset</button>
-                    <button class="btn btn-danger btn-sm" ng-click="delete(row.service.id)">delete</button>
+                <td nowrap>
+                    <a class="edit btn btn-default btn-xs" href="services/{{row.service.id}}/edit"><i class="fa fa-edit"></i> </a>
+                    <button class="btn btn-default btn-xs" ng-click="reset(row.service.id)"><i class="fa fa-warning"></i> </button>
+                    <button class="btn btn-default btn-xs" ng-click="delete(row.service.id)"><i class="fa fa-remove"></i> </button>
                 </td>
                 <% } %>
 
