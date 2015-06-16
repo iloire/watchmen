@@ -97,6 +97,26 @@ describe('service validator', function () {
     assert.equal(errors.length, 0, errors);
   });
 
+  it('should have valid emails in "alertTo" field', function(){
+    service.alertTo = 'invalidemail, user@domain.com';
+    var errors = serviceValidator.validate(service);
+    assert.equal(errors.length, 1, errors);
+    assert.equal(errors[0].field, 'alertTo');
+  });
+
+  it('should have valid not empty values in "alertTo" field', function(){
+    service.alertTo = 'admin@domain.com, , user@domain.com';
+    var errors = serviceValidator.validate(service);
+    assert.equal(errors.length, 1, errors);
+    assert.equal(errors[0].field, 'alertTo');
+  });
+
+  it('should validate "alertTo" field if correct', function(){
+    service.alertTo = 'admin@domain.com, user@domain.com';
+    var errors = serviceValidator.validate(service);
+    assert.equal(errors.length, 0, errors);
+  });
+
   function checkNonEmpty(field) {
     delete service[field];
     var errors = serviceValidator.validate(service);

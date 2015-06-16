@@ -1,5 +1,5 @@
-module.exports = (function(){
-    return {
-        CONFIG_KEY: "empty"
-    }
+module.exports = (function () {
+  return {
+    CONFIG_KEY: "empty"
+  }
 })();

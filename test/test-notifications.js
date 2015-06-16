@@ -33,9 +33,13 @@ describe('notifications', function () {
 
     it('should require services', function (done) {
       defaultNotificationsConfig.services = null;
+      var mockServiceConfig = {
+        name: 'url info',
+        alertTo: 'email1@domain.com, email2@domain.com'
+      };
       var notificationsService = new NotificationsFactory(defaultNotificationsConfig);
-      notificationsService.sendServiceBackAlert({}, {}, function (err) {
-        assert.equal(err.indexOf('invalid configuration in NotificationService'), 0);
+      notificationsService.sendServiceBackAlert(mockServiceConfig, {}, function (err) {
+        assert.equal(err.indexOf('invalid configuration in NotificationService'), 0, err);
         done();
       });
     });
@@ -54,19 +58,33 @@ describe('notifications', function () {
     it('should return valid services', function (done) {
       var notificationsService = new NotificationsFactory(defaultNotificationsConfig);
       var notificationServices = notificationsService.getEnabledServices();
-      assert.equal(typeof notificationServices[0]._send, 'function');
+      assert.equal(typeof notificationServices[0].send, 'function');
       assert.equal(notificationServices[0].getName(), 'service 2');
       done();
     });
   });
 
   describe('sendServiceDownAlert', function () {
+    it('should not call _send if there are not recipients', function (done) {
+      var mockServiceConfig = {
+        name: 'url info',
+        alertTo: ''
+      };
+      var notificationsService = new NotificationsFactory(defaultNotificationsConfig);
+      notificationsService._send = function () {
+        assert.fail('should not be called');
+      };
+      notificationsService.sendServiceDownAlert(mockServiceConfig, {error: "ERROR"}, function(err){
+        assert.ifError(err);
+        done();
+      });
+    });
+
     it('should call _send with the right parameters', function (done) {
       var mockServiceConfig = {
-        name: 'url info', // hardcoded. this value is actually calculated while loading the services
-        alert_to: ['email1@domain.com', 'email2@domain.com']
+        name: 'url info',
+        alertTo: 'email1@domain.com, email2@domain.com'
       };
-
       var notificationsService = new NotificationsFactory(defaultNotificationsConfig);
       notificationsService._send = function (service, cb) {
         assert.equal(service.to[0], 'email1@domain.com');
@@ -83,10 +101,25 @@ describe('notifications', function () {
 
     beforeEach(function () {
       mockServiceConfig = {
-        name: 'url info', // hardcoded. this value is actually calculated while loading the services
-        alert_to: ['email1@domain.com', 'email2@domain.com'],
+        name: 'url info',
+        alertTo: 'email1@domain.com, email2@domain.com',
         msg: 'is back '
       };
+    });
+
+    it('should not call _send if there are not recipients', function (done) {
+      var mockServiceConfig = {
+        name: 'url info',
+        alertTo: ''
+      };
+      var notificationsService = new NotificationsFactory(defaultNotificationsConfig);
+      notificationsService._send = function () {
+        assert.fail('should not be called');
+      };
+      notificationsService.sendServiceBackAlert(mockServiceConfig, {error: "ERROR"}, function(err){
+        assert.ifError(err);
+        done();
+      });
     });
 
     it('should call _send with the right parameters', function (done) {
@@ -113,9 +146,57 @@ describe('notifications', function () {
     });
   });
 
-  describe('send', function () {
-    it('TODO', function (done) {
-      done();
+  describe('_getRecipients', function () {
+    it('should concat with default list of emails', function () {
+      var mockServiceConfig = {
+        name: 'url info',
+        alertTo: 'email1@domain.com'
+      };
+      var notificationsService = new NotificationsFactory(defaultNotificationsConfig);
+      var emailListResult = notificationsService._getRecipients(mockServiceConfig, ['email2@domain.com']);
+      assert.equal (emailListResult.length, 2);
     });
+
+    it('should avoid duplicates', function () {
+      var mockServiceConfig = {
+        name: 'url info',
+        alertTo: 'email1@domain.com'
+      };
+      var notificationsService = new NotificationsFactory(defaultNotificationsConfig);
+      var emailListResult = notificationsService._getRecipients(mockServiceConfig, ['email1@domain.com']);
+      assert.equal (emailListResult.length, 1);
+    });
+
+    it('should not include empty values from alertTo', function () {
+      var mockServiceConfig = {
+        name: 'url info',
+        alertTo: ''
+      };
+      var notificationsService = new NotificationsFactory(defaultNotificationsConfig);
+      var emailListResult = notificationsService._getRecipients(mockServiceConfig, ['email1@domain.com']);
+      assert.equal (emailListResult.length, 1);
+    });
+
+    it('should not include empty values from additional list of emails', function () {
+      var mockServiceConfig = {
+        name: 'url info',
+        alertTo: 'email1@domain.com'
+      };
+      var notificationsService = new NotificationsFactory(defaultNotificationsConfig);
+      var emailListResult = notificationsService._getRecipients(mockServiceConfig, ['']);
+      assert.equal (emailListResult.length, 1);
+    });
+
+    it('should trim emails', function () {
+      var mockServiceConfig = {
+        name: 'url info',
+        alertTo: '  email1@domain.com  '
+      };
+      var notificationsService = new NotificationsFactory(defaultNotificationsConfig);
+      var emailListResult = notificationsService._getRecipients(mockServiceConfig, ['  email2@domain.com   ']);
+      assert.equal (emailListResult[0], 'email1@domain.com');
+      assert.equal (emailListResult[1], 'email2@domain.com');
+    });
+
   });
 });

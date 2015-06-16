@@ -1,3 +1,4 @@
+var debug = require('debug')('notifications');
 var notificationsFactory = require('../../../lib/notifications/notifications');
 var notificationService = new notificationsFactory();
 
@@ -10,7 +11,12 @@ var eventHandlers = {
    */
 
   onNewOutage: function (service, state) {
-    notificationService.sendServiceDownAlert(service, state);
+    debug('triggering "onNewOutage" notification');
+    notificationService.sendServiceDownAlert(service, state, function(err){
+      if (err){
+        console.error(err);
+      }
+    });
   },
 
   /**
@@ -20,7 +26,12 @@ var eventHandlers = {
    */
 
   onServiceBack: function (service, currentOutage) {
-    notificationService.sendServiceBackAlert(service, {}); // TODO: check second parameter (it was state)
+    debug('triggering "onServiceBack" notification');
+    notificationService.sendServiceBackAlert(service, currentOutage, function(err){
+      if (err){
+        console.error(err);
+      }
+    });
   }
 };
 
@@ -34,7 +45,7 @@ function NotificationsPlugin(watchmen) {
     var configErrors = s.checkConfiguration();
     if (configErrors) {
       console.error(configErrors.red);
-      exit(1);
+      process.exit(1);
     }
   });
 }
