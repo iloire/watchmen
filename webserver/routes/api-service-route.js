@@ -128,7 +128,7 @@ module.exports.getRoutes = function (storage){
      * Load service
      */
 
-    router.get('/services/:id', function(req, res){
+    router.get('/services/:id', requireAdmin, function(req, res){
         if (!req.params.id) {
             return res.status(404).json({ error: 'ID parameter not found' });
         }
@@ -138,7 +138,7 @@ module.exports.getRoutes = function (storage){
                 return res.status(500).json({ error: err });
             }
 
-            service = accessFilter.filterServices(service, req.user ? req.user.email : null);
+            service = accessFilter.filterServices(service, req.user);
 
             if (!service) {
                 return res.status(404).json({ error: 'Service not found' });
@@ -151,7 +151,7 @@ module.exports.getRoutes = function (storage){
      * Load services
      */
 
-    router.get('/services', function(req, res){
+    router.get('/services', requireAdmin, function(req, res){
         storage.getServices({}, function (err, services){
             if (err) {
                 console.error(err);
@@ -159,7 +159,7 @@ module.exports.getRoutes = function (storage){
             }
             // for small number of services (hundreds) we can go away with post database query filtering.
             // if you are managing thousands of services you may to index users/services for better performance
-            res.json(accessFilter.filterServices(services, req.user ? req.user.email : null));
+            res.json(accessFilter.filterServices(services, req.user));
         });
     });
 

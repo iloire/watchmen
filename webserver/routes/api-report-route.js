@@ -6,8 +6,13 @@ var accessFilter = require('./../../lib/service-access-filter');
 module.exports.getRoutes = function (storage){
 
   var reporter = new reporterFactory(storage);
-
   var router = express.Router();
+
+  function removePrivateFields(service) {
+    delete service.alertTo;
+    delete service.restrictedTo;
+    return service;
+  }
 
   /**
    * Load service report
@@ -17,19 +22,21 @@ module.exports.getRoutes = function (storage){
     if (!req.params.id) {
       return res.status(400).json({ error: 'ID parameter not found' });
     }
-    reporter.getService(req.params.id, function (err, service){
+    reporter.getService(req.params.id, function (err, serviceReport){
       if (err) {
         console.error(err);
         return res.status(500).json({ error: err });
       }
 
-      service = accessFilter.filterReports(service, req.user ? req.user.email : null);
+      serviceReport = accessFilter.filterReports(serviceReport, req.user);
 
-      if (!service) {
+      if (!serviceReport) {
         return res.status(404).json({ error: 'Service not found' });
       }
 
-      res.json(service);
+      serviceReport.service = removePrivateFields(serviceReport.service);
+
+      res.json(serviceReport);
     });
   });
 
@@ -38,12 +45,16 @@ module.exports.getRoutes = function (storage){
    */
 
   router.get('/services', function(req, res){
-    reporter.getServices({}, function (err, services){
+    reporter.getServices({}, function (err, serviceReports){
       if (err) {
         console.error(err);
         return res.status(500).json({ error: err });
       }
-      res.json(accessFilter.filterReports(services, req.user ? req.user.email : null));
+      serviceReports = accessFilter.filterReports(serviceReports, req.user).map(function(s){
+        s.service = removePrivateFields(s.service);
+        return s;
+      });
+      res.json(serviceReports);
     });
   });
 

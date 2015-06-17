@@ -4,8 +4,9 @@ var express = require('express');
 var passport = require('passport');
 var mockPassport = require('passport-mock');
 var storageFactory = require('../lib/storage/storage-factory');
-var storage = storageFactory.getStorageInstance('test');
+var superAgentAssertions = require('./lib/util/super-agent-assertions');
 
+var storage = storageFactory.getStorageInstance('test');
 var app = require('../webserver/app')(storage);
 
 describe('service route', function () {
@@ -68,19 +69,17 @@ describe('service route', function () {
       });
 
       it('should require auth', function (done) {
-        var body = {
-          name: 'my new service',
-          interval: 1000
-        };
-        agent
-            .post(API_ROOT + '/services')
-            .set('Accept', 'application/json')
-            .expect('Content-Type', /json/)
-            .expect(401)
-            .send(body)
-            .end(function (err) {
-              done(err);
-            });
+        superAgentAssertions.shouldDenyPostingTo(agent, API_ROOT + '/services', done);
+      });
+    });
+
+    describe('with an authenticated normal user', function () {
+      before(function (done) {
+        agent.get('/login/test/2').expect(200, done);
+      });
+
+      it('should not have permissions', function (done) {
+        superAgentAssertions.shouldDenyPostingTo(agent, API_ROOT + '/services', done);
       });
     });
 
@@ -90,12 +89,10 @@ describe('service route', function () {
       });
 
       it('should return 400 if the service does not validate', function (done) {
-
         var body = {
           name: 'my new service',
           interval: 1000
         };
-
         agent
             .post(API_ROOT + '/services')
             .set('Accept', 'application/json')
@@ -108,7 +105,6 @@ describe('service route', function () {
       });
 
       it('should add the service if properties are correct', function (done) {
-
         agent
             .post(API_ROOT + '/services')
             .set('Accept', 'application/json')
@@ -117,31 +113,10 @@ describe('service route', function () {
             .send(validService)
             .end(function (err, res) {
               if (err) {
+                assert.ok(res.body.id);
                 return done(err);
               }
               done();
-            });
-      });
-    });
-
-    describe('with an authenticated normal user', function () {
-      before(function (done) {
-        agent.get('/login/test/2').expect(200, done);
-      });
-
-      it('should not have permissions', function (done) {
-        var body = {
-          name: 'my new service',
-          interval: 1000
-        };
-        agent
-            .post(API_ROOT + '/services')
-            .set('Accept', 'application/json')
-            .expect('Content-Type', /json/)
-            .expect(401)
-            .send(body)
-            .end(function (err) {
-              done(err);
             });
       });
     });
@@ -158,15 +133,20 @@ describe('service route', function () {
       it('should require auth', function (done) {
         storage.addService(validService, function (err, id) {
           assert.ifError(err);
-          agent
-            .post(API_ROOT + '/services/' + id)
-            .set('Accept', 'application/json')
-            .expect('Content-Type', /json/)
-            .expect(401)
-            .send({})
-            .end(function (err) {
-              done(err);
-            });
+          superAgentAssertions.shouldDenyPostingTo(agent, API_ROOT + '/services/' + id, done);
+        });
+      });
+    });
+
+    describe('with an authenticated normal user', function () {
+      before(function (done) {
+        agent.get('/login/test/2').expect(200, done);
+      });
+
+      it('should not have permissions', function (done) {
+        storage.addService(validService, function (err, id) {
+          assert.ifError(err);
+          superAgentAssertions.shouldDenyPostingTo(agent, API_ROOT + '/services/' + id, done);
         });
       });
     });
@@ -181,14 +161,14 @@ describe('service route', function () {
         storage.addService(validService, function (err, id) {
           assert.ifError(err);
           agent
-            .post(API_ROOT + '/services/' + id)
-            .set('Accept', 'application/json')
-            .expect('Content-Type', /json/)
-            .expect(400)
-            .send(validService)
-            .end(function (err) {
-              done(err);
-            });
+              .post(API_ROOT + '/services/' + id)
+              .set('Accept', 'application/json')
+              .expect('Content-Type', /json/)
+              .expect(400)
+              .send(validService)
+              .end(function (err) {
+                done(err);
+              });
         });
       });
 
@@ -197,39 +177,18 @@ describe('service route', function () {
         storage.addService(validService, function (err, id) {
           assert.ifError(err);
           agent
-            .post(API_ROOT + '/services/' + id)
-            .set('Accept', 'application/json')
-            .expect('Content-Type', /json/)
-            .expect(200)
-            .send(validService)
-            .end(function (err, res) {
-              if (err) {
-                return done(err);
-              }
-              assert.equal(res.body.name, "updated name");
-              done();
-            });
-        });
-      });
-    });
-
-    describe('with an authenticated normal user', function () {
-      before(function (done) {
-        agent.get('/login/test/2').expect(200, done);
-      });
-
-      it('should not have permissions', function (done) {
-        storage.addService(validService, function (err, id) {
-          assert.ifError(err);
-          agent
-            .post(API_ROOT + '/services/' + id)
-            .set('Accept', 'application/json')
-            .expect('Content-Type', /json/)
-            .expect(401)
-            .send({})
-            .end(function (err) {
-              done(err);
-            });
+              .post(API_ROOT + '/services/' + id)
+              .set('Accept', 'application/json')
+              .expect('Content-Type', /json/)
+              .expect(200)
+              .send(validService)
+              .end(function (err, res) {
+                if (err) {
+                  return done(err);
+                }
+                assert.equal(res.body.name, "updated name");
+                done();
+              });
         });
       });
     });
@@ -333,15 +292,18 @@ describe('service route', function () {
       });
 
       it('should require auth', function (done) {
-        agent
-            .post(API_ROOT + '/services/222/reset')
-            .set('Accept', 'application/json')
-            .expect('Content-Type', /json/)
-            .expect(401)
-            .send()
-            .end(function (err) {
-              done(err);
-            });
+        superAgentAssertions.shouldDenyPostingTo(agent, API_ROOT + '/services/222/reset', done);
+      });
+    });
+
+    describe('with an authenticated normal user', function () {
+
+      before(function (done) {
+        agent.get('/login/test/2').expect(200, done);
+      });
+
+      it('should not have permissions', function (done) {
+        superAgentAssertions.shouldDenyPostingTo(agent, API_ROOT + '/services/222/reset', done);
       });
     });
 
@@ -380,84 +342,28 @@ describe('service route', function () {
         });
       });
     });
-
-    describe('with a normal user', function () {
-
-      before(function (done) {
-        agent.get('/login/test/2').expect(200, done);
-      });
-
-      it('should not have permissions', function (done) {
-        agent
-            .post(API_ROOT + '/services/222/reset')
-            .set('Accept', 'application/json')
-            .expect('Content-Type', /json/)
-            .expect(401)
-            .send()
-            .end(function (err) {
-              done(err);
-            });
-      });
-    });
-
   });
 
   describe('loading a service', function () {
 
     describe('with an anonymous user', function () {
-
       before(function (done) {
         agent.get('/logout').expect(302, done);
       });
 
-      it('should not require auth', function (done) {
+      it('should require auth', function (done) {
         storage.addService(validService, function (err, id) {
           assert.ifError(err);
-          agent
-              .get(API_ROOT + '/services/' + id)
-              .set('Accept', 'application/json')
-              .expect('Content-Type', /json/)
-              .expect(200)
-              .send()
-              .end(function (err, res) {
-                assert.equal(res.body.interval, validService.interval);
-                done(err);
-              });
-        });
-      });
-
-      it('should return 404 if the service does not exist', function (done) {
-        agent
-            .get(API_ROOT + '/services/22222')
-            .set('Accept', 'application/json')
-            .expect('Content-Type', /json/)
-            .expect(404)
-            .send()
-            .end(function (err) {
-              done(err);
-            });
-      });
-
-      it('should have not access if restrictions are applied', function (done) {
-        validService.restrictedTo = "other@domain.com";
-        storage.addService(validService, function (err, id) {
-          assert.ifError(err);
-          agent
-              .get(API_ROOT + '/services/' + id)
-              .set('Accept', 'application/json')
-              .expect('Content-Type', /json/)
-              .expect(404)
-              .send()
-              .end(function (err, res) {
-                done(err);
-              });
+          superAgentAssertions.shouldReturnStatusCode(agent, {
+            url : API_ROOT + '/services/' + id,
+            statusCode: 401
+          }, done);
         });
       });
 
     });
 
-    describe('with an authenticated user', function () {
-
+    describe('with an authenticated normal user', function () {
       before(function (done) {
         agent.get('/login/test/2').expect(200, done);
       });
@@ -466,20 +372,21 @@ describe('service route', function () {
         validService.restrictedTo = "other@domain.com";
         storage.addService(validService, function (err, id) {
           assert.ifError(err);
-          agent
-              .get(API_ROOT + '/services/' + id)
-              .set('Accept', 'application/json')
-              .expect('Content-Type', /json/)
-              .expect(404)
-              .send()
-              .end(function (err, res) {
-                done(err);
-              });
+          superAgentAssertions.shouldReturnStatusCode(agent, {
+            url : API_ROOT + '/services/' + id,
+            statusCode: 401
+          }, done);
         });
       });
 
-      it('should have access if restrictions include the current user', function (done) {
-        validService.restrictedTo = "user@domain.com";
+    });
+
+    describe('with an authenticated admin user', function () {
+      before(function (done) {
+        agent.get('/login/test/1').expect(200, done);
+      });
+
+      it('should load the service', function (done) {
         storage.addService(validService, function (err, id) {
           assert.ifError(err);
           agent
@@ -489,9 +396,40 @@ describe('service route', function () {
               .expect(200)
               .send()
               .end(function (err, res) {
+                assert.equal(res.body.name, validService.name);
+                assert.equal(res.body.interval, validService.interval);
+                assert.equal(res.body.pingServiceName, validService.pingServiceName);
+                assert.equal(res.body.url, validService.url);
+                assert.equal(res.body.timeout, validService.timeout);
+                assert.equal(res.body.port, validService.port);
+                assert.equal(res.body.failureInterval, validService.failureInterval);
+                assert.equal(res.body.warningThreshold, validService.warningThreshold);
                 done(err);
               });
         });
+      });
+
+      it('should load the service even if it is restricted to another user', function (done) {
+        validService.restrictedTo = 'other@domain.com';
+        storage.addService(validService, function (err, id) {
+          assert.ifError(err);
+          agent
+              .get(API_ROOT + '/services/' + id)
+              .set('Accept', 'application/json')
+              .expect('Content-Type', /json/)
+              .expect(200)
+              .send()
+              .end(function (err, res) {
+                assert.equal(res.body.name, validService.name);
+                done(err);
+              });
+        });
+      });
+      it('should return 404 if the service does not exist', function (done) {
+        superAgentAssertions.shouldReturnStatusCode(agent, {
+          url : API_ROOT + '/services/222222',
+          statusCode: 404
+        }, done);
       });
 
     });
@@ -500,31 +438,65 @@ describe('service route', function () {
   describe('loading all services', function () {
 
     describe('with an anonymous user', function () {
-
       before(function (done) {
         agent.get('/logout').expect(302, done);
       });
 
-      it('should not require auth', function (done) {
+      it('should require auth', function (done) {
         storage.flush_database(function () {
           storage.addService(validService, function (err, id) {
             assert.ifError(err);
-            agent
-                .get(API_ROOT + '/services')
-                .set('Accept', 'application/json')
-                .expect('Content-Type', /json/)
-                .expect(200)
-                .send()
-                .end(function (err, res) {
-                  assert.equal(res.body.length, 1);
-                  assert.equal(res.body[0].interval, validService.interval);
-                  done(err);
-                });
+            superAgentAssertions.shouldReturnStatusCode(agent, {
+              url : API_ROOT + '/services',
+              statusCode: 401
+            }, done);
+          });
+        });
+      });
+    });
+
+    describe('with an authenticated normal user', function () {
+      before(function (done) {
+        agent.get('/login/test/2').expect(200, done);
+      });
+
+      it('should require auth', function (done) {
+        storage.flush_database(function () {
+          storage.addService(validService, function (err, id) {
+            assert.ifError(err);
+            superAgentAssertions.shouldReturnStatusCode(agent, {
+              url : API_ROOT + '/services',
+              statusCode: 401
+            }, done);
           });
         });
       });
 
     });
+
+    describe('with an authenticated admin user', function () {
+      before(function (done) {
+        agent.get('/login/test/1').expect(200, done);
+      });
+
+      it('should load services', function (done) {
+        storage.addService(validService, function (err, id) {
+          assert.ifError(err);
+          agent
+              .get(API_ROOT + '/services/')
+              .set('Accept', 'application/json')
+              .expect('Content-Type', /json/)
+              .expect(200)
+              .send()
+              .end(function (err, res) {
+                assert.equal(res.body.filter(function(s){ return s.id === id; }).length, 1);
+                done(err);
+              });
+        });
+      });
+
+    });
+
   });
 
 });
