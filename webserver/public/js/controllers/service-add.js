@@ -9,8 +9,8 @@
    * Add service
    */
 
-  watchmenControllers.controller('ServiceAddCtrl', ['$scope', '$state', '$filter', '$stateParams', 'Service',
-    function ($scope, $state, $filter, $stateParams, Service) {
+  watchmenControllers.controller('ServiceAddCtrl', ['$scope', '$state', '$filter', '$stateParams', 'Service', 'Report',
+    function ($scope, $state, $filter, $stateParams, Service, Report) {
       $scope.service = new Service();
 
       $scope.editServiceTitle = "New service";
@@ -24,6 +24,7 @@
 
       $scope.save = function () {
         $scope.service.$save(function () {
+          Report.clearCache();
           $state.go('services');
         }, function(response){
           console.error(response);

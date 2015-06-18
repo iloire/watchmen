@@ -49,19 +49,41 @@
   angular.module('watchmenFactories', []);
 
   var factories = angular.module('watchmenFactories');
+  var reportCache;
+  
+  factories.factory('Report', function ($resource, $cacheFactory) {
+    reportCache = $cacheFactory('Services');
 
-  factories.factory('Report', function ($resource) {
-    return $resource('/api/report/services/:id');
-    //return $resource('http://ec2-54-204-149-175.compute-1.amazonaws.com:3334/api/report/services/:id');
+    setInterval(function(){
+      reportCache.removeAll();
+    }, 30000);
+    
+    var Report = $resource('/api/report/services/:id', {id: '@id'}, {
+      'get': { method:'GET', cache: reportCache},
+      'query': { method:'GET', isArray:true, cache: reportCache}
+    });
+
+    Report.clearCache = function () {
+      if (reportCache) {
+        reportCache.removeAll();
+      }
+    };
+
+    return Report;
   });
 
   factories.factory('Service', function ($resource) {
     return $resource('/api/services/:id',
         {id: '@id'}, {
+
+          /**
+           * Rest service data
+           */
           reset: {
             method: 'POST',
             url: '/api/services/:id/reset'
           }
+
         });
   });
 
@@ -264,8 +286,8 @@ angular.module('watchmenControllers', []);
    * Add service
    */
 
-  watchmenControllers.controller('ServiceAddCtrl', ['$scope', '$state', '$filter', '$stateParams', 'Service',
-    function ($scope, $state, $filter, $stateParams, Service) {
+  watchmenControllers.controller('ServiceAddCtrl', ['$scope', '$state', '$filter', '$stateParams', 'Service', 'Report',
+    function ($scope, $state, $filter, $stateParams, Service, Report) {
       $scope.service = new Service();
 
       $scope.editServiceTitle = "New service";
@@ -279,6 +301,7 @@ angular.module('watchmenControllers', []);
 
       $scope.save = function () {
         $scope.service.$save(function () {
+          Report.clearCache();
           $state.go('services');
         }, function(response){
           console.error(response);
@@ -424,8 +447,8 @@ angular.module('watchmenControllers', []);
    * Add service
    */
 
-  watchmenControllers.controller('ServiceEditCtrl', ['$scope', '$state', '$filter', '$stateParams', 'Service', 'usSpinnerService',
-    function ($scope, $state, $filter, $stateParams, Service, usSpinnerService) {
+  watchmenControllers.controller('ServiceEditCtrl', ['$scope', '$state', '$filter', '$stateParams', 'Service', 'Report', 'usSpinnerService',
+    function ($scope, $state, $filter, $stateParams, Service, Report, usSpinnerService) {
 
       function loading(){
         usSpinnerService.spin('spinner-1');
@@ -450,6 +473,7 @@ angular.module('watchmenControllers', []);
 
       $scope.save = function () {
         $scope.service.$save(function () {
+          Report.clearCache();
           $state.go('services');
         }, function(response){
           console.error(response);
@@ -471,34 +495,13 @@ angular.module('watchmenControllers', []);
 
   'use strict';
 
-  var SERVICES_POLLING_INTERVAL = 3000;
+  var SERVICES_POLLING_INTERVAL = 10000;
   var timer;
 
   var watchmenControllers = angular.module('watchmenControllers');
 
   watchmenControllers.controller('ServiceListCtrl',
       function ($scope, $filter, $timeout, Report, Service, usSpinnerService, ngTableUtils) {
-
-        var key = 'tableServicesData';
-        $scope[key] = [];
-        $scope.tableParams = ngTableUtils.createngTableParams(key, $scope, $filter);
-
-        var filterToMeCheckboxIsPresent = document.getElementById('filterRestrictedToMe');
-        if (filterToMeCheckboxIsPresent && window.localStorage) {
-          var filterToMeStoredValue = (window.localStorage.getItem('filterRestrictedToMe') === 'true');
-          $timeout(function(){
-            filterToMeCheckboxIsPresent.checked = filterToMeStoredValue;
-            $scope.filterRestrictedToMe = filterToMeStoredValue;
-          }, 0);
-        }
-
-        $scope.$watch('filterRestrictedToMe',
-            function (newValue) {
-              if (window.localStorage) {
-                window.localStorage.setItem('filterRestrictedToMe', newValue);
-              }
-            }
-        );
 
         function scheduleNextTick() {
           $timeout.cancel(timer);
@@ -535,10 +538,31 @@ angular.module('watchmenControllers', []);
           }
         };
 
+        var key = 'tableServicesData';
+        $scope[key] = [];
+        $scope.tableParams = ngTableUtils.createngTableParams(key, $scope, $filter);
+
+        var filterToMeCheckboxIsPresent = document.getElementById('filterRestrictedToMe');
+        if (filterToMeCheckboxIsPresent && window.localStorage) {
+          var filterToMeStoredValue = (window.localStorage.getItem('filterRestrictedToMe') === 'true');
+          $timeout(function(){
+            filterToMeCheckboxIsPresent.checked = filterToMeStoredValue;
+            $scope.filterRestrictedToMe = filterToMeStoredValue;
+          }, 0);
+        }
+
+        $scope.$watch('filterRestrictedToMe',
+            function (newValue) {
+              if (window.localStorage) {
+                window.localStorage.setItem('filterRestrictedToMe', newValue);
+              }
+            }
+        );
+
         transition.loading();
 
         $scope.serviceFilter = function (row) {
-          if ($scope.filterRestrictedToMe && !row.service.restrictedTo) {
+          if ($scope.filterRestrictedToMe && !row.service.isRestricted) {
             return false;
           }
           return row.service.name.indexOf($scope.query || '') > -1;

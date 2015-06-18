@@ -9,8 +9,8 @@
    * Add service
    */
 
-  watchmenControllers.controller('ServiceEditCtrl', ['$scope', '$state', '$filter', '$stateParams', 'Service', 'usSpinnerService',
-    function ($scope, $state, $filter, $stateParams, Service, usSpinnerService) {
+  watchmenControllers.controller('ServiceEditCtrl', ['$scope', '$state', '$filter', '$stateParams', 'Service', 'Report', 'usSpinnerService',
+    function ($scope, $state, $filter, $stateParams, Service, Report, usSpinnerService) {
 
       function loading(){
         usSpinnerService.spin('spinner-1');
@@ -35,6 +35,7 @@
 
       $scope.save = function () {
         $scope.service.$save(function () {
+          Report.clearCache();
           $state.go('services');
         }, function(response){
           console.error(response);

@@ -2,34 +2,13 @@
 
   'use strict';
 
-  var SERVICES_POLLING_INTERVAL = 3000;
+  var SERVICES_POLLING_INTERVAL = 10000;
   var timer;
 
   var watchmenControllers = angular.module('watchmenControllers');
 
   watchmenControllers.controller('ServiceListCtrl',
       function ($scope, $filter, $timeout, Report, Service, usSpinnerService, ngTableUtils) {
-
-        var key = 'tableServicesData';
-        $scope[key] = [];
-        $scope.tableParams = ngTableUtils.createngTableParams(key, $scope, $filter);
-
-        var filterToMeCheckboxIsPresent = document.getElementById('filterRestrictedToMe');
-        if (filterToMeCheckboxIsPresent && window.localStorage) {
-          var filterToMeStoredValue = (window.localStorage.getItem('filterRestrictedToMe') === 'true');
-          $timeout(function(){
-            filterToMeCheckboxIsPresent.checked = filterToMeStoredValue;
-            $scope.filterRestrictedToMe = filterToMeStoredValue;
-          }, 0);
-        }
-
-        $scope.$watch('filterRestrictedToMe',
-            function (newValue) {
-              if (window.localStorage) {
-                window.localStorage.setItem('filterRestrictedToMe', newValue);
-              }
-            }
-        );
 
         function scheduleNextTick() {
           $timeout.cancel(timer);
@@ -65,6 +44,27 @@
             $scope.loading = false;
           }
         };
+
+        var key = 'tableServicesData';
+        $scope[key] = [];
+        $scope.tableParams = ngTableUtils.createngTableParams(key, $scope, $filter);
+
+        var filterToMeCheckboxIsPresent = document.getElementById('filterRestrictedToMe');
+        if (filterToMeCheckboxIsPresent && window.localStorage) {
+          var filterToMeStoredValue = (window.localStorage.getItem('filterRestrictedToMe') === 'true');
+          $timeout(function(){
+            filterToMeCheckboxIsPresent.checked = filterToMeStoredValue;
+            $scope.filterRestrictedToMe = filterToMeStoredValue;
+          }, 0);
+        }
+
+        $scope.$watch('filterRestrictedToMe',
+            function (newValue) {
+              if (window.localStorage) {
+                window.localStorage.setItem('filterRestrictedToMe', newValue);
+              }
+            }
+        );
 
         transition.loading();
 
