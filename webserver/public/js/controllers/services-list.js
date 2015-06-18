@@ -69,7 +69,7 @@
         transition.loading();
 
         $scope.serviceFilter = function (row) {
-          if ($scope.filterRestrictedToMe && !row.service.restrictedTo) {
+          if ($scope.filterRestrictedToMe && !row.service.isRestricted) {
             return false;
           }
           return row.service.name.indexOf($scope.query || '') > -1;

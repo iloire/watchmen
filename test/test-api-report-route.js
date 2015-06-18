@@ -152,7 +152,8 @@ describe('report route', function () {
               .expect('Content-Type', /json/)
               .expect(200)
               .send()
-              .end(function (err) {
+              .end(function (err, res) {
+                assert.equal(res.body.service.isRestricted, true);
                 done(err);
               });
         });
@@ -276,6 +277,7 @@ describe('report route', function () {
               .send()
               .end(function (err, res) {
                 assert.equal(res.body.length, 1);
+                assert.equal(res.body[0].service.isRestricted, true);
                 done(err);
               });
         });
@@ -300,6 +302,7 @@ describe('report route', function () {
               .send()
               .end(function (err, res) {
                 assert.equal(res.body.length, 1);
+                assert.equal(res.body[0].service.isRestricted, true);
                 done(err);
               });
         });

@@ -51,7 +51,7 @@
                 </td>
 
                 <td data-title="'Host'" sortable="'service.name'">
-                    <i title="restricted to me" ng-if="row.service.restrictedTo" class="fa fa-lock"></i>
+                    <i title="restricted to me" ng-if="row.service.isRestricted" class="fa fa-lock"></i>
                     <a class="name" href="/services/{{row.service.id}}/view">
                         {{row.service.name}}
                     </a>

@@ -8,8 +8,12 @@ module.exports.getRoutes = function (storage){
   var reporter = new reporterFactory(storage);
   var router = express.Router();
 
-  function removePrivateFields(service) {
+
+  function handlePrivateFields(service) {
     delete service.alertTo;
+
+    service.isRestricted = !!service.restrictedTo;
+
     delete service.restrictedTo;
     return service;
   }
@@ -34,7 +38,7 @@ module.exports.getRoutes = function (storage){
         return res.status(404).json({ error: 'Service not found' });
       }
 
-      serviceReport.service = removePrivateFields(serviceReport.service);
+      serviceReport.service = handlePrivateFields(serviceReport.service);
 
       res.json(serviceReport);
     });
@@ -51,7 +55,7 @@ module.exports.getRoutes = function (storage){
         return res.status(500).json({ error: err });
       }
       serviceReports = accessFilter.filterReports(serviceReports, req.user).map(function(s){
-        s.service = removePrivateFields(s.service);
+        s.service = handlePrivateFields(s.service);
         return s;
       });
       res.json(serviceReports);
