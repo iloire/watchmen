@@ -1,8 +1,19 @@
+var faker = require('faker');
+
 exports = module.exports = (function(){
+
+  function getRandomName(long) {
+    if (long) {
+      return faker.internet.domainName(); + ' ' + faker.finance.accountName(); // long enough for layout testing purposes
+    }
+    else {
+      return faker.internet.domainName();
+    }
+  }
 
   function generateDummyService (i){
     return {
-      name: 'service n' + i,
+      name: getRandomName(false),
       interval: 60 * 1000,
       failureInterval: 20 * 1000,
       url: 'http://apple.com',
