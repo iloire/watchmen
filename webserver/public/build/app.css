@@ -53,6 +53,14 @@ footer a {
   color: #c2c2c2;
 }
 
+html {
+  box-sizing: border-box;
+}
+*,
+*:before,
+*:after {
+  box-sizing: inherit;
+}
 body {
   padding-top: 60px;
 }
@@ -175,35 +183,40 @@ h2 {
 
 .services-sidebar {
   float: left;
-  width: 15%;
-  padding-right: 1em;
+  padding: 1.2em 0.7em;
+  width: 17%;
 }
-.services-sidebar ul {
-  margin: 1em 0.2em;
-  padding: 0;
-  list-style: none;
+.services-sidebar table {
+  width: 100%;
 }
-.services-sidebar ul li {
-  padding: 2px;
+.services-sidebar table td.name {
+  max-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
-.services-sidebar ul li span.uptime {
+.services-sidebar table td.uptime {
+  width: 30%;
+  padding-right: 10px;
+}
+.services-sidebar table td.uptime span {
   display: inline-block;
   min-width: 45px;
   font-weight: bold;
 }
-.services-sidebar ul li span.uptime.down {
+.services-sidebar table td.uptime span.down {
   color: red;
 }
-.services-sidebar ul li span.uptime.up {
+.services-sidebar table td.uptime span.up {
   color: green;
 }
-.services-sidebar ul li.selected a {
+.services-sidebar table tr.selected a {
   color: black;
   font-weight: bold;
 }
 .details-page {
   float: right;
-  width: 85%;
+  width: 83%;
 }
 @media (max-width: 991px) {
   .details-page {

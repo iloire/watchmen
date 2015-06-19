@@ -1,17 +1,24 @@
 .services-sidebar {
   float:left;
-  width:15%;
-  padding-right:1em;
+  padding:1.2em 0.7em;
+  width:17%;
 
-  ul {
-    margin: 1em 0.2em;
-    padding:0;
-    list-style: none;
+  table {
 
-    li {
-      padding:2px;
+    width: 100%;
 
-      span.uptime {
+    td.name {
+      max-width: 0;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+
+    td.uptime {
+      width:30%;
+      padding-right:10px;
+
+      span {
         display: inline-block;
         min-width: 45px;
         font-weight: bold;
@@ -24,9 +31,9 @@
           color: green;
         }
       }
-
     }
-    li.selected {
+
+    tr.selected {
       a {
         color:black;
         font-weight: bold;
@@ -37,7 +44,7 @@
 
 .details-page{
   float:right;
-  width:85%;
+  width:83%;
 }
 
 @media (max-width: 991px) {
