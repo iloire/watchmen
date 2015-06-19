@@ -334,7 +334,7 @@ angular.module('watchmenControllers', []);
     function ($scope, $filter, $stateParams, Report, ngTableUtils, usSpinnerService, $timeout) {
 
       function getChartSize() {
-        return {height: 150, width: $('.view-frame').width()};
+        return {height: 150, width: $('.details-page').width()};
       }
 
       function loading(){
@@ -361,8 +361,12 @@ angular.module('watchmenControllers', []);
       $scope.showConfig = false;
       $scope.isAdmin = window.isAdmin;
 
-      $scope.serviceDetails = Report.get({id: $stateParams.id}, function (data) {
+      $scope.services = Report.query(function(){  // for sidebar
+        $scope.services.sort(function(a, b){
+          return a.status.last24Hours.uptime - b.status.last24Hours.uptime; });
+      });
 
+      $scope.serviceDetails = Report.get({id: $stateParams.id}, function (data) {
         loaded();
         $scope.latestOutages = data.status.latestOutages;
 
@@ -382,10 +386,10 @@ angular.module('watchmenControllers', []);
         });
 
         var max = _.max([maxLastHour.l, maxLast24Hours.l, maxLastWeek.l]);
-        var chartSize = getChartSize();
 
         var charts = [];
         $timeout(function () {
+          var chartSize = getChartSize();
           if (latencyLastHour.list.length > 0) { // at least one successful ping
             $scope.showLastHourChart = true;
             charts.push(Charting.render({

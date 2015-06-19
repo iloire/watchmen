@@ -1,0 +1,52 @@
+.services-sidebar {
+  float:left;
+  width:15%;
+  padding-right:1em;
+
+  ul {
+    margin: 1em 0.2em;
+    padding:0;
+    list-style: none;
+
+    li {
+      padding:2px;
+
+      span.uptime {
+        display: inline-block;
+        min-width: 45px;
+        font-weight: bold;
+
+        &.down {
+          color:red;
+        }
+
+        &.up {
+          color: green;
+        }
+      }
+
+    }
+    li.selected {
+      a {
+        color:black;
+        font-weight: bold;
+      }
+    }
+  }
+}
+
+.details-page{
+  float:right;
+  width:85%;
+}
+
+@media (max-width: 991px) {
+  .details-page{
+    float:inherit;
+    width:100%;
+  }
+
+  .services-sidebar {
+    display:none;
+  }
+}

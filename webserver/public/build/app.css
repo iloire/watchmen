@@ -59,6 +59,11 @@ body {
 .spinner {
   opacity: 0.8;
 }
+h2 {
+  margin: 10px 0;
+  color: gray;
+  font-size: 2.1em;
+}
 
 .status-overview {
   text-align: right;
@@ -92,11 +97,6 @@ body {
 .details-page .status .down {
   color: red;
   font-weight: bold;
-}
-.details-page h2 {
-  margin: 10px 0;
-  color: gray;
-  font-size: 2.1em;
 }
 .details-page .table-logs th {
   text-align: left;
@@ -171,6 +171,48 @@ body {
 }
 .filter-container div.filter-to-me {
   padding-top: 5px;
+}
+
+.services-sidebar {
+  float: left;
+  width: 15%;
+  padding-right: 1em;
+}
+.services-sidebar ul {
+  margin: 1em 0.2em;
+  padding: 0;
+  list-style: none;
+}
+.services-sidebar ul li {
+  padding: 2px;
+}
+.services-sidebar ul li span.uptime {
+  display: inline-block;
+  min-width: 45px;
+  font-weight: bold;
+}
+.services-sidebar ul li span.uptime.down {
+  color: red;
+}
+.services-sidebar ul li span.uptime.up {
+  color: green;
+}
+.services-sidebar ul li.selected a {
+  color: black;
+  font-weight: bold;
+}
+.details-page {
+  float: right;
+  width: 85%;
+}
+@media (max-width: 991px) {
+  .details-page {
+    float: inherit;
+    width: 100%;
+  }
+  .services-sidebar {
+    display: none;
+  }
 }
 
 input.ng-dirty.ng-invalid,
