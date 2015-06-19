@@ -11,10 +11,11 @@ function js(shouldMinify) {
       .pipe(gulp.dest('webserver/public/build'));
 }
 
-function less() {
+function less(shouldMinify) {
   return gulp.src('./webserver/public/less/*.less')
       .pipe(plugins.less())
       .pipe(plugins.concat('app.css'))
+      .pipe(plugins.if(shouldMinify, plugins.minifyCss({keepBreaks: true})))
       .pipe(gulp.dest('webserver/public/build'));
 }
 
@@ -70,9 +71,9 @@ gulp.task('less', function () {
 });
 
 gulp.task('build', function () {
-  less();
   // TODO: fix string injection based syntax to be able to minify angular code
   js(false);
+  less(true);
   bowerJS(true);
 });
 
