@@ -5,9 +5,12 @@ var accessFilter = require('./../../lib/service-access-filter');
 
 module.exports.getRoutes = function (storage){
 
+  if (!storage) {
+    throw 'storage needed';
+  }
+
   var reporter = new reporterFactory(storage);
   var router = express.Router();
-
 
   function handlePrivateFields(service) {
     delete service.alertTo;

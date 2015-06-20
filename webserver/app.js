@@ -12,6 +12,9 @@ var web = require('./routes/web-route')
 var auth = require('./routes/web-auth-route');
 
 exports = module.exports = function(storage){
+  if (!storage) {
+    throw 'storage is required';
+  }
 
   app.set('views', __dirname + '/views');
   app.set('view engine', 'ejs');

@@ -6,6 +6,10 @@ var accessFilter = require('./../../lib/service-access-filter');
 
 module.exports.getRoutes = function (storage){
 
+    if (!storage){
+        throw 'storage needed';
+    }
+
     var router = express.Router();
 
     var requireAdmin = function(req, res, next){
