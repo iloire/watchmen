@@ -3,8 +3,8 @@ var assert = require('assert');
 var express = require('express');
 var passport = require('passport');
 var mockPassport = require('passport-mock');
-var storageFactory = require('../lib/storage/storage-factory');
 var superAgentAssertions = require('./lib/util/super-agent-assertions');
+var storageFactory = require('../lib/storage/storage-factory');
 
 var storage = storageFactory.getStorageInstance('test');
 var app = require('../webserver/app')(storage);

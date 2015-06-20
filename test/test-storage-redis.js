@@ -8,6 +8,7 @@ var redisStorage = storageFactory.getStorageInstance('test');
 describe('redis storage', function(){
 
   var service;
+  var clock;
   var INITIAL_TIME = 946684800;
 
   beforeEach(function(done){
@@ -22,7 +23,7 @@ describe('redis storage', function(){
   });
 
   after(function(done){
-    clock.restore();
+    clock && clock.restore();
     done();
   });
 

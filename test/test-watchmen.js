@@ -30,7 +30,7 @@ describe('watchmen', function () {
   });
 
   after(function (done) {
-    clock.restore();
+    clock && clock.restore();
     done();
   });
 

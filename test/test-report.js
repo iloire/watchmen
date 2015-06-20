@@ -14,6 +14,7 @@ describe('reporting', function () {
   var DAY = HOUR * 24; //ms
 
   var service;
+  var clock;
   var storage = new redisStorage_class({port: 6666, host: '127.0.0.1', db: 0});
   var reporter;
   var INITIAL_TIME = 946684800000;
@@ -65,7 +66,7 @@ describe('reporting', function () {
   });
 
   after(function (done) {
-    clock.restore();
+    clock && clock.restore();
     done();
   });
 
