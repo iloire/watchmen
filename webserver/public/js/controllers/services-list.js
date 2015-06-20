@@ -24,6 +24,7 @@
         }
 
         function reload(doneCb, errorHandler) {
+          Report.clearCache();
           $scope.services = Report.query(function (services) {
             $scope[key] = services;
             $scope.tableParams.reload();
