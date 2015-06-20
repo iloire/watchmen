@@ -28,8 +28,16 @@ describe('sentinel', function () {
   });
 
   it('should ignore certain fields', function () {
-    var dbServices = [{id: '1', pingServiceOptions: 'options'}, {id: '2', pingServiceOptions: 'options'}];
-    var runningServices = [{id: '1', pingServiceOptions: 'change in options'}, {id: '2', pingServiceOptions: 'options'}];
+    var dbServices = [{id: '1', ignoreField: 'ignored field'}, {id: '2', ignoreField: 'ignored field'}];
+    var runningServices = [{id: '1', ignoreField: 'change in ignored field'}, {id: '2', ignoreField: 'other change in ignored field'}];
+    var sentinel = new sentinelFactory([], null);
+    var modifiedServices = sentinel._findModified(dbServices, runningServices);
+    assert.equal(modifiedServices.length, 0);
+  });
+
+  it('should handle json properties', function () {
+    var dbServices = [{id: '1', pingServiceOptions: {'http-contains': [{name: 'my property'}]}}];
+    var runningServices = [{id: '1', pingServiceOptions: {'http-contains': [{name: 'my property'}]}}];
     var sentinel = new sentinelFactory([], null);
     var modifiedServices = sentinel._findModified(dbServices, runningServices);
     assert.equal(modifiedServices.length, 0);
