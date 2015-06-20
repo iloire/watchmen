@@ -9,8 +9,15 @@
    * Add service
    */
 
-  watchmenControllers.controller('ServiceAddCtrl', ['$scope', '$state', '$filter', '$stateParams', 'Service', 'Report',
-    function ($scope, $state, $filter, $stateParams, Service, Report) {
+  watchmenControllers.controller('ServiceAddCtrl',
+    function (
+        $scope,
+        $state,
+        $filter,
+        $stateParams,
+        Service,
+        Report
+    ) {
       $scope.service = new Service();
 
       $scope.editServiceTitle = "New service";
@@ -38,6 +45,6 @@
         $state.go('services');
       };
 
-    }]);
+    });
 
 })();

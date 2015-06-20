@@ -8,7 +8,15 @@
   var watchmenControllers = angular.module('watchmenControllers');
 
   watchmenControllers.controller('ServiceListCtrl',
-      function ($scope, $filter, $timeout, Report, Service, usSpinnerService, ngTableUtils) {
+      function (
+          $scope,
+          $filter,
+          $timeout,
+          Report,
+          Service,
+          usSpinnerService,
+          ngTableUtils
+      ) {
 
         function scheduleNextTick() {
           $timeout.cancel(timer);

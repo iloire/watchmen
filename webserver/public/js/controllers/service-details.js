@@ -9,8 +9,16 @@
    * Service details
    */
 
-  watchmenControllers.controller('ServiceDetailCtrl', ['$scope', '$filter', '$stateParams', 'Report', 'ngTableUtils', 'usSpinnerService', '$timeout',
-    function ($scope, $filter, $stateParams, Report, ngTableUtils, usSpinnerService, $timeout) {
+  watchmenControllers.controller('ServiceDetailCtrl',
+
+    function (
+        $scope,
+        $filter,
+        $stateParams,
+        Report,
+        ngTableUtils,
+        usSpinnerService,
+        $timeout) {
 
       function getChartSize() {
         return {height: 150, width: $('.details-page').width()};
@@ -115,6 +123,6 @@
         }, 0);
       }, errHandler);
 
-    }]);
+    });
 
 })();

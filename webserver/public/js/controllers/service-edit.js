@@ -2,15 +2,23 @@
 
   'use strict';
 
-
   var watchmenControllers = angular.module('watchmenControllers');
 
   /**
    * Add service
    */
 
-  watchmenControllers.controller('ServiceEditCtrl', ['$scope', '$state', '$filter', '$stateParams', 'Service', 'Report', 'usSpinnerService',
-    function ($scope, $state, $filter, $stateParams, Service, Report, usSpinnerService) {
+  watchmenControllers.controller('ServiceEditCtrl',
+
+    function (
+        $scope,
+        $state,
+        $filter,
+        $stateParams,
+        Service,
+        Report,
+        usSpinnerService
+    ) {
 
       function loading(){
         usSpinnerService.spin('spinner-1');
@@ -52,6 +60,6 @@
         $state.go('services');
       };
 
-    }]);
+    });
 
 })();
