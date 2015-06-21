@@ -67,11 +67,11 @@
             <div class="form-group">
                 <label for="service-pingService-name" class="col-sm-2 control-label">Ping service</label>
                 <div class="col-sm-6">
-                    <select  id="service-pingService-name" ng-model="service.pingServiceName" class="form-control">
-                        <!--TODO: ping services need to be read from packages.json modules instead of being hardcoded-->
-                        <option value="http-head">ping (watchmen-ping-http-head)</option>
-                        <option value="http-contains">response contains (watchmen-ping-http-contains)</option>
+                    <select ng-options="service.name as service.name for service in pingServices"
+                            id="service-pingService-name"
+                            ng-model="service.pingServiceName" class="form-control">
                     </select>
+                    <div ping-service-options ng-model="selectedPingServiceOptions"></div>
                 </div>
                 <div class="descr col-sm-4">Ping service to use</div>
             </div>

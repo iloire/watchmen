@@ -27,6 +27,7 @@ h2{margin:10px 0;color:gray;font-size:2.1em}
 .details-page .table-logs td:first-child{width:70%}
 .details-page .outages thead td{color:#c2c2c2}
 .service-edition .descr{color:#c2c2c2;padding-top:.4em}
+.service-edition .ping-service-option-panel{padding:.5em}
 .critical,.error,.failure{color:red}
 .success{color:green}
 .warning,.warnings{color:orange}
@@ -42,7 +43,7 @@ h2{margin:10px 0;color:gray;font-size:2.1em}
 .filter-container input.query{padding-left:30px;display:block}
 .filter-container span.icon{position:absolute;left:10px;padding:10px 12px;pointer-events:none}
 .filter-container div.filter-to-me{padding-top:5px}
-.services-sidebar{float:left;padding:1.2em .7em;width:17%}
+.services-sidebar{float:left;padding:.8em 2em 0 .4em;width:17%}
 .services-sidebar table{width:100%}
 .services-sidebar table td.name{max-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 .services-sidebar table td.uptime{width:30%;padding-right:10px}

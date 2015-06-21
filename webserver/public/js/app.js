@@ -11,6 +11,7 @@
         'angularMoment',
         'angularMSTime',
         'watchmenControllers',
+        'watchmenDirectives',
         'watchmenFactories',
         'ngResource'
     ]);

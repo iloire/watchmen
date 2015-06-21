@@ -45,6 +45,10 @@
       });
 
       $scope.save = function () {
+
+        $scope.service.pingServiceOptions = {};
+        $scope.service.pingServiceOptions[$scope.service.pingServiceName] = $scope.selectedPingServiceOptions;
+
         $scope.service.$save(function () {
           Report.clearCache();
           $state.go('services');

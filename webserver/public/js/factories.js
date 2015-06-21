@@ -6,6 +6,7 @@
 
   var factories = angular.module('watchmenFactories');
   var reportCache;
+  var pingPluginsCache;
   
   factories.factory('Report', function ($resource, $cacheFactory) {
     reportCache = $cacheFactory('Services');
@@ -43,4 +44,11 @@
         });
   });
 
+  factories.factory('PingPlugins', function ($resource, $cacheFactory) {
+    pingPluginsCache = $cacheFactory('PingPlugins');
+    return $resource('/api/plugins/:id',
+        {id: '@id'}, {
+          'query': { method:'GET', isArray:true, cache: pingPluginsCache}
+        });
+  });
 })();

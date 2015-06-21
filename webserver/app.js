@@ -9,6 +9,7 @@ var compress = require('compression');
 var api = require('./routes/api-service-route')
 var report = require('./routes/api-report-route')
 var web = require('./routes/web-route')
+var plugins = require('./routes/api-ping-plugins-route');
 var auth = require('./routes/web-auth-route');
 
 exports = module.exports = function(storage){
@@ -38,6 +39,7 @@ exports = module.exports = function(storage){
     next();
   });
 
+  app.use('/api/plugins', plugins.getRoutes());
   app.use('/api/report', report.getRoutes(storage));
   app.use('/api', api.getRoutes(storage));
   app.use('/', web.getRoutes(storage));
