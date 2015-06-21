@@ -28,7 +28,7 @@
         </div>
 
         <div ng-if="serviceDetails.status.currentOutage">
-            <span title="Outage" class="down">Site is DOWN!.</span>
+            <span title="Outage" class="down">Site is DOWN!: "{{serviceDetails.status.currentOutage.error}}"</span>
                 Outage ocurred
             <span am-time-ago="serviceDetails.status.currentOutage.timestamp"></span>
         </div>
