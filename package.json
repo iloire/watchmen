@@ -9,8 +9,7 @@
     "test": "mocha -R list -b test/*.js;kill `cat test/redis.pid`",
     "posttest": "kill `cat test/redis.pid`",
     "prestart": "npm install",
-    "start": "redis-server redis.conf; forever --minUptime 1000 --spinSleepTime 2000 start server.js; forever --minUptime 1000 --spinSleepTime 2000 start webserver/app.js 8084; forever list",
-    "stop": "forever stop server.js; forever stop webserver/app.js"
+    "start": "redis-server redis.conf; node run-monitor-server"
   },
   "description": "A simple service monitor",
   "version": "2.5.0",
