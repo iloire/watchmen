@@ -48,7 +48,7 @@ function watch() {
 // ---------------
 
 gulp.task('js-dev', function () {
-  return js(false);
+  return js(true);
 });
 
 gulp.task('js-prod', function () {
