@@ -13,7 +13,7 @@ describe('reporting', function () {
   var HOUR = MINUTE * 60; //ms
   var DAY = HOUR * 24; //ms
 
-  var service;
+  var services;
   var clock;
   var storage = new redisStorage_class({port: 6666, host: '127.0.0.1', db: 0});
   var reporter;
@@ -55,10 +55,9 @@ describe('reporting', function () {
 
       populator.populate(servicesFixtures, storage, function (err) {
         assert.ifError(err);
-
-        storage.getService(servicesFixtures[0].id, function (err, _service) {
+        storage.getServices({}, function (err, _services) {
           assert.ifError(err);
-          service = _service;
+          services = _services;
           done();
         });
       });
@@ -88,8 +87,8 @@ describe('reporting', function () {
           error: 'my error'
         };
 
-        storage.startOutage(service, outageData, function (err) {
-          reporter.getService(service.id, function (err, data) {
+        storage.startOutage(services[0], outageData, function (err) {
+          reporter.getService(services[0].id, function (err, data) {
             assert.ifError(err);
             assert.ok(data.status.currentOutage);
             done();
@@ -103,8 +102,8 @@ describe('reporting', function () {
           outageData.push({error: 'my error'});
         }
         var outageDuration = 4 * MINUTE, outageInterval = HOUR;
-        addOutageRecords(service, outageData, outageDuration, outageInterval, function () {
-          reporter.getService(service.id, function (err, data) {
+        addOutageRecords(services[0], outageData, outageDuration, outageInterval, function () {
+          reporter.getService(services[0].id, function (err, data) {
             assert.ifError(err);
             assert.equal(data.status.latestOutages.length, 10);
             done();
@@ -119,8 +118,8 @@ describe('reporting', function () {
           outageData.push({error: 'my error'});
         }
         var outageDuration = 4 * MINUTE, outageInterval = DAY;
-        addOutageRecords(service, outageData, outageDuration, outageInterval, function () {
-          reporter.getService(service.id, function (err, data) {
+        addOutageRecords(services[0], outageData, outageDuration, outageInterval, function () {
+          reporter.getService(services[0].id, function (err, data) {
             assert.ifError(err);
             assert.equal(data.status.latestOutages.length, 6);
             done();
@@ -134,8 +133,8 @@ describe('reporting', function () {
           outageData.push({error: 'my error'});
         }
         var outageDuration = 1 * HOUR, outageInterval = DAY;
-        addOutageRecords(service, outageData, outageDuration, outageInterval, function () {
-          reporter.getService(service.id, function (err, data) {
+        addOutageRecords(services[0], outageData, outageDuration, outageInterval, function () {
+          reporter.getService(services[0].id, function (err, data) {
             assert.ifError(err);
             assert.equal(data.status.lastWeek.outages.length, 6);
             assert.equal(data.status.lastWeek.numberOutages, 6);
@@ -150,8 +149,8 @@ describe('reporting', function () {
           outageData.push({error: 'my error'});
         }
         var outageDuration = 1 * MINUTE, outageInterval = HOUR;
-        addOutageRecords(service, outageData, outageDuration, outageInterval, function () {
-          reporter.getService(service.id, function (err, data) {
+        addOutageRecords(services[0], outageData, outageDuration, outageInterval, function () {
+          reporter.getService(services[0].id, function (err, data) {
             assert.ifError(err);
             assert.equal(data.status.last24Hours.outages.length, 23);
             assert.equal(data.status.last24Hours.numberOutages, 23);
@@ -169,8 +168,8 @@ describe('reporting', function () {
       //    outageData.push({error: 'my error'});
       //  }
       //  var outageDuration = 1 * SECOND, outageInterval = MINUTE;
-      //  addOutageRecords(service, outageData, outageDuration, outageInterval, function () {
-      //    reporter.getService(service.id, function (err, data) {
+      //  addOutageRecords(services[0], outageData, outageDuration, outageInterval, function () {
+      //    reporter.getService(service[0].id, function (err, data) {
       //      assert.ifError(err);
       //      assert.equal(data.status.lastHour.outages.length, 59);
       //      assert.equal(data.status.lastHour.numberOutages, 59);
@@ -194,9 +193,9 @@ describe('reporting', function () {
           {timestamp: INITIAL_TIME + 3.5 * DAY, latency: 1100}
         ];
 
-        saveLatencyRecords(service, data, function () {
+        saveLatencyRecords(services[0], data, function () {
           clock.tick(4 * HOUR);
-          reporter.getService(service.id, function (err, data) {
+          reporter.getService(services[0].id, function (err, data) {
             assert.ifError(err);
             assert.equal(data.status.lastWeek.latency.list.length, 4);
             assert.equal(data.status.lastWeek.latency.list[0].l, 1000);
@@ -217,9 +216,9 @@ describe('reporting', function () {
           {timestamp: INITIAL_TIME + 3.5 * HOUR, latency: 1100}
         ];
 
-        saveLatencyRecords(service, data, function () {
+        saveLatencyRecords(services[0], data, function () {
           clock.tick(4 * HOUR);
-          reporter.getService(service.id, function (err, data) {
+          reporter.getService(services[0].id, function (err, data) {
             assert.ifError(err);
             assert.equal(data.status.last24Hours.latency.list.length, 4);
             assert.equal(data.status.last24Hours.latency.list[0].l, 1000);
@@ -245,9 +244,9 @@ describe('reporting', function () {
           {timestamp: INITIAL_TIME + 2.6 * MINUTE, latency: 600}
         ];
 
-        saveLatencyRecords(service, data, function () {
+        saveLatencyRecords(services[0], data, function () {
           clock.tick(4 * MINUTE);
-          reporter.getService(service.id, function (err, data) {
+          reporter.getService(services[0].id, function (err, data) {
             assert.ifError(err);
             assert.equal(data.status.lastHour.latency.list.length, 3);
             assert.equal(data.status.lastHour.latency.list[0].l, 500);
@@ -263,9 +262,9 @@ describe('reporting', function () {
     describe('uptime', function () {
 
       it('should return zero uptime if service started down', function (done) {
-        storage.startOutage(service, {timestamp: +new Date(), error: 'my error'}, function (err) {
+        storage.startOutage(services[0], {timestamp: +new Date(), error: 'my error'}, function (err) {
           clock.tick(1000);
-          reporter.getService(service.id, function (err, data) {
+          reporter.getService(services[0].id, function (err, data) {
             assert.ifError(err);
             assert.equal(data.status.lastHour.uptime, 0);
             assert.equal(data.status.last24Hours.uptime, 0);
@@ -282,8 +281,8 @@ describe('reporting', function () {
           {error: 'my error'}
         ];
         var outageDuration = MINUTE * 3, outageInterval = MINUTE * 27;
-        addOutageRecords(service, outageData, outageDuration, outageInterval, function () {
-          reporter.getService(service.id, function (err, data) {
+        addOutageRecords(services[0], outageData, outageDuration, outageInterval, function () {
+          reporter.getService(services[0].id, function (err, data) {
             assert.ifError(err);
             assert.equal(data.status.lastHour.uptime, 90); // 2 outages of 3 minutes each in 60 min total time
             done();
@@ -300,8 +299,8 @@ describe('reporting', function () {
           {error: 'my error'}
         ];
         var outageDuration = HOUR, outageInterval = HOUR * 7;
-        addOutageRecords(service, outageData, outageDuration, outageInterval, function () {
-          reporter.getService(service.id, function (err, data) {
+        addOutageRecords(services[0], outageData, outageDuration, outageInterval, function () {
+          reporter.getService(services[0].id, function (err, data) {
             assert.ifError(err);
             assert.equal(data.status.last24Hours.uptime, 87.5); // 3 outages of 1 hour each in 24 hour. (1 - 3/24)
             done();
@@ -316,8 +315,8 @@ describe('reporting', function () {
           {error: 'my error'}
         ];
         var outageDuration = 1000, outageInterval = 1000;
-        addOutageRecords(service, outageData, outageDuration, outageInterval, function () {
-          reporter.getService(service.id, function (err, data) {
+        addOutageRecords(services[0], outageData, outageDuration, outageInterval, function () {
+          reporter.getService(services[0].id, function (err, data) {
             assert.ifError(err);
             assert.equal(data.status.lastWeek.uptime, 50); // 3 outages of 1 second each in 6 seconds total time
             done();
@@ -332,8 +331,8 @@ describe('reporting', function () {
           {error: 'my error'}
         ];
         var outageDuration = 1000, outageInterval = 2000;
-        addOutageRecords(service, outageData, outageDuration, outageInterval, function () {
-          reporter.getService(service.id, function (err, data) {
+        addOutageRecords(services[0], outageData, outageDuration, outageInterval, function () {
+          reporter.getService(services[0].id, function (err, data) {
             assert.ifError(err);
             assert.equal(data.status.lastWeek.uptime, 66.667); // real value without rounding would be 66.66666666666
             done();
@@ -361,11 +360,11 @@ describe('reporting', function () {
         {error: 'my error'}
       ];
       var outageDuration = 1000, outageInterval = DAY;
-      addOutageRecords(service, outageData, outageDuration, outageInterval, function () {
+      addOutageRecords(services[0], outageData, outageDuration, outageInterval, function () {
         reporter.getServices({}, function (err, servicesData) {
           assert.ifError(err);
           var _service = servicesData.filter(function (row) {
-            return row.service.id == service.id
+            return row.service.id == services[0].id
           })[0];
           assert.equal(_service.status.lastWeek.numberOutages, 6);
           done();
@@ -380,11 +379,11 @@ describe('reporting', function () {
         {error: 'my error'}
       ];
       var outageDuration = 1000, outageInterval = 1000;
-      addOutageRecords(service, outageData, outageDuration, outageInterval, function () {
+      addOutageRecords(services[0], outageData, outageDuration, outageInterval, function () {
         reporter.getServices({}, function (err, servicesData) {
           assert.ifError(err);
           var _service = servicesData.filter(function (row) {
-            return row.service.id == service.id
+            return row.service.id == services[0].id
           })[0];
           assert.equal(_service.status.last24Hours.numberOutages, 3);
           done();
@@ -392,4 +391,5 @@ describe('reporting', function () {
       });
     });
   });
+
 });
