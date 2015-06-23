@@ -1,27 +1,27 @@
 <!doctype html>
 <html lang="en">
 <head>
-    <title>Code coverage report for config/notifications/notifications.js</title>
+    <title>Code coverage report for config/storage.js</title>
     <meta charset="utf-8">
-    <link rel="stylesheet" href="../../prettify.css">
-    <link rel="stylesheet" href="../../base.css">
+    <link rel="stylesheet" href="../prettify.css">
+    <link rel="stylesheet" href="../base.css">
     <style type='text/css'>
         div.coverage-summary .sorter {
-            background-image: url(../../sort-arrow-sprite.png);
+            background-image: url(../sort-arrow-sprite.png);
         }
     </style>
 </head>
 <body>
 <div class="header high">
-    <h1>Code coverage report for <span class="entity">config/notifications/notifications.js</span></h1>
+    <h1>Code coverage report for <span class="entity">config/storage.js</span></h1>
     <h2>
-        Statements: <span class="metric">100% <small>(2 / 2)</small></span> &nbsp;&nbsp;&nbsp;&nbsp;
+        Statements: <span class="metric">100% <small>(1 / 1)</small></span> &nbsp;&nbsp;&nbsp;&nbsp;
         Branches: <span class="metric">100% <small>(0 / 0)</small></span> &nbsp;&nbsp;&nbsp;&nbsp;
-        Functions: <span class="metric">100% <small>(1 / 1)</small></span> &nbsp;&nbsp;&nbsp;&nbsp;
-        Lines: <span class="metric">100% <small>(2 / 2)</small></span> &nbsp;&nbsp;&nbsp;&nbsp;
+        Functions: <span class="metric">100% <small>(0 / 0)</small></span> &nbsp;&nbsp;&nbsp;&nbsp;
+        Lines: <span class="metric">100% <small>(1 / 1)</small></span> &nbsp;&nbsp;&nbsp;&nbsp;
         Ignored: <span class="metric"><span class="ignore-none">none</span></span> &nbsp;&nbsp;&nbsp;&nbsp;
     </h2>
-    <div class="path"><a href="../../index.html">All files</a> &#187; <a href="index.html">config/notifications/</a> &#187; notifications.js</div>
+    <div class="path"><a href="../index.html">All files</a> &#187; <a href="index.html">config/</a> &#187; storage.js</div>
 </div>
 <div class="body">
 <pre><table class="coverage">
@@ -59,14 +59,8 @@
 32
 33
 34
-35</td><td class="line-coverage"><span class="cline-any cline-yes">1</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">1</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
+35
+36</td><td class="line-coverage"><span class="cline-any cline-yes">1</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -93,48 +87,57 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">exports = module.exports = (function(){
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">exports = module.exports = {
 &nbsp;
-    /**
-     * Notifications configuration file.
-     */
-&nbsp;
-    return  {
-&nbsp;
-        /**
-         * Enable the services you would like to use when an alert is triggered
-         *
-         * How to create a new notification service:
-         * - 1) Create a new service entry in this file
-         * - 2) Create the actual service file in the 'path' path
-         * - 3) Setup some default configuration file in the 'config' path
-         */
-&nbsp;
-        services: [
-            {
-                enabled: process.env.WATCHMEN_NOTIFICATIONS_AWS_SES_ENABLED,
-                name : 'aws-ses',
-                path: './services/aws-ses/aws-ses',
-                config: '../../config/notifications/services/aws-ses'
-            },
-            {
-                enabled: process.env.WATCHMEN_NOTIFICATIONS_POSTMARK_ENABLED,
-                name : 'aws-ses',
-                path: './services/postmark/postmark',
-                config: '../../config/notifications/services/postmark'
-            }
-        ],
-&nbsp;
-        alwaysAlertTo: process.env.WATCHMEN_NOTIFICATIONS_ALWAYS_ALERT_TO // comma separated emails
+  production: {
+    provider : 'redis',
+    options : {
+      'redis' : {
+        port: 1216,
+        host: '127.0.0.1',
+        db: 1
+      }
     }
-})();</pre></td></tr>
+  },
+&nbsp;
+  development: {
+    provider : 'redis',
+    options : {
+      'redis' : {
+        port: 1216,
+        host: '127.0.0.1',
+        db: 2
+      }
+    }
+  },
+&nbsp;
+  test: {
+    provider : 'redis',
+    options : {
+      'redis' : {
+        port: 6666,
+        host: '127.0.0.1',
+        db: 5
+      }
+    }
+  }
+&nbsp;
+};</pre></td></tr>
 </table></pre>
 
 </div>
 <div class="footer">
     <div class="meta">Generated by <a href="http://istanbul-js.org/" target="_blank">istanbul</a> at Sun Jun 21 2015 20:01:25 GMT+1000 (AEST)</div>
 </div>
-<script src="../../prettify.js"></script>
+<script src="../prettify.js"></script>
 <script>
 window.onload = function () {
         if (typeof prettyPrint === 'function') {
@@ -142,6 +145,6 @@ window.onload = function () {
         }
 };
 </script>
-<script src="../../sorter.js"></script>
+<script src="../sorter.js"></script>
 </body>
 </html>
