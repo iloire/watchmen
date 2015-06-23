@@ -134,7 +134,7 @@ describe('redis storage', function(){
           assert.equal(outage.downtime, 1000, 'should record downtime');
           redisStorage.getCurrentOutage(service, function(err, NoMoreOutage){
             assert.ok(!NoMoreOutage);
-            redisStorage.getOutagesSince(service, +new Date() - 2000, function(err, outages){
+            redisStorage.getServiceOutagesSince(service, +new Date() - 2000, function(err, outages){
               assert.equal(outages.length, 1, 'should have 1 outage');
               assert.equal(outages[0].downtime, 1000, 'should record downtime');
               done();
