@@ -4,9 +4,9 @@ exports = module.exports = {
     provider : 'redis',
     options : {
       'redis' : {
-        port: 1216,
+        port: process.env.WATCHMEN_REDIS_PORT_PRODUCTION || 1216,
         host: '127.0.0.1',
-        db: 1
+        db: process.env.WATCHMEN_REDIS_DB_PRODUCTION || 1
       }
     }
   },
@@ -15,9 +15,9 @@ exports = module.exports = {
     provider : 'redis',
     options : {
       'redis' : {
-        port: 1216,
+        port: process.env.WATCHMEN_REDIS_PORT_DEVELOPMENT || 1216,
         host: '127.0.0.1',
-        db: 2
+        db: process.env.WATCHMEN_REDIS_DB_DEVELOPMENT || 2
       }
     }
   },
@@ -26,9 +26,9 @@ exports = module.exports = {
     provider : 'redis',
     options : {
       'redis' : {
-        port: 6666,
+        port: process.env.WATCHMEN_REDIS_PORT_TEST || 6666,
         host: '127.0.0.1',
-        db: 5
+        db: process.env.WATCHMEN_REDIS_DB_TEST || 1
       }
     }
   }
