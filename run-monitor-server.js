@@ -5,7 +5,6 @@ var storageFactory = require('./lib/storage/storage-factory');
 var WatchMenFactory = require('./lib/watchmen');
 var sentinelFactory = require('./lib/sentinel');
 
-var PLUGINS_LOCATION = "plugins/monitor";
 var RETURN_CODES = {
   OK: 0,
   BAD_STORAGE: 1,
@@ -32,7 +31,7 @@ storage.getServices({}, function (err, services) {
 
   var watchmen = new WatchMenFactory(services, storage);
 
-  pluginLoader.loadPlugins(watchmen, {location: PLUGINS_LOCATION}, function () {
+  pluginLoader.loadPlugins(watchmen, {}, function(){
     watchmen.startAll({randomDelayOnInit: program.maxInitialDelay});
     console.log('\nwatchmen has started. ' + services.length + ' services loaded\n');
 

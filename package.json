@@ -28,7 +28,6 @@
   "license": "MIT",
   "dependencies": {
     "async": "^0.9.0",
-    "aws-sdk": "2.1.x",
     "body-parser": "^1.12.4",
     "colors": "^1.1.0",
     "commander": "^2.8.1",
@@ -45,16 +44,16 @@
     "moment": "^2.10.3",
     "passport": "^0.2.1",
     "passport-google-oauth2": "0.1.x",
-    "postmark": "1.0.x",
     "q": "^1.3.0",
     "redis": "^0.12.1",
     "shortid": "^2.2.2",
     "stream-spigot": "^3.0.5",
     "timestream-aggregates": "^0.1.7",
     "validator": "^3.39.0",
-    "walk": "^2.3.9",
     "watchmen-ping-http-head": "^0.1.0",
-    "watchmen-ping-http-contains": "0.0.1"
+    "watchmen-ping-http-contains": "0.0.1",
+    "watchmen-plugin-aws-ses": "0.0.1",
+    "watchmen-plugin-console": "0.0.1"
   },
   "devDependencies": {
     "assert": "^1.3.0",
