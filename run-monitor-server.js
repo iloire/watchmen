@@ -11,9 +11,14 @@ var RETURN_CODES = {
   GENERIC_ERROR: 2
 };
 
+function exit(code) {
+  storage.quit();
+  process.exit(code);
+}
+
 program
     .option('-e, --env [env]', 'Storage environment key', process.env.NODE_ENV || 'development')
-      .option('-d, --max-initial-delay [value]', 'Initial random delay max bound', 20000)
+    .option('-d, --max-initial-delay [value]', 'Initial random delay max bound', 20000)
     .parse(process.argv);
 
 var storage = storageFactory.getStorageInstance(program.env);
@@ -45,8 +50,3 @@ process.on('SIGINT', function () {
   console.log('stopping watchmen..'.gray);
   exit(RETURN_CODES.OK);
 });
-
-function exit(code) {
-  storage.quit();
-  process.exit(code);
-}
