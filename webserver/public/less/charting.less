@@ -1,0 +1,57 @@
+.chart-wrapper {
+
+  .chart {
+    margin-top: 5px;
+    margin-left: -10px;
+
+    .c3-line-Latency {
+      stroke-width: 1px;
+    }
+
+    .c3 .c3-axis-x path, .c3 .c3-axis-x line {
+      stroke: #c2c2c2;
+    }
+
+    .c3 .c3-axis-y path, .c3 .c3-axis-y line {
+      stroke: #c2c2c2;
+    }
+
+    .c3-region.region-outage {
+      fill: red;
+    }
+
+    .c3-region.region-latency-warning {
+      fill: orange;
+    }
+
+    .c3-ygrid-line.threshold line {
+      stroke: orange;
+      stroke-width: 2px;
+    }
+
+    .c3-ygrid-line.threshold text {
+      fill: orange;
+      font-size: 1.5em;
+    }
+
+    span {
+      .caption {
+        color: #c2c2c2;
+        font-size: 0.9em;
+      }
+      margin-right: 10px;
+      font-size: 1.1em;
+    }
+
+    /*-- Tooltip overrides --*/
+    .c3-tooltip tr {
+      border: 1px solid #c2c2c2;
+      border-radius: 4px;
+    }
+
+    .c3-tooltip th {
+      background-color: #333;
+    }
+
+  }
+}

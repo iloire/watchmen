@@ -7,69 +7,76 @@
 
 <div class="container-fluid" ng-show="!loading">
     <div class="row">
-
         <div class="filter-container">
-            <span class="glyphicon glyphicon-search"></span>
-            <input ng-model="query" class="form-control" placeholder="filter by host name"/>
+            <% if (user){ %>
+            <div class="row">
+                <div class="col-md-10">
+                    <span class="icon glyphicon glyphicon-search"></span>
+                    <input ng-model="query" class="query form-control" placeholder="filter by host name"/>
+                </div>
+                <div class="col-md-2 filter-to-me">
+                    <input ng-model="filterRestrictedToMe" id="filterRestrictedToMe" type="checkbox"/>
+                    <label for="filterRestrictedToMe">only restricted to me</label>
+                </div>
+            </div>
+            <% } else {%>
+            <input ng-model="query" class="query form-control" placeholder="filter by host name"/>
+            <% } %>
         </div>
 
         <table ng-table="tableParams" class="table-services table sorted table-striped table-condensed">
             <tbody>
-            <tr ng-class={'result-disabled':service.enabled===false,'result-success':service.data.status=='success','result-error':service.data.status=='error'} ng-repeat="service in $data | filter:query">
-                <td data-title="'Status'" sortable="'data.status'">
-                    <span ng-if="service.data.status == 'error'" class="label label-danger">offline</span>
-                    <span ng-if="service.data.status == 'success'" class="label label-success">online</span>
+
+            <tr ng-class={'result-disabled':row.service.enabled===false,'result-success':!row.status.currentOutage,'result-error':row.status.currentOutage}
+                ng-repeat="row in $data | filter:serviceFilter">
+                <td data-title="'Status'" sortable="'status.currentOutage'">
+                    <span ng-if="row.status.currentOutage" class="label label-danger">offline</span>
+                    <span ng-if="!row.status.currentOutage" class="label label-success">online</span>
                 </td>
 
-                <td header-class="'hidden-xs'" class="service hidden-xs" data-title="'Service'" sortable="'name'">
-                    {{service.ping_service_name}}
-                </td>
-
-                <td data-title="'Host'" sortable="'host.name'">
-                    <a class="name" href="#/details/{{service.host.name}}/{{service.name}}">
-                        {{service.host.name}} / {{service.name}}
+                <td class="result-uptime"  data-title="'last 24h'" sortable="'status.last24Hours.uptime'">
+                    <a class="name" href="/services/{{row.service.id}}/view">
+                        <span>{{row.status.last24Hours.uptime}}%</span>
                     </a>
+                </td>
 
-                    <span ng-if="service.data.last_check" class="hidden-xs last_check">
-                        last ping:
-                        <span>{{service.data.last_check | amDateFormat:'DD/MMM, HH:mm'}}</span>
-                        (<span class="time-ago" am-time-ago="service.data.last_check"></span>)
+                <td class="result-uptime hidden-sm hidden-xs" header-class="'hidden-sm hidden-xs'"  data-title="'last week'" sortable="'status.lastWeek.uptime'">
+                    <a class="name" href="/services/{{row.service.id}}/view">
+                        <span>{{row.status.lastWeek.uptime}}%</span>
+                    </a>
+                </td>
+
+                <td header-class="'hidden-sm hidden-xs'" class="service hidden-sm hidden-xs" data-title="'Service'" sortable="'name'">
+                    {{row.service.pingServiceName}}
+                </td>
+
+                <td data-title="'Host'" sortable="'service.name'">
+                    <i title="restricted to me" ng-if="row.service.isRestricted" class="fa fa-lock"></i>
+                    <a class="name" href="/services/{{row.service.id}}/view">
+                        {{row.service.name}}
+                    </a>
+                </td>
+
+                <td header-class="'hidden-xs'" class="outages hidden-xs" data-title="'Downtime last 24h'" sortable="'status.last24Hours.downtime'">
+                    <span ng-if="row.status.last24Hours.downtime" class="label label-danger">
+                        <span ms-time="row.status.last24Hours.downtime"></span>
                     </span>
                 </td>
 
-                <td header-class="'hidden-xs'" class="avgresponse hidden-xs" data-title="'AVG res. (ms)'" sortable="'data.avg_response_time'">
-                    <span ng-if="service.data.avg_response_time" class="label label-default">
-                        {{service.data.avg_response_time}}
+                <td header-class="'hidden-sm hidden-xs'" class="outages hidden-sm hidden-xs" data-title="'Outages last 24h'" sortable="'status.last24Hours.numberOutages'">
+                    <span class="label label-danger" ng-if="row.status.last24Hours.numberOutages">
+                        {{row.status.last24Hours.numberOutages}}
                     </span>
                 </td>
 
-                <td header-class="'hidden-xs'" class="result-error hidden-xs" data-title="'Outages'" sortable="'data.outages'">
-                    <span ng-if="service.data.outages" class="label label-danger">{{service.data.outages}}</span>
+                <% if (user && user.isAdmin) { %>
+                <td nowrap>
+                    <a class="edit btn btn-default btn-xs" href="services/{{row.service.id}}/edit"><i class="fa fa-edit"></i> </a>
+                    <button class="btn btn-default btn-xs" ng-click="reset(row.service.id)"><i class="fa fa-warning"></i> </button>
+                    <button class="btn btn-default btn-xs" ng-click="delete(row.service.id)"><i class="fa fa-remove"></i> </button>
                 </td>
+                <% } %>
 
-                <td header-class="'hidden-xs'" class="result-error hidden-xs" data-title="'Last outage'" sortable="'data.last_outage'">
-                    <div ng-if="service.data.last_outage">
-                        <span>{{service.data.last_outage | amDateFormat:'DD/MMM, HH:mm'}}</span>
-                        (<span class="time-ago" am-time-ago="service.data.last_outage"></span>)
-                    </div>
-                </td>
-
-                <td header-class="'hidden-xs hidden-sm'" class="result-warning hidden-xs hidden-sm" data-title="'Warnings'" sortable="'data.warnings'">
-                    <span ng-if="service.data.warnings" class="label label-warning">{{service.data.warnings}}</span>
-                </td>
-
-                <td header-class="'hidden-xs hidden-sm'" class="result-warning hidden-xs hidden-sm" data-title="'Last warning'" sortable="'data.last_warning'">
-                    <div ng-if="service.data.last_warning">
-                        <span>{{service.data.last_warning | amDateFormat:'DD/MMM, HH:mm'}}</span>
-                        (<span class="time-ago" am-time-ago="service.data.last_warning"></span>)
-                    </div>
-                </td>
-
-                <td class="result-uptime"  data-title="'Uptime'" sortable="'data.uptime'">
-                    <a ng-if="service.data.uptime" class="name" href="#/details/{{service.host.name}}/{{service.name}}">
-                        <span>{{service.data.uptime}}%</span>
-                    </a>
-                </td>
             </tr>
             </tbody>
         </table>

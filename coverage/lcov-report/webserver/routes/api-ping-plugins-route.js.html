@@ -1,0 +1,183 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <title>Code coverage report for webserver/routes/api-ping-plugins-route.js</title>
+    <meta charset="utf-8">
+    <link rel="stylesheet" href="../../prettify.css">
+    <link rel="stylesheet" href="../../base.css">
+    <style type='text/css'>
+        div.coverage-summary .sorter {
+            background-image: url(../../sort-arrow-sprite.png);
+        }
+    </style>
+</head>
+<body>
+<div class="header high">
+    <h1>Code coverage report for <span class="entity">webserver/routes/api-ping-plugins-route.js</span></h1>
+    <h2>
+        Statements: <span class="metric">86.36% <small>(19 / 22)</small></span> &nbsp;&nbsp;&nbsp;&nbsp;
+        Branches: <span class="metric">100% <small>(2 / 2)</small></span> &nbsp;&nbsp;&nbsp;&nbsp;
+        Functions: <span class="metric">100% <small>(4 / 4)</small></span> &nbsp;&nbsp;&nbsp;&nbsp;
+        Lines: <span class="metric">86.36% <small>(19 / 22)</small></span> &nbsp;&nbsp;&nbsp;&nbsp;
+        Ignored: <span class="metric"><span class="ignore-none">none</span></span> &nbsp;&nbsp;&nbsp;&nbsp;
+    </h2>
+    <div class="path"><a href="../../index.html">All files</a> &#187; <a href="index.html">webserver/routes/</a> &#187; api-ping-plugins-route.js</div>
+</div>
+<div class="body">
+<pre><table class="coverage">
+<tr><td class="line-count">1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+21
+22
+23
+24
+25
+26
+27
+28
+29
+30
+31
+32
+33
+34
+35
+36
+37
+38
+39
+40
+41
+42
+43
+44
+45
+46
+47</td><td class="line-coverage"><span class="cline-any cline-yes">1</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">3</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">3</span>
+<span class="cline-any cline-yes">3</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1</span>
+<span class="cline-any cline-yes">2</span>
+<span class="cline-any cline-yes">2</span>
+<span class="cline-any cline-yes">2</span>
+<span class="cline-any cline-yes">2</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">3</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1</span>
+<span class="cline-any cline-yes">1</span>
+<span class="cline-any cline-yes">28</span>
+<span class="cline-any cline-yes">2</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1</span>
+<span class="cline-any cline-yes">2</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">3</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">var express = require('express');
+&nbsp;
+exports = module.exports.getRoutes = function (){
+&nbsp;
+  var PREFIX_PING_PLUGIN = 'watchmen-ping-';
+&nbsp;
+  var router = express.Router();
+  var pkgJson = require(__dirname + '../../../package.json');
+&nbsp;
+  function getOptions(dep){
+      try {
+        var pluginFactory = require(dep);
+        var plugin = new pluginFactory();
+        return plugin.getDefaultOptions();
+      } catch (e) {
+<span class="cstat-no" title="statement not covered" >        console.error('Error parsing options for ' + dep);</span>
+<span class="cstat-no" title="statement not covered" >        console.error(e);</span>
+<span class="cstat-no" title="statement not covered" >        return {};</span>
+      }
+  }
+&nbsp;
+  /**
+   * Returns the list of available plugin ping plugins (ex: watchmen-ping-http-head)
+   * Those plugins should be installed in node_modules with the prefix "watchmen-ping"
+   */
+  router.get('/', function(req, res){
+&nbsp;
+    var pingServicesPluginsInPackageJson = [];
+    for (var dep in pkgJson.dependencies) {
+      if (dep.indexOf(PREFIX_PING_PLUGIN) === 0){
+        pingServicesPluginsInPackageJson.push(dep);
+      }
+    }
+&nbsp;
+    var plugins = pingServicesPluginsInPackageJson.map(function(pluginName){
+      return {
+        name: pluginName.replace(PREFIX_PING_PLUGIN, ''),
+        options: getOptions(pluginName)
+      }
+    });
+&nbsp;
+    return res.json(plugins);
+  });
+&nbsp;
+  return router;
+&nbsp;
+};</pre></td></tr>
+</table></pre>
+
+</div>
+<div class="footer">
+    <div class="meta">Generated by <a href="http://istanbul-js.org/" target="_blank">istanbul</a> at Sun Jun 21 2015 20:01:25 GMT+1000 (AEST)</div>
+</div>
+<script src="../../prettify.js"></script>
+<script>
+window.onload = function () {
+        if (typeof prettyPrint === 'function') {
+            prettyPrint();
+        }
+};
+</script>
+<script src="../../sorter.js"></script>
+</body>
+</html>

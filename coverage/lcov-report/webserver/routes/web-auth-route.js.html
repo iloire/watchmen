@@ -1,0 +1,231 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <title>Code coverage report for webserver/routes/web-auth-route.js</title>
+    <meta charset="utf-8">
+    <link rel="stylesheet" href="../../prettify.css">
+    <link rel="stylesheet" href="../../base.css">
+    <style type='text/css'>
+        div.coverage-summary .sorter {
+            background-image: url(../../sort-arrow-sprite.png);
+        }
+    </style>
+</head>
+<body>
+<div class="header medium">
+    <h1>Code coverage report for <span class="entity">webserver/routes/web-auth-route.js</span></h1>
+    <h2>
+        Statements: <span class="metric">76% <small>(19 / 25)</small></span> &nbsp;&nbsp;&nbsp;&nbsp;
+        Branches: <span class="metric">0% <small>(0 / 2)</small></span> &nbsp;&nbsp;&nbsp;&nbsp;
+        Functions: <span class="metric">55.56% <small>(5 / 9)</small></span> &nbsp;&nbsp;&nbsp;&nbsp;
+        Lines: <span class="metric">79.17% <small>(19 / 24)</small></span> &nbsp;&nbsp;&nbsp;&nbsp;
+        Ignored: <span class="metric"><span class="ignore-none">none</span></span> &nbsp;&nbsp;&nbsp;&nbsp;
+    </h2>
+    <div class="path"><a href="../../index.html">All files</a> &#187; <a href="index.html">webserver/routes/</a> &#187; web-auth-route.js</div>
+</div>
+<div class="body">
+<pre><table class="coverage">
+<tr><td class="line-count">1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+21
+22
+23
+24
+25
+26
+27
+28
+29
+30
+31
+32
+33
+34
+35
+36
+37
+38
+39
+40
+41
+42
+43
+44
+45
+46
+47
+48
+49
+50
+51
+52
+53
+54
+55
+56
+57
+58
+59
+60
+61
+62
+63</td><td class="line-coverage"><span class="cline-any cline-yes">1</span>
+<span class="cline-any cline-yes">1</span>
+<span class="cline-any cline-yes">1</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">3</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">3</span>
+<span class="cline-any cline-yes">15</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">3</span>
+<span class="cline-any cline-yes">58</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">3</span>
+<span class="cline-any cline-yes">3</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">3</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">3</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">3</span>
+<span class="cline-any cline-yes">8</span>
+<span class="cline-any cline-yes">8</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">var config = require('../../config/web');
+var passport = require('passport');
+var url = require('url');
+&nbsp;
+var GoogleStrategy = require( 'passport-google-oauth2' ).Strategy;
+&nbsp;
+module.exports = (function (){
+&nbsp;
+<span class="fstat-no" title="function not covered" >  function isAdmin(email){</span>
+<span class="cstat-no" title="statement not covered" >    var admins = (process.env.WATCHMEN_ADMINS || '').split(',').map(<span class="fstat-no" title="function not covered" >function(email){</span> <span class="cstat-no" title="statement not covered" >return email.trim (); </span>});</span>
+<span class="cstat-no" title="statement not covered" >    return admins.indexOf(email)&gt;-1;</span>
+  }
+&nbsp;
+  return {
+    
+    /**
+     * Configure application with authentication mechanisms
+     * @param  {Application} app
+     */
+    configureApp : function (app){
+&nbsp;
+      passport.use(new GoogleStrategy({
+          clientID: config.auth.GOOGLE_CLIENT_ID,
+          clientSecret: config.auth.GOOGLE_CLIENT_SECRET,
+          passReqToCallback: true,
+          callbackURL: url.resolve(config.public_host_name, '/auth/google/callback')
+        },
+<span class="fstat-no" title="function not covered" >        function(request, accessToken, refreshToken, profile, done) {</span>
+<span class="cstat-no" title="statement not covered" >          var email = profile.emails[0].value;</span>
+<span class="cstat-no" title="statement not covered" >          done(null, { email : email, isAdmin: isAdmin(email) });</span>
+        }
+      ));
+&nbsp;
+      passport.serializeUser(function(user, done) {
+        done(null, user);
+      });
+&nbsp;
+      passport.deserializeUser(function(obj, done) {
+        done(null, obj);
+      });
+&nbsp;
+      app.use(passport.initialize());
+      app.use(passport.session());
+&nbsp;
+      app.get('/auth/google', passport.authenticate('google', {
+        scope: 'https://www.google.com/m8/feeds https://www.googleapis.com/auth/userinfo.email https://www.googleapis.com/auth/userinfo.profile'
+      }));
+&nbsp;
+      app.get('/auth/google/callback', passport.authenticate('google', {
+        failureRedirect: '/'
+      }), <span class="fstat-no" title="function not covered" >function(req, res) {</span>
+          // successful authentication
+<span class="cstat-no" title="statement not covered" >          res.redirect('/');</span>
+      });
+&nbsp;
+      app.get('/logout', function (req, res){
+        req.logOut();
+        res.redirect('/');
+      });
+    }
+  };
+&nbsp;
+}());</pre></td></tr>
+</table></pre>
+
+</div>
+<div class="footer">
+    <div class="meta">Generated by <a href="http://istanbul-js.org/" target="_blank">istanbul</a> at Sun Jun 21 2015 20:01:25 GMT+1000 (AEST)</div>
+</div>
+<script src="../../prettify.js"></script>
+<script>
+window.onload = function () {
+        if (typeof prettyPrint === 'function') {
+            prettyPrint();
+        }
+};
+</script>
+<script src="../../sorter.js"></script>
+</body>
+</html>

@@ -1,0 +1,59 @@
+.services-sidebar {
+  float:left;
+  padding:0.8em 2em 0 0.4em;
+  width:17%;
+
+  table {
+
+    width: 100%;
+
+    td.name {
+      max-width: 0;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+
+    td.uptime {
+      width:30%;
+      padding-right:10px;
+
+      span {
+        display: inline-block;
+        min-width: 45px;
+        font-weight: bold;
+
+        &.down {
+          color:red;
+        }
+
+        &.up {
+          color: green;
+        }
+      }
+    }
+
+    tr.selected {
+      a {
+        color:black;
+        font-weight: bold;
+      }
+    }
+  }
+}
+
+.details-page{
+  float:right;
+  width:83%;
+}
+
+@media (max-width: 991px) {
+  .details-page{
+    float:inherit;
+    width:100%;
+  }
+
+  .services-sidebar {
+    display:none;
+  }
+}

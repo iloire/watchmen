@@ -1,0 +1,17 @@
+<div class="services-sidebar">
+    <table>
+        <tbody>
+            <tr ng-repeat="serviceReport in services" ng-class="{'selected':serviceDetails.service.id==serviceReport.service.id}">
+                <td class="uptime">
+                    <span ng-if="serviceReport.status.currentOutage" class="down">{{serviceReport.status.last24Hours.uptime}}%</span>
+                    <span ng-if="!serviceReport.status.currentOutage" class="up">{{serviceReport.status.last24Hours.uptime}}%</span>
+                </td>
+                <td class="name">
+                    <a href="/services/{{serviceReport.service.id}}/view">
+                        {{serviceReport.service.name}}
+                    </a>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</div>

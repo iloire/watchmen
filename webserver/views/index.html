@@ -2,16 +2,19 @@
 <html lang="en" ng-app="watchmenApp">
   <head>
     <title>watchmen, http monitor for node.js - <%= title %></title>
-    <link rel='stylesheet' href='bower_components/bootstrap/dist/css/bootstrap.min.css' />
-    <link rel='stylesheet' href='bower_components/bootstrap/dist/css/bootstrap-theme.min.css' />
-    <link rel='stylesheet' href='bower_components/ng-table/dist/ng-table.min.css' />
-    <link rel='stylesheet' href='stylesheets/style.css' />
+    <link rel='stylesheet' href='<%=baseUrl%>bower_components/bootstrap/dist/css/bootstrap.min.css' />
+    <link rel='stylesheet' href='<%=baseUrl%>bower_components/bootstrap/dist/css/bootstrap-theme.min.css' />
+    <link rel='stylesheet' href='<%=baseUrl%>bower_components/ng-table/dist/ng-table.min.css' />
+    <link rel="stylesheet" href="<%=baseUrl%>bower_components/components-font-awesome/css/font-awesome.min.css">
+    <link rel='stylesheet' href='<%=baseUrl%>bower_components/c3/c3.min.css' />
+    <link rel='stylesheet' href='<%=baseUrl%>build/app.css' />
     <meta name="viewport" content="width=device-width">
+    <base href="<%=baseUrl%>">
   </head>
   <body>
 
   <div class="container-fluid">
-      <div ng-view class="view-frame"></div>
+      <div class="view-frame" ui-view></div>
   </div>
 
   <script type="text/ng-template" id="service-detail.html">
@@ -22,26 +25,31 @@
     <%- include service-list.html %>
   </script>
 
+  <script type="text/ng-template" id="service-edit.html">
+    <%- include service-edit.html %>
+  </script>
+
   <script type="text/ng-template" id="header.html">
     <%- include header.html %>
+  </script>
+
+  <script type="text/ng-template" id="ping-service-options.html">
+    <%- include partials/ping-service-options.html %>
   </script>
 
   <span class="spinner" us-spinner="{radius:50, width:10, length: 50}" spinner-key="spinner-1"></span>
 
   <footer>
     <% if (user) { %>
-      logged as <%=user%>
+      <script>window.isAdmin=<%=user.isAdmin%>;</script>
+      logged as <%=user.email%> (<a target="_self" href="/logout">logout</a>)
     <% } else { %>
-      <a href="/auth/google">Sign In with Google</a> - 
+      <a target="_self" href="/auth/google">Sign In with Google</a>
     <% } %>
     |
     <a target="_blank" href="https://github.com/iloire/WatchMen">watchmen source code (github)</a> |
     author: <a target="_blank" href="http://iloire.com">iloire.com</a>
   </footer>
-
-  <script id='status-overview-template' type="text/x-handlebars-template">
-    <span class="down">{{down}} services down</span>
-  </script>
 
   <% if (ga_analytics_ID) { %>
   <script>
@@ -55,7 +63,7 @@
   </script>
   <% } %>
 
-  <script src="build/vendor.js"></script>
-  <script src="build/app.js"></script>
+  <script src="<%=baseUrl%>build/vendor.js"></script>
+  <script src="<%=baseUrl%>build/app.js"></script>
   </body>
 </html>

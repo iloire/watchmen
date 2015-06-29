@@ -2,6 +2,6 @@ logs/
 .monitor
 .DS_Store
 node_modules/
-watchmen.rdb
+*.rdb
 .idea/
 webserver/public/bower_components/

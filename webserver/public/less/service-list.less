@@ -1,0 +1,67 @@
+
+.error, .failure, .critical {color:red;}
+.success {color:green;}
+.warning, .warnings{color:orange;}
+
+.table-services {
+
+  tr.result-success .result-uptime a {
+    color:green;
+  }
+
+  tr.result-error .result-uptime a {
+    color: red;
+  }
+
+  tr.result-warning .result-uptime  a {
+    color: orange;
+  }
+
+  .result-uptime {
+    font-size: 1.3em;
+  }
+
+  th {
+    text-align: left;
+  }
+
+  td {
+    font-size:120%;
+  }
+
+  td.outages {
+    color:red;
+  }
+
+  td.warnings {
+    color:orange;
+  }
+
+  td.service {
+    text-transform: uppercase;
+    margin-top: 20px;
+    opacity: 0.6;
+    font-size:100%;
+    color: gray;
+  }
+}
+
+.filter-container {
+  margin: 10px 0;
+
+  input.query {
+    padding-left:30px;
+    display:block;
+  }
+
+  span.icon {
+    position: absolute;
+    left: 10px;
+    padding: 10px 12px;
+    pointer-events: none;
+  }
+
+  div.filter-to-me {
+    padding-top: 5px;
+  }
+}

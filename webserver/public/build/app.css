@@ -1,0 +1,58 @@
+.chart-wrapper .chart{margin-top:5px;margin-left:-10px}
+.chart-wrapper .chart .c3-line-Latency{stroke-width:1px}
+.chart-wrapper .chart .c3 .c3-axis-x line,.chart-wrapper .chart .c3 .c3-axis-x path,.chart-wrapper .chart .c3 .c3-axis-y line,.chart-wrapper .chart .c3 .c3-axis-y path{stroke:#c2c2c2}
+.chart-wrapper .chart .c3-region.region-outage{fill:red}
+.chart-wrapper .chart .c3-region.region-latency-warning{fill:orange}
+.chart-wrapper .chart .c3-ygrid-line.threshold line{stroke:orange;stroke-width:2px}
+.chart-wrapper .chart .c3-ygrid-line.threshold text{fill:orange;font-size:1.5em}
+.chart-wrapper .chart span{margin-right:10px;font-size:1.1em}
+.chart-wrapper .chart span .caption{color:#c2c2c2;font-size:.9em}
+.chart-wrapper .chart .c3-tooltip tr{border:1px solid #c2c2c2;border-radius:4px}
+.chart-wrapper .chart .c3-tooltip th{background-color:#333}
+footer{color:#ccc;padding:20px;text-align:center}
+footer a{color:#c2c2c2}
+html{box-sizing:border-box}
+*,:after,:before{box-sizing:inherit}
+body{padding-top:60px}
+.spinner{opacity:.8}
+h2{margin:10px 0;color:gray;font-size:2.1em}
+.status-overview{text-align:right;padding:10px;font-size:1.5em;color:#fff}
+.details-page .table-logs th,.table-services th{text-align:left}
+.status-overview>span{color:#fff;display:inline;padding:5px 12px;border-radius:5px}
+.status-overview .down{background-color:red}
+.ng-table th.sortable.sort-asc,.ng-table th.sortable.sort-desc{background-color:#f5f5f5;border-radius:3px}
+.details-page .edit-link{font-size:.5em}
+.details-page .status .up{color:green;font-weight:700}
+.details-page .status .down{color:red;font-weight:700}
+.details-page .table-logs td:first-child{width:70%}
+.details-page .outages thead td{color:#c2c2c2}
+.service-edition .descr{color:#c2c2c2;padding-top:.4em}
+.service-edition .ping-service-option-panel{padding:.5em}
+.critical,.error,.failure{color:red}
+.success{color:green}
+.warning,.warnings{color:orange}
+.table-services tr.result-success .result-uptime a{color:green}
+.table-services tr.result-error .result-uptime a{color:red}
+.table-services tr.result-warning .result-uptime a{color:orange}
+.table-services .result-uptime{font-size:1.3em}
+.table-services td{font-size:120%}
+.table-services td.outages{color:red}
+.table-services td.warnings{color:orange}
+.table-services td.service{text-transform:uppercase;margin-top:20px;opacity:.6;font-size:100%;color:gray}
+.filter-container{margin:10px 0}
+.filter-container input.query{padding-left:30px;display:block}
+.filter-container span.icon{position:absolute;left:10px;padding:10px 12px;pointer-events:none}
+.filter-container div.filter-to-me{padding-top:5px}
+.services-sidebar{float:left;padding:.8em 2em 0 .4em;width:17%}
+.services-sidebar table{width:100%}
+.services-sidebar table td.name{max-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.services-sidebar table td.uptime{width:30%;padding-right:10px}
+.services-sidebar table td.uptime span{display:inline-block;min-width:45px;font-weight:700}
+.services-sidebar table td.uptime span.down{color:red}
+.services-sidebar table td.uptime span.up{color:green}
+.services-sidebar table tr.selected a{color:#000;font-weight:700}
+.details-page{float:right;width:83%}
+@media (max-width:991px){.details-page{float:inherit;width:100%}
+.services-sidebar{display:none}
+}
+input.ng-dirty.ng-invalid,input.ng-touched.ng-invalid{color:red;border-color:red}
