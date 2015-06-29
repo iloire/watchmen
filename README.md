@@ -1,186 +1,161 @@
-# "watchmen", a service monitor for node.js
+# watchmen: a service monitor for node.js
 
-[![Build Status](https://secure.travis-ci.org/iloire/WatchMen.png?branch=1.x)](http://travis-ci.org/iloire/WatchMen)
+[![Build Status](https://secure.travis-ci.org/iloire/WatchMen.png?branch=master)](http://travis-ci.org/iloire/WatchMen)
 
-- monitor service health (outages, uptime, response time warnings, avg. response time, etc) in your servers (`http`, `smtp`, etc).
-- use the database of your choice. Data **storages are pluggable**. At this time, only [redis](http://redis.io) storage is available, but it is pretty easy to create and plug your own. There are plans to support `couchdb` and `mongodb` in the short term.
-- **ping types are pluggable**. At this time, `http` (includes `https`) and `smtp` (tcp connection check) are available.
-- watchmen provides **customizable notifications** if service is down, the response time is over a predefined limit, etc..
-- the code base aims to be small, simple and easy to understand and modify.
-
-There is a <a href="http://letsnode.com/example-of-what-node-is-really-good-at" target="_blank">related blog post about watchmen here</a>.
+- watchmen monitors health (outages, uptime, response time warnings, avg. response time, etc) for your servers.
+- **ping types are pluggable** through npm modules. At this time, `http-head` and `http-contains` are available. Read more about ping services and how to create one below.
+- watchmen provides **custom actions through plugins** (console outpug, email notifications, etc).
+- the code base aims to be simple and easy to understand and modify.
 
 # Demo
 
 Check the **web interface** in action: <a href="http://watchmen.letsnode.com" target="_blank">watchmen.letsnode.com</a>.
 
-![List of hosts](https://github.com/iloire/WatchMen/raw/1.x/screenshots/watchmen-01.png)
+![watchmen, service details](https://github.com/iloire/WatchMen/raw/master/screenshots/watchmen-details-mobile-01.png)
+
+![watchmen, service list](https://github.com/iloire/WatchMen/raw/master/screenshots/watchmen-list-mobile-01.png)
+
+![watchmen, add service](https://github.com/iloire/WatchMen/raw/master/screenshots/watchmen-add.png)
+
+![watchmen, list services](https://github.com/iloire/WatchMen/raw/master/screenshots/watchmen-list-wide-01.png)
+
+
 
 # Installation
 
 ## Requirements
 
-Install first bower and redis store:
+Make sure bower is installed globally:
 
     $ npm install -g bower
 
-[http://redis.io/download](Download redis from here)
-
+Get redis from [redis.io](http://redis.io/download) and install it.
 
 ## Install watchmen
 
-This command will install both npm and bower dependencies
+    git clone git@github.com:iloire/WatchMen.git
+    cd WatchMen
 
     $ npm install
 
 # Running and stopping watchmen
 
-Make sure you have `redis-server` in your `PATH`
-
-    $ npm start
-    $ npm stop
-
-Or if you want to run the services separately:
+Make sure you have `redis-server` in your `PATH`. Then you can run watchmen services:
 
     $ redis-server redis.conf
-    $ node server.js
-    $ node webserver/app.js
+    $ ./run-monitor-server.sh
+    $ ./run-web-server.sh
+
+## Managing your node processes with pm2
+
+Install pm2:
+
+    $ npm install -g pm2
+
+Configure env variables:
+
+    $ export WATCHMEN_WEB_PORT=8080
+
+Run servers:
+
+    $ pm2 start run-monitor-server.sh
+    $ pm2 start run-web-server.sh
+
+Server list:
+
+    $ pm2 list
+
+![List of pm2 services](https://github.com/iloire/WatchMen/raw/master/screenshots/pm2-01.png)
 
 ## Configuration
 
-### a) Define hosts and services to be monitored:
+Config is set through ``env`` variables.
 
-You need at least one service for each host. Define the ping service type for each host or service.
+Have a look at the /config folder for more details, but the general parameters are:
 
-Most of the properties can be defined either at host or service level. Service level properties will be prioritized.
-
-```js
-//-------------------
-//config/hosts.js
-//-------------------
-
-//example of http ping for a host with 2 url's
-{
-  name:'letsnode blog',
-  host: 'letsnode.com',
-  port:80,
-  ping_interval: one_minute, //set ping interval (in seconds)
-  ping_service_name: 'http', //if ping_service_name is not defined, 'http' is used by default
-  failed_ping_interval: one_minute, //set ping interval if site is down (in seconds)
-  enabled: true, //enables/disables this host
-  alert_to: ['ivan@iloire.com'], //emails to alert if site goes down.
-  warning_if_takes_more_than: 700, //miliseconds. alert if request takes more than this
-  remove_events_older_than_seconds : 60 * 60 * 24 * 10, // remove events older than (seconds)
-  services : [
-    {
-      name : 'home',
-      method: 'get',
-      url : '/',
-      //expected status code and expected string to be found in the response (otherwise will fail)
-      expected: {statuscode: 200, contains: 'A blog about node.js and express.js'}
-    } ,
-    {
-      name : 'contact page',
-      method: 'get',
-      url : '/contact',
-      expected: {statuscode: 200, contains: 'Contact page'}
-    }
-  ]
-} ,
-
-//example of smtp ping
-{
-  name:'mydomain',
-  host: 'mydomain.com',
-  port:25,
-  ping_interval: one_minute, //set ping interval (in seconds)
-  ping_service_name: 'smtp',
-  failed_ping_interval: one_minute,
-  enabled: true,
-  alert_to: ['ivan@iloire.com'], //emails to alert if site goes down.
-  warning_if_takes_more_than: 700, //miliseconds. alert if request takes more than this
-  services : [
-    {
-      name : 'my smtp server'
-    }
-  ]
-}
+```sh
+export WATCHMEN_BASE_URL='http://watchmen.letsnode.com'
+export WATCHMEN_WEB_PORT='8080'
+export WATCHMEN_ADMINS='admin@domain.com'
+export WATCHMEN_GOOGLE_ANALYTICS_ID='your-GA-ID'
 ```
 
 ### Authorization settings (since 2.2.0)
 
-Since version ``2.2.0`` you can restrict reporting access to services or hosts to certain users (authentication works using passportjs's OAuth2 GoogleStrategy).
+Watchmen uses Google Auth through passportjs for authentication. If your google email is present in ``WATCHMEN_ADMINS`` env variable, you will be able to **manage services**.
 
-Simply use the ``restrictedTo`` option for a particular service or host.
+Make sure you set the right hostname so the OAuth dance can be negociated correctly:
 
-
-```js
-{
-  name:'letsnode blog',
-  host: 'letsnode.com',
-  port:80,
-  ping_interval: one_minute, //set ping interval (in seconds)
-  ping_service_name: 'http', //if ping_service_name is not defined, 'http' is used by default
-  failed_ping_interval: one_minute, //set ping interval if site is down (in seconds)
-  services : [
-    {
-      name : 'home',
-      method: 'get',
-      url : '/',
-      expected: {statuscode: 200, contains: 'A blog about node.js and express.js'},
-      restrictedTo: ["admin@yourdomain.com"] // you can apply restrictions at a service or host 
-    }
-  ],
-level
-} ,
-```
-
-Make sure you set the right hostname in the ``config/web.js`` file so the OAuth dance can be negociated correctly:
-
-```js
-public_host_name: 'http://watchmen.letsnode.com/', // required for OAuth dance
+```sh
+export WATCHMEN_BASE_URL='http://watchmen.letsnode.com/'
 ```
 
 You will also need to set the Google client ID and secret using ``env`` variables accordingly. (Login into https://console.developers.google.com/ to create them first)
 
-```js
-auth: {
-	GOOGLE_CLIENT_ID: process.env.WATCHMEN_GOOGLE_CLIENT_ID || '<Create credentials from Google Dev Console>',
-	GOOGLE_CLIENT_SECRET: process.env.WATCHMEN_GOOGLE_CLIENT_SECRET || '<Create credentials from Google Dev Console>'
-},
+```sh
+export WATCHMEN_GOOGLE_CLIENT_ID='<your key>'
+export WATCHMEN_GOOGLE_CLIENT_SECRET='<your secret>'
 ```
 
 ### Ping services
 
-#### HTTP
 
-Using http ping service, you can also check for a) certain http status code or b) a certain text in the response stream.
+#### Embedded ping services
 
-##### Main properties:
+##### HTTP-HEAD
 
-- `host.host`
-- `host.port`
-- `host.ping_service_name` (use 'http', although it is the default value)
-- `service.method` (get/post)
-- `service.url`
-- `service.expected` (expected status code, expected text to be found in response)
+https://www.npmjs.com/package/watchmen-ping-http-head
 
-#### SMTP
-##### Main properties:
+##### HTTP-CONTAINS
 
-- `host.host`
-- `host.port`
-- `host.ping_service_name` (use 'smtp')
+https://www.npmjs.com/package/watchmen-ping-http-contains
 
-### b) Notifications settings:
+#### Creating your own ping service
 
-You can use one, many or none of the following notification services simultaneously:
+Ping services are npm modules with the ``'watchmen-ping'`` prefix.
 
-#### AWS-SES
+For example, if you want to create a smtp ping service:
 
+##### a) create a watchmen-ping-smtp module and publish it. This is how a simple HTTP ping service looks like:
+
+```javascript
+var request = require('request');
+
+function PingService(){}
+
+exports = module.exports = PingService;
+
+PingService.prototype.ping = function(service, callback){
+  var startTime = +new Date();
+  request.get({ method: 'HEAD', uri: service.url }, function(error, response, body){
+    callback(error, body, response, +new Date() - startTime);
+  });
+};
+
+PingService.prototype.getDefaultOptions = function(){
+  return {}; // there is not need for UI confi options for this ping service
+}
 ```
-export WATCHMEN_NOTIFICATIONS_AWS_SES_ENABLED='true'
 
+##### b) npm install it in watchmen:
+
+```sh
+     npm install watchmen-ping-smtp
+```
+
+##### c) create a service that uses that ping service
+
+![Select ping service](https://github.com/iloire/WatchMen/raw/master/screenshots/ping-service-selection.png)
+
+### Monitor plugins
+
+#### AWS SES Notifications
+
+https://github.com/iloire/watchmen-plugin-aws-ses
+
+##### Settings
+
+```sh
 export WATCHMEN_AWS_FROM='your@email'
 export WATCHMEN_AWS_REGION='your AWS region'
 export WATCHMEN_AWS_KEY='your AWS Key'
@@ -188,139 +163,185 @@ export WATCHMEN_AWS_SECRET='your AWS secret'
 
 ```
 
-#### Postmark
+#### Console output
 
-```
-export WATCHMEN_NOTIFICATIONS_POSTMARK_ENABLED='true'
+https://github.com/iloire/watchmen-plugin-console
 
-export WATCHMEN_POSTMARK_FROM='your@email'
-export WATCHMEN_POSTMARK_API_KEY='your Postmark API key'
-```
 
-Every time the service triggers an alert, a notification will be send using the predefined notification services to the email addresses defined on the ``alert_to`` property for a particular service or host.
+#### Creating your own plugin
 
-Also, you can subscribe a list of emails to receive all the notifications form all the services by using:
+A ``watchmen`` instance will be injected through your plugin constructor. Then you can subscribe to the desired events. Best is to show it through an example.
 
-```
-export WATCHMEN_NOTIFICATIONS_ALWAYS_ALERT_TO="admin1@domain.com, leaddev@domain.com"
-```
+This what the console plugin looks like:
 
-### c) Configure the storage provider
+```javascript
+var colors = require('colors');
+var moment = require('moment');
 
-```js
-//-------------------
-// config/storage.js
-//-------------------
+var eventHandlers = {
 
-module.exports = {
+  /**
+   * On a new outage
+   * @param service
+   * @param outage
+   */
 
-  //---------------------------
-  // Select storage provider.
-  // Supported providers: 'redis' (only redis at this time)
-  //---------------------------
-  provider : 'redis',
+  onNewOutage: function (service, outage) {
+    var errorMsg = service.name + ' down!'.red + '. Error: ' + JSON.stringify(outage.error).red;
+    console.log(errorMsg);
+  },
 
-  options : {
+  /**
+   * Failed ping on an existing outage
+   * @param service
+   * @param outage
+   */
 
-    //---------------------------
-    // redis configuration
-    //---------------------------
-    'redis' : {
-      port: 1216,
-      host: '127.0.0.1',
-      db: 1
-    }
+  onCurrentOutage: function (service, outage) {
+    var errorMsg = service.name + ' is still down!'.red + '. Error: ' + JSON.stringify(outage.error).red;
+    console.log(errorMsg);
+  },
+
+  /**
+   * Warning alert
+   * @param service
+   * @param data.elapsedTime ms
+   */
+
+  onLatencyWarning: function (service, data) {
+    var msg = service.name + ' latency warning'.yellow + '. Took: ' + (data.elapsedTime + ' ms.').yellow;
+    console.log(msg);
+  },
+
+  /**
+   * Service is back online
+   * @param service
+   * @param lastOutage
+   */
+
+  onServiceBack: function (service, lastOutage) {
+    var duration = moment.duration(+new Date() - lastOutage.timestamp, 'seconds');
+    console.log(service.name.white + ' is back'.green + '. Down for '.gray + duration.humanize().white);
+  },
+
+  /**
+   * Service is responding correctly
+   * @param service
+   * @param data
+   */
+
+  onServiceOk: function (service, data) {
+    var serviceOkMsg = service.name + ' responded ' + 'OK!'.green;
+    var responseTimeMsg = data.elapsedTime + ' ms.';
+    console.log(serviceOkMsg, responseTimeMsg.gray);
   }
 };
+
+function ConsolePlugin(watchmen) {
+  watchmen.on('new-outage', eventHandlers.onNewOutage);
+  watchmen.on('current-outage', eventHandlers.onCurrentOutage);
+
+  watchmen.on('latency-warning', eventHandlers.onLatencyWarning);
+  watchmen.on('service-back', eventHandlers.onServiceBack);
+  watchmen.on('service-ok', eventHandlers.onServiceOk);
+}
+
+exports = module.exports = ConsolePlugin;
 ```
+
 ### Storage providers
 
 #### Redis
-##### Installation and configuration
 
-1. get redis from [redis.io](http://redis.io)
-2. launch the server:
-
-```
-    $ redis-server redis.conf
-```
 ##### Data schema
 
 ```
 service - set with service id's
+service:latestOutages - latest outages for all services
 service:<serviceId> - hashMap with service details
 service:<serviceId>:outages:current - current outage for a service (if any)
 service:<serviceId>:outages - sorted set with outages info
 service:<serviceId>:latency - sorted set with latency info
 ```
 
-### d) Add custom logic
+##### Configuration
 
-Example: log in the console and send email if there is an outage:
+```sh
+export WATCHMEN_REDIS_PORT_PRODUCTION=1216
+export WATCHMEN_REDIS_DB_PRODUCTION=1
 
-```js
-//-------------------
-// server.js
-//-------------------
-
-var watchmen = new WatchMenFactory(services, storage);
-
-watchmen.on('service_error', eventHandlers.onServiceError);
-watchmen.on('service_warning', eventHandlers.onServiceWarning);
-watchmen.on('service_back', eventHandlers.onServiceBack);
-watchmen.on('service_ok', eventHandlers.onServiceOk);
-
-// your own additional custom handlers:
-watchmen.on('service_error', function(service, state){
-  // do stuff on error
-});
-
-watchmen.start();
+export WATCHMEN_REDIS_PORT_DEVELOPMENT=1216
+export WATCHMEN_REDIS_DB_DEVELOPMENT=2
 ```
 
-## Ping Services
 
-Ping services are plugable as npm modules.
-For example, if you want to create a smtp ping service:
+### Using fake data for development
 
-### a) create a watchmen-ping-smtp module and publish it. This is how a simple HTTP ping service looks:
+```sh
+cd scripts
+sh populate-dummy-data-120days.sh # will populate data from 120 days
+```
 
-    var request = require('request');
+or
 
-    function PingService(){}
+```sh
+sh populate-dummy-data-30days.sh
+```
 
-    exports = module.exports = PingService;
-    
-    PingService.prototype.ping = function(service, callback){
-      var startTime = +new Date();
-      request.get({ method: 'HEAD', uri: service.url }, function(error, response, body){
-        callback(error, body, response, +new Date() - startTime);
-      });
-    };
-
-
-### b) npm install it in WatchMen:
-
-     npm install watchmen-ping-smtp
-
-### c) create a service that uses that ping service
-
-    service.PingServiceName = 'smtp'; // (ignore the 'watchmen-ping-' sufix)
+etc..
 
 
 ## Tests
 
+```sh
     $ npm test
+```
 
 ### Test coverage
 
+```sh
     $ npm run coverage
+```
 
 Then check the coverage reports:
 
+```sh
     $ open coverage/lcov-report/lib/index.html
+```
+
+## Debugging
+
+watchmen uses [debug](https://www.npmjs.com/package/debug)
+
+```sh
+    set DEBUG=*
+```
+
+## TODO
+
+ - Define a data expiration period (per service)
+ - Handle auth in ping services.
+
+## Contributions
+
+You can contribute by:
+
+- Addressing one if the items on the TODO list or one of the open issues.
+- Creating monitor plugins.
+- Creating ping services.
+- Reporting bugs.
 
 ## History
+
+**3.0.0**
+
+- Watchmen monitor has been refactored. **There is not backwards compatibility with previous watchmen databases.**
+- Pluggable ping services as separate npm modules (http-head and http contains included).
+- Plugins for watchmen monitor as separate npm modules (console and AWS SES Notifications included).
+- Services are persisted in the database.
+- UI panel to add/edit/delete/reset services.
+- Store latency points. Latency charts.
+- Restricted services to users (by email). Login with Google Auth to access those.
 
 **2.5.0**
 
@@ -464,6 +485,15 @@ Then check the coverage reports:
 - Reset stats from control panel
 - Regular expressions support
 - Reset warning and error counter according to event expiration.
+
+## Third party attribution
+
+- Bootstrap - http://getbootstrap.com/
+- "Font Awesome by Dave Gandy - http://fortawesome.github.com/Font-Awesome"
+- C3 charts - http://c3js.org/
+- ngTable - http://ng-table.com/
+
+(see package.json and bower.json for a complete list of libraries and dependencies)
 
 ## License
 
