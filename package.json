@@ -2,12 +2,12 @@
   "author": "Iván Loire <ivan@iloire.com> (http://iloire.com/)",
   "name": "watchmen",
   "scripts": {
-    "precoverage": "npm install;redis-server test/redis.test.conf",
     "coverage": "./node_modules/istanbul/lib/cli.js cover ./node_modules/mocha/bin/_mocha -- --ui bdd -R spec -t 5000",
     "postcoverage": "kill `cat test/redis.pid`",
+    "posttest": "kill `cat test/redis.pid`",
+    "precoverage": "npm install;redis-server test/redis.test.conf",
     "pretest": "redis-server test/redis.test.conf",
-    "test": "mocha -R list -b test/*.js;kill `cat test/redis.pid`",
-    "posttest": "kill `cat test/redis.pid`"
+    "test": "mocha -R list -b test/*.js;kill `cat test/redis.pid`"
   },
   "description": "A simple service monitor",
   "version": "2.5.0",
@@ -20,10 +20,10 @@
     "node": ">=0.10"
   },
   "keywords": [
-    "watchmen",
-    "service",
     "monitor",
-    "ping"
+    "ping",
+    "service",
+    "watchmen"
   ],
   "license": "MIT",
   "dependencies": {
@@ -50,8 +50,8 @@
     "stream-spigot": "^3.0.5",
     "timestream-aggregates": "^0.1.7",
     "validator": "^3.39.0",
-    "watchmen-ping-http-head": "^0.1.0",
     "watchmen-ping-http-contains": "0.0.1",
+    "watchmen-ping-http-head": "^0.1.0",
     "watchmen-plugin-aws-ses": "0.0.1",
     "watchmen-plugin-console": "0.0.1"
   },
@@ -74,6 +74,7 @@
     "main-bower-files": "^2.6.2",
     "mocha": "^2.2.5",
     "passport-mock": "0.0.3",
-    "sinon": "^1.14.1"
+    "sinon": "^1.14.1",
+    "supertest": "^1.0.1"
   }
 }
