@@ -14,7 +14,7 @@
      */
 
     function getDefaultParameters(key) {
-      var defaults = {};
+      var defaults = {"sorting": {"status.last24Hours.uptime": "asc"}};
 
       if (SAVE_PARAMS_IN_LOCALSTORAGE && window.localStorage) {
         if (window.localStorage.getItem(key)) {
