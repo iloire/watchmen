@@ -7,7 +7,7 @@
     "posttest": "kill `cat test/redis.pid`",
     "precoverage": "npm install;redis-server test/redis.test.conf",
     "pretest": "redis-server test/redis.test.conf",
-    "test": "mocha -R list -b test/*.js;kill `cat test/redis.pid`"
+    "test": "mocha -R list -b test/*.js"
   },
   "description": "A simple service monitor",
   "version": "2.5.0",
