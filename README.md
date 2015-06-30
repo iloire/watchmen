@@ -279,7 +279,7 @@ export WATCHMEN_REDIS_DB_DEVELOPMENT=2
 
 ```sh
 cd scripts
-sh populate-dummy-data-120days.sh # will populate data from 120 days
+sh populate-dummy-data-120days.sh # will populate data for a 120 day period
 ```
 
 or
@@ -294,19 +294,19 @@ etc..
 ## Tests
 
 ```sh
-    $ npm test
+$ npm test
 ```
 
 ### Test coverage
 
 ```sh
-    $ npm run coverage
+$ npm run coverage
 ```
 
 Then check the coverage reports:
 
 ```sh
-    $ open coverage/lcov-report/lib/index.html
+$ open coverage/lcov-report/lib/index.html
 ```
 
 ## Debugging
@@ -314,7 +314,7 @@ Then check the coverage reports:
 watchmen uses [debug](https://www.npmjs.com/package/debug)
 
 ```sh
-    set DEBUG=*
+set DEBUG=*
 ```
 
 ## TODO
