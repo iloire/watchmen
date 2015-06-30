@@ -23,7 +23,7 @@ module.exports = (function (){
           clientID: config.auth.GOOGLE_CLIENT_ID,
           clientSecret: config.auth.GOOGLE_CLIENT_SECRET,
           passReqToCallback: true,
-          callbackURL: url.resolve(config.public_host_name, '/auth/google/callback')
+          callbackURL: url.resolve(config.public_host_name || '', '/auth/google/callback')
         },
         function(request, accessToken, refreshToken, profile, done) {
           var email = profile.emails[0].value;
