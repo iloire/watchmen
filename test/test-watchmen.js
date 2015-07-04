@@ -34,7 +34,7 @@ describe('watchmen', function () {
     done();
   });
 
-  describe('event emmitter',function(){
+  describe('event emitter',function(){
 
     it('should emit "new-outage" when ping fails for the first time', function (done) {
       mockedPing.mockedResponse = ERROR_RESPONSE;
@@ -208,5 +208,54 @@ describe('watchmen', function () {
       watchmen.stopAll();
     });
   });
-  
+
+  describe('add service', function(){
+    it('should add service and start it', function(done){
+      var newService = {
+        id: 'X3333',
+        host: {host: 'www.new-service.com', port: '80', name: 'test'},
+        url: '/',
+        interval: 4 * 1000,
+        failureInterval: 5 * 1000,
+        warningThreshold: 1500,
+        pingService: mockedPing
+      };
+
+      var watchmen = new Watchmen([service], new mockedStorage(null));
+      watchmen._launch = function () {
+        done(); // service ping is invoked
+      };
+      watchmen.addService(newService);
+      assert.equal(watchmen.services.length, 2);
+    });
+  });
+
+  describe('remove service', function(){
+    it('should throw error if service Id is not provided', function(){
+      var watchmen = new Watchmen([service], new mockedStorage(null));
+      assert.throws(function() {
+        watchmen.removeService();
+      });
+    });
+
+    it('should throw error if the service Id is invalid', function(){
+      var watchmen = new Watchmen([service], new mockedStorage(null));
+      assert.throws(function() {
+        watchmen.removeService('invalid-id');
+      });
+    });
+
+    it('should stop and remove service', function(done){
+      var watchmen = new Watchmen([service], new mockedStorage(null));
+      watchmen._launch = function () {
+        done('should not be invoked');
+      };
+      watchmen.removeService(service.id);
+      assert.equal(watchmen.services.length, 0);
+      watchmen.startAll();
+      clock.tick(30000);
+      done();
+    });
+  });
+
 });
