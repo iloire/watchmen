@@ -5,7 +5,7 @@
     "coverage": "./node_modules/istanbul/lib/cli.js cover ./node_modules/mocha/bin/_mocha -- --ui bdd -R spec -t 5000",
     "postcoverage": "kill `cat test/redis.pid`",
     "posttest": "kill `cat test/redis.pid`",
-    "precoverage": "npm install;redis-server test/redis.test.conf",
+    "precoverage": "redis-server test/redis.test.conf",
     "pretest": "redis-server test/redis.test.conf",
     "test": "mocha -R list -b test/*.js"
   },
