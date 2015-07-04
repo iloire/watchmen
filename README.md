@@ -309,6 +309,8 @@ Then check the coverage reports:
 $ open coverage/lcov-report/lib/index.html
 ```
 
+![watchmen test coverage](https://github.com/iloire/WatchMen/raw/master/screenshots/test-coverage-node-01.png)
+
 ## Debugging
 
 watchmen uses [debug](https://www.npmjs.com/package/debug)
