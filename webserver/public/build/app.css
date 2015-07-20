@@ -10,16 +10,13 @@
 .chart-wrapper .chart .c3-tooltip tr{border:1px solid #c2c2c2;border-radius:4px}
 .chart-wrapper .chart .c3-tooltip th{background-color:#333}
 footer{color:#ccc;padding:20px;text-align:center}
+.details-page .table-logs th,.table-services th{text-align:left}
 footer a{color:#c2c2c2}
 html{box-sizing:border-box}
 *,:after,:before{box-sizing:inherit}
 body{padding-top:60px}
 .spinner{opacity:.8}
 h2{margin:10px 0;color:gray;font-size:2.1em}
-.status-overview{text-align:right;padding:10px;font-size:1.5em;color:#fff}
-.details-page .table-logs th,.table-services th{text-align:left}
-.status-overview>span{color:#fff;display:inline;padding:5px 12px;border-radius:5px}
-.status-overview .down{background-color:red}
 .ng-table th.sortable.sort-asc,.ng-table th.sortable.sort-desc{background-color:#f5f5f5;border-radius:3px}
 .details-page .edit-link{font-size:.5em}
 .details-page .status .up{color:green;font-weight:700}

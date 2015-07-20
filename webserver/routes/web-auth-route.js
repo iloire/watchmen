@@ -1,10 +1,17 @@
 var config = require('../../config/web');
 var passport = require('passport');
 var url = require('url');
+var crypto = require('crypto');
 
 var GoogleStrategy = require( 'passport-google-oauth2' ).Strategy;
 
 module.exports = (function (){
+
+  function md5(str) {
+    var hash = crypto.createHash('md5');
+    hash.update(str.toLowerCase().trim());
+    return hash.digest('hex');
+  }
 
   function isAdmin(email){
     var admins = (process.env.WATCHMEN_ADMINS || '').split(',').map(function(email){ return email.trim (); });
@@ -12,7 +19,7 @@ module.exports = (function (){
   }
 
   return {
-    
+
     /**
      * Configure application with authentication mechanisms
      * @param  {Application} app
@@ -27,7 +34,11 @@ module.exports = (function (){
         },
         function(request, accessToken, refreshToken, profile, done) {
           var email = profile.emails[0].value;
-          done(null, { email : email, isAdmin: isAdmin(email) });
+          done(null, {
+            email : email,
+            emailHash: md5(email),
+            isAdmin: isAdmin(email)
+          });
         }
       ));
 
