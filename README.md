@@ -43,8 +43,8 @@ Get redis from [redis.io](http://redis.io/download) and install it.
 Make sure you have `redis-server` in your `PATH`. Then you can run watchmen services:
 
     $ redis-server redis.conf
-    $ ./run-monitor-server.sh
-    $ ./run-web-server.sh
+    $ node run-monitor-server.js
+    $ node run-web-server.js
 
 ## Managing your node processes with pm2
 
@@ -58,8 +58,8 @@ Configure env variables:
 
 Run servers:
 
-    $ pm2 start run-monitor-server.sh
-    $ pm2 start run-web-server.sh
+    $ pm2 start node run-monitor-server.js
+    $ pm2 start node run-web-server.js
 
 Server list:
 
