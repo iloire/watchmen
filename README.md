@@ -58,8 +58,8 @@ Configure env variables:
 
 Run servers:
 
-    $ pm2 start node run-monitor-server.js
-    $ pm2 start node run-web-server.js
+    $ pm2 start run-monitor-server.js
+    $ pm2 start run-web-server.js
 
 Server list:
 
