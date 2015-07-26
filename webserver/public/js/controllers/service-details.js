@@ -21,7 +21,7 @@
         $timeout) {
 
       function getChartSize() {
-        return {height: 150, width: $('.details-page').width()};
+        return {height: 200, width: $('.chart-container').width()};
       }
 
       function loading(){

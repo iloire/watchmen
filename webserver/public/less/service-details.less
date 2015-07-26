@@ -1,32 +1,53 @@
 .details-page {
 
+  .chart-wrapper {
+    margin-bottom: 1.5em;
+  }
+
+  .chart-wrapper > span {
+    font-size: 1.4em;
+    color:gray;
+    display: inline-block;
+    width: 32%;
+    border: solid lightgray 1px;
+    text-align: center;
+    padding:0.3em;
+
+    &.uptime {
+      color:green;
+    }
+
+    &.downtime {
+      color:#d9534f;
+    }
+  }
+
   .edit-link {
     font-size:0.5em;
   }
 
-  .status {
-    .up {
+  .status span {
+    &.up {
+      font-size:2em;
       color: green;
       font-weight: bold;
     }
-    .down {
-      color: red;
+
+    &.down {
+      font-size:2em;
+      color: #d9534f;
       font-weight: bold;
     }
   }
 
-  .table-logs {
-    th {
-      text-align: left;
+  .outages-list {
+    .outage {
+      padding:0.3em;
+      border-top: solid #d3d3d3 1px;
     }
-
-    td:first-child {
-      width: 70%;
+    .odd {
+      background-color: #f9f9f9;
     }
-  }
-
-  .outages thead td {
-    color: #c2c2c2;
   }
 }
 

@@ -1,37 +1,19 @@
 <div ng-show="latestOutages.length">
-    <h4>Outages</h4>
-    <table class="outages table-logs table sorted table-striped table-condensed">
-        <thead>
-        <tr>
-            <td>
-                Error message
-            </td>
-            <td>
-                Duration
-            </td>
-            <td>
-                Time
-            </td>
-        </tr>
-        </thead>
-        <tbody>
-        <tr ng-repeat="log in latestOutages">
-            <td class="" data-title="'Message'" sortable="'msg'">
-                <span class="error">
-                    OUTAGE
-                </span>
-                <span class="text-muted">
-                    {{log.error}}
-                </span>
-            </td>
-            <td>
-                <span ms-time="log.downtime"></span>
-            </td>
-            <td class="" data-title="'When'" sortable="'timestamp'">
+    <h4>Latest outages</h4>
+    <div ng-repeat="log in latestOutages">
+        <div ng-class-odd="'outage odd'" ng-class-even="'outage even'">
+            <div class="text-muted">
                 <span>{{log.timestamp | amDateFormat:'MMMM Do, HH:mm:ss'}}</span>
-                (<span class="text-muted" am-time-ago="log.timestamp"></span>)
-            </td>
-        </tr>
-        </tbody>
-    </table>
+                - <span class="text-muted" am-time-ago="log.timestamp"></span>
+            </div>
+
+            <div class="error">
+                {{log.error}}
+            </div>
+
+            <div>
+                Downtime: <strong><span ms-time="log.downtime"></span></strong>
+            </div>
+        </div>
+    </div>
 </div>
