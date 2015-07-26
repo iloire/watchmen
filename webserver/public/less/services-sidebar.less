@@ -1,11 +1,15 @@
 .services-sidebar {
-  float:left;
-  padding:0.8em 2em 0 0.4em;
-  width:17%;
+  padding:1.2em;
+  width:250px;
+  font-size: 1.1em;
 
   table {
 
     width: 100%;
+
+    td {
+      padding:0.1em;
+    }
 
     td.name {
       max-width: 0;
@@ -24,7 +28,7 @@
         font-weight: bold;
 
         &.down {
-          color:red;
+          color:#d9534f;
         }
 
         &.up {
@@ -39,21 +43,5 @@
         font-weight: bold;
       }
     }
-  }
-}
-
-.details-page{
-  float:right;
-  width:83%;
-}
-
-@media (max-width: 991px) {
-  .details-page{
-    float:inherit;
-    width:100%;
-  }
-
-  .services-sidebar {
-    display:none;
   }
 }

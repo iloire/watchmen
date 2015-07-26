@@ -21,7 +21,7 @@
         $timeout) {
 
       function getChartSize() {
-        return {height: 150, width: $('.details-page').width()};
+        return {height: 200, width: $('.chart-container').width()};
       }
 
       function loading(){
@@ -114,11 +114,17 @@
             }));
           }
 
-          $(window).resize(function(){
+          function onWindowResize () {
             for (var i = 0; i < charts.length; i++) {
               charts[i].resize(getChartSize());
             }
+          }
+
+          $scope.$on('$destroy', function(){
+            $(window).off("resize", onWindowResize);
           });
+
+          $(window).resize(onWindowResize);
 
         }, 0);
       }, errHandler);

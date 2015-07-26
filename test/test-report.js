@@ -259,7 +259,7 @@ describe('reporting', function () {
 
     });
 
-    describe('uptime', function () {
+    describe('uptime and downtime', function () {
 
       it('should return zero uptime if service started down', function (done) {
         storage.startOutage(services[0], {timestamp: +new Date(), error: 'my error'}, function (err) {
@@ -268,7 +268,9 @@ describe('reporting', function () {
             assert.ifError(err);
             assert.equal(data.status.lastHour.uptime, 0);
             assert.equal(data.status.last24Hours.uptime, 0);
+            assert.equal(data.status.last24Hours.downtime, 1000);
             assert.equal(data.status.lastWeek.uptime, 0);
+            assert.equal(data.status.lastWeek.downtime, 1000);
             done();
           });
         });
@@ -285,6 +287,7 @@ describe('reporting', function () {
           reporter.getService(services[0].id, function (err, data) {
             assert.ifError(err);
             assert.equal(data.status.lastHour.uptime, 90); // 2 outages of 3 minutes each in 60 min total time
+            assert.equal(data.status.lastHour.downtime, 2 * outageDuration);
             done();
           });
         });
@@ -303,6 +306,7 @@ describe('reporting', function () {
           reporter.getService(services[0].id, function (err, data) {
             assert.ifError(err);
             assert.equal(data.status.last24Hours.uptime, 87.5); // 3 outages of 1 hour each in 24 hour. (1 - 3/24)
+            assert.equal(data.status.last24Hours.downtime, 3 * outageDuration);
             done();
           });
         });
@@ -319,6 +323,7 @@ describe('reporting', function () {
           reporter.getService(services[0].id, function (err, data) {
             assert.ifError(err);
             assert.equal(data.status.lastWeek.uptime, 50); // 3 outages of 1 second each in 6 seconds total time
+            assert.equal(data.status.lastWeek.downtime, 3 * outageDuration);
             done();
           });
         });
