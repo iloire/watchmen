@@ -63,12 +63,6 @@
                     </span>
                 </td>
 
-                <td header-class="'hidden-sm hidden-xs'" class="outages hidden-sm hidden-xs" data-title="'Outages last 24h'" sortable="'status.last24Hours.numberOutages'">
-                    <span class="label label-danger" ng-if="row.status.last24Hours.numberOutages">
-                        {{row.status.last24Hours.numberOutages}}
-                    </span>
-                </td>
-
                 <% if (user && user.isAdmin) { %>
                 <td nowrap>
                     <a class="edit btn btn-default btn-xs" href="services/{{row.service.id}}/edit"><i class="fa fa-edit"></i> </a>
