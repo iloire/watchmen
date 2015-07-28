@@ -17,16 +17,17 @@ body{padding-top:60px}
 .spinner{opacity:.8}
 h2{margin:10px 0;color:gray;font-size:2.1em}
 .ng-table th.sortable.sort-asc,.ng-table th.sortable.sort-desc{background-color:#f5f5f5;border-radius:3px}
+.details-page .timestamp{font-size:.8em;line-height:1.8em}
+.details-page .timestamp .timeago{color:#c2c2c2}
+.details-page .glyphicon-ok-circle{color:green;font-size:.8em}
+.details-page .glyphicon-exclamation-sign{color:#d9534f;font-size:.8em}
 .details-page .chart-wrapper{margin-bottom:1.5em}
+.details-page .current-outage{font-size:1.2em;border:1px solid #eee;border-radius:3px;border-left-color:#ce4844;border-left-width:5px;padding:20px;margin:10px 0}
 .details-page .chart-wrapper>span{font-size:1.4em;color:gray;display:inline-block;width:32%;border:1px solid #d3d3d3;text-align:center;padding:.3em}
 .details-page .chart-wrapper>span.uptime{color:green}
 .details-page .chart-wrapper>span.downtime{color:#d9534f}
 .details-page .edit-link{font-size:.5em}
-.details-page .status span.up{font-size:2em;color:green;font-weight:700}
-.details-page .status span.down{font-size:2em;color:#d9534f;font-weight:700}
 .details-page .outages-list .outage{padding:.3em;border-top:solid #d3d3d3 1px}
-.details-page .outages-list .outage .timestamp{font-size:.8em;line-height:1.8em}
-.details-page .outages-list .outage .timestamp .timeago{color:#c2c2c2}
 .details-page .outages-list .odd{background-color:#f9f9f9}
 .service-edition .descr{color:#c2c2c2;padding-top:.4em}
 .service-edition .ping-service-option-panel{padding:.5em}

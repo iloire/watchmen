@@ -1,7 +1,36 @@
 .details-page {
 
+  .timestamp {
+    font-size: 0.8em;
+    line-height: 1.8em;
+
+    .timeago {
+      color: #c2c2c2;
+    }
+  }
+
+  .glyphicon-ok-circle {
+    color: green;
+    font-size: 0.8em;
+  }
+
+  .glyphicon-exclamation-sign {
+    color: #d9534f;
+    font-size: 0.8em;
+  }
+
   .chart-wrapper {
     margin-bottom: 1.5em;
+  }
+
+  .current-outage {
+    font-size: 1.2em;
+    border: 1px solid #eee;
+    border-radius: 3px;
+    border-left-color: #ce4844;
+    border-left-width: 5px;
+    padding: 20px;
+    margin: 10px 0;
   }
 
   .chart-wrapper > span {
@@ -26,33 +55,11 @@
     font-size:0.5em;
   }
 
-  .status span {
-    &.up {
-      font-size:2em;
-      color: green;
-      font-weight: bold;
-    }
-
-    &.down {
-      font-size:2em;
-      color: #d9534f;
-      font-weight: bold;
-    }
-  }
-
   .outages-list {
     .outage {
       padding:0.3em;
       border-top: solid #d3d3d3 1px;
 
-      .timestamp {
-        font-size: 0.8em;
-        line-height: 1.8em;
-
-        .timeago {
-          color: #c2c2c2;
-        }
-      }
     }
     .odd {
       background-color: #f9f9f9;

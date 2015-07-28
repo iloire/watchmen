@@ -14,7 +14,26 @@
     <h2>
         <i title="restricted to me" ng-if="serviceDetails.service.isRestricted" class="fa fa-lock"></i> {{serviceDetails.service.name}}
         <a class="edit-link" ng-if="isAdmin" href="/services/{{serviceDetails.service.id}}/edit"><i class="fa fa-edit"></i> edit</a>
+        <span ng-if="!serviceDetails.status.currentOutage">
+          <span title="site is up!" class="glyphicon glyphicon-ok-circle" aria-hidden="true"></span>
+        </span>
+        <span ng-if="serviceDetails.status.currentOutage">
+          <span title="site is down!!" class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
+        </span>
     </h2>
+
+    <div class="current-outage" ng-if="serviceDetails.status.currentOutage">
+      <span title="Outage" class="down">Site is down!. <strong>Error:</strong></span>
+      <span class="error">
+          {{serviceDetails.status.currentOutage.error}}
+      </span>
+      <div class="timestamp">
+          Outage started
+          <span>{{serviceDetails.status.currentOutage.timestamp | amDateFormat:'MMMM Do, HH:mm:ss'}}</span>
+          -
+          <span class="timeago" am-time-ago="serviceDetails.status.currentOutage.timestamp"></span>
+      </div>
+    </div>
 
     <div class="row">
 
@@ -79,24 +98,6 @@
         </div>
 
         <div class="col-md-4">
-            <div class="status">
-                <h4>Status</h4>
-
-                <div ng-if="!serviceDetails.status.currentOutage">
-                    <span title="Enabled" class="up">Site is Up!</span>
-                </div>
-
-                <div ng-if="serviceDetails.status.currentOutage">
-                    <span title="Outage" class="down">Site is DOWN!</span>
-                    <span class="error">
-                        {{serviceDetails.status.currentOutage.error}}
-                    </span>
-                    <div class="text-muted">
-                        Outage started
-                        <span am-time-ago="serviceDetails.status.currentOutage.timestamp"></span>
-                    </div>
-                </div>
-            </div>
             <div class="outages-list">
                 <%- include partials/outages.html %>
             </div>
