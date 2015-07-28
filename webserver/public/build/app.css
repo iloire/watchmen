@@ -25,6 +25,8 @@ h2{margin:10px 0;color:gray;font-size:2.1em}
 .details-page .status span.up{font-size:2em;color:green;font-weight:700}
 .details-page .status span.down{font-size:2em;color:#d9534f;font-weight:700}
 .details-page .outages-list .outage{padding:.3em;border-top:solid #d3d3d3 1px}
+.details-page .outages-list .outage .timestamp{font-size:.8em;line-height:1.8em}
+.details-page .outages-list .outage .timestamp .timeago{color:#c2c2c2}
 .details-page .outages-list .odd{background-color:#f9f9f9}
 .service-edition .descr{color:#c2c2c2;padding-top:.4em}
 .service-edition .ping-service-option-panel{padding:.5em}
