@@ -43,6 +43,9 @@ h2{margin:10px 0;color:gray;font-size:2.1em}
 .table-services td.outages{color:#d9534f}
 .table-services td.warnings{color:orange}
 .table-services td.service{text-transform:uppercase;margin-top:20px;opacity:.6;font-size:100%;color:gray}
+.table-services tr .outages.admin span.admin-operations{display:none}
+.table-services tr .outages.admin span.label,.table-services tr:hover .outages.admin span.admin-operations{display:inline}
+.table-services tr:hover .outages.admin span.label{display:none}
 .filter-container{margin:10px 0}
 .filter-container input.query{padding-left:30px;display:block}
 .filter-container span.icon{position:absolute;left:10px;padding:10px 12px;pointer-events:none}

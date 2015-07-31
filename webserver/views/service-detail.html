@@ -12,14 +12,16 @@
     </a>
 
     <h2>
-        <i title="restricted to me" ng-if="serviceDetails.service.isRestricted" class="fa fa-lock"></i> {{serviceDetails.service.name}}
-        <a class="edit-link" ng-if="isAdmin" href="/services/{{serviceDetails.service.id}}/edit"><i class="fa fa-edit"></i> edit</a>
+        <span ng-if="serviceDetails.service.isRestricted" class="glyphicon glyphicon-lock" aria-hidden="true"></span> {{serviceDetails.service.name}}
         <span ng-if="!serviceDetails.status.currentOutage">
           <span title="site is up!" class="glyphicon glyphicon-ok-circle" aria-hidden="true"></span>
         </span>
         <span ng-if="serviceDetails.status.currentOutage">
           <span title="site is down!!" class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
         </span>
+        <a class="edit-link" ng-if="isAdmin" href="/services/{{serviceDetails.service.id}}/edit">
+            <span class="glyphicon glyphicon-pencil" aria-hidden="true"></span> edit
+        </a>
     </h2>
 
     <div class="current-outage" ng-if="serviceDetails.status.currentOutage">

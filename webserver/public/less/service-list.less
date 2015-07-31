@@ -44,6 +44,24 @@
     font-size:100%;
     color: gray;
   }
+
+  tr .outages.admin {
+    span.admin-operations {
+      display:none;
+    }
+    span.label {
+      display:inline;
+    }
+  }
+
+  tr:hover .outages.admin {
+    span.admin-operations {
+      display: inline;
+    }
+    span.label {
+      display: none;
+    }
+  }
 }
 
 .filter-container {
