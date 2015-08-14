@@ -374,6 +374,23 @@ sh populate-dummy-data-30days.sh
 etc..
 
 
+## Running with docker
+
+To run with docker, make sure you have docker-compose installed: https://docs.docker.com/compose/install/
+
+Also, have a docker host running. A good way is using docker-machine with a local VM: https://docs.docker.com/machine/get-started/
+
+To build and run Watchmen, run the following:
+
+```
+docker-compose build
+docker-compose up
+```
+
+After this Watchmen webserver will be running and exposed in the port 3000 of the docker host.
+
+To configure, please look `docker-compose.yml` and `docker-compose.env`.
+
 ## Tests
 
 ```sh
