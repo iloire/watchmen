@@ -10,7 +10,8 @@ var api = require('./routes/api-service-route')
 var report = require('./routes/api-report-route')
 var web = require('./routes/web-route')
 var plugins = require('./routes/api-ping-plugins-route');
-var auth = require('./routes/web-auth-route');
+var webAuth = require('./routes/web-auth-route');
+var tokenAuth = require('./routes/token-auth-route');
 
 exports = module.exports = function(storage){
   if (!storage) {
@@ -31,7 +32,8 @@ exports = module.exports = function(storage){
   app.use(bodyParser.urlencoded({ extended: false }));
   app.use(methodOverride());
 
-  auth.configureApp(app);
+  webAuth.configureApp(app);
+  tokenAuth.configureApp(app);
 
   app.all('/*', function(req, res, next) {
     res.header("Access-Control-Allow-Origin", "*");

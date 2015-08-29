@@ -34,7 +34,6 @@ describe('report route', function () {
 
     server = app.listen(PORT, function () {
       if (server.address()) {
-        console.log('starting server in port ' + PORT);
         done();
       } else {
         console.log('something went wrong... couldn\'t listen to that port.');

@@ -1,27 +1,15 @@
 var config = require('../../config/web');
 var passport = require('passport');
 var url = require('url');
-var crypto = require('crypto');
-
+var securityHelper = require('./helpers/security');
 var GoogleStrategy = require( 'passport-google-oauth2' ).Strategy;
 
 module.exports = (function (){
 
-  function md5(str) {
-    var hash = crypto.createHash('md5');
-    hash.update(str.toLowerCase().trim());
-    return hash.digest('hex');
-  }
-
-  function isAdmin(email){
-    var admins = (process.env.WATCHMEN_ADMINS || '').split(',').map(function(email){ return email.trim (); });
-    return admins.indexOf(email)>-1;
-  }
-
   return {
 
     /**
-     * Configure application with authentication mechanisms
+     * Configure application to authenticate via oauth
      * @param  {Application} app
      */
     configureApp : function (app){
@@ -36,8 +24,8 @@ module.exports = (function (){
           var email = profile.emails[0].value;
           done(null, {
             email : email,
-            emailHash: md5(email),
-            isAdmin: isAdmin(email)
+            emailHash: securityHelper.md5(email),
+            isAdmin: securityHelper.isAdmin(email)
           });
         }
       ));

@@ -15,10 +15,8 @@ describe('ping plugins route', function () {
   var agent = request.agent(app);
 
   before(function (done) {
-
     server = app.listen(PORT, function () {
       if (server.address()) {
-        console.log('starting server in port ' + PORT);
         done();
       } else {
         console.log('something went wrong... couldn\'t listen to that port.');
