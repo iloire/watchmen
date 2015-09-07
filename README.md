@@ -1,6 +1,6 @@
 # watchmen: a service monitor for node.js
 
-[![Build Status](https://secure.travis-ci.org/iloire/WatchMen.png?branch=master)](http://travis-ci.org/iloire/WatchMen)
+[![Build Status](https://secure.travis-ci.org/iloire/watchmen.png?branch=master)](http://travis-ci.org/iloire/watchmen)
 
 - watchmen monitors health (outages, uptime, response time warnings, avg. response time, etc) for your servers.
 - **ping types are pluggable** through npm modules. At this time, `http-head` and `http-contains` are available. Read more about ping services and how to create one below.
@@ -11,13 +11,13 @@
 
 Check the [web interface in action](http://ec2-54-204-149-175.compute-1.amazonaws.com:3334/services).
 
-![watchmen, service details](https://github.com/iloire/WatchMen/raw/master/screenshots/watchmen-details-mobile-01.png)
+![watchmen, service details](https://github.com/iloire/watchmen/raw/master/screenshots/watchmen-details-mobile-01.png)
 
-![watchmen, service list](https://github.com/iloire/WatchMen/raw/master/screenshots/watchmen-list-mobile-01.png)
+![watchmen, service list](https://github.com/iloire/watchmen/raw/master/screenshots/watchmen-list-mobile-01.png)
 
-![watchmen, add service](https://github.com/iloire/WatchMen/raw/master/screenshots/watchmen-add.png)
+![watchmen, add service](https://github.com/iloire/watchmen/raw/master/screenshots/watchmen-add.png)
 
-![watchmen, list services](https://github.com/iloire/WatchMen/raw/master/screenshots/watchmen-list-wide-01.png)
+![watchmen, list services](https://github.com/iloire/watchmen/raw/master/screenshots/watchmen-list-wide-01.png)
 
 
 
@@ -33,7 +33,7 @@ Get redis from [redis.io](http://redis.io/download) and install it.
 
 ## Install watchmen
 
-    git clone git@github.com:iloire/WatchMen.git
+    git clone git@github.com:iloire/watchmen.git
     cd WatchMen
 
     $ npm install
@@ -65,7 +65,7 @@ Server list:
 
     $ pm2 list
 
-![List of pm2 services](https://github.com/iloire/WatchMen/raw/master/screenshots/pm2-01.png)
+![List of pm2 services](https://github.com/iloire/watchmen/raw/master/screenshots/pm2-01.png)
 
 ## Configuration
 
@@ -145,7 +145,7 @@ PingService.prototype.getDefaultOptions = function(){
 
 ##### c) create a service that uses that ping service
 
-![Select ping service](https://github.com/iloire/WatchMen/raw/master/screenshots/ping-service-selection.png)
+![Select ping service](https://github.com/iloire/watchmen/raw/master/screenshots/ping-service-selection.png)
 
 ### Monitor plugins
 
@@ -309,7 +309,7 @@ Then check the coverage reports:
 $ open coverage/lcov-report/lib/index.html
 ```
 
-![watchmen test coverage](https://github.com/iloire/WatchMen/raw/master/screenshots/test-coverage-node-01.png)
+![watchmen test coverage](https://github.com/iloire/watchmen/raw/master/screenshots/test-coverage-node-01.png)
 
 ## Debugging
 
