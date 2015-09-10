@@ -17,7 +17,7 @@ describe('watchmen', function () {
   var noop = function () {};
 
   beforeEach(function () {
-    clock = sinon.useFakeTimers(946684800);
+    clock = sinon.useFakeTimers(INITIAL_TIME);
     service = {
       id: 'X34dF',
       host: {host: 'www.correcthost.com', port: '80', name: 'test'},
@@ -29,7 +29,7 @@ describe('watchmen', function () {
     };
   });
 
-  after(function (done) {
+  afterEach(function (done) {
     clock && clock.restore();
     done();
   });
@@ -44,7 +44,7 @@ describe('watchmen', function () {
       watchmen.on('new-outage', function (service, outageData) {
         assert.equal(outageData.error, 'mocked error', 'should have error property');
         assert.equal(outageData.timestamp, failedTimestamp, 'should have timestamp property');
-        done(null);
+        done();
       });
       watchmen.ping({service: service, timestamp: failedTimestamp}, noop);
       clock.tick(ERROR_RESPONSE.latency);
