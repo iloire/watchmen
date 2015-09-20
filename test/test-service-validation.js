@@ -53,15 +53,23 @@ describe('service validator', function () {
     checkNonEmpty('port');
   });
 
-  it('should have a numberic value for "port"', function () {
+  it('should have a numeric value for "port"', function () {
     checkIntField('3434invalidnumber', 'port');
+  });
+
+  it('should have a numeric value for "failuresToBeOutage"', function () {
+    checkIntField('3434invalidnumber', 'failuresToBeOutage');
+  });
+
+  it('should not allow a negative value for "failuresToBeOutage"', function () {
+    checkIntField(-2, 'failuresToBeOutage');
   });
 
   it('should have a "timeout" field', function () {
     checkNonEmpty('timeout');
   });
 
-  it('should have a numberic value for "timeout"', function () {
+  it('should have a numeric value for "timeout"', function () {
     checkIntField('3434invalidnumber', 'timeout');
   });
 
@@ -69,7 +77,7 @@ describe('service validator', function () {
     checkNonEmpty('warningThreshold');
   });
 
-  it('should have a numberic value for "warningThreshold"', function () {
+  it('should have a numeric value for "warningThreshold"', function () {
     checkIntField('3434invalidnumber', 'warningThreshold');
   });
 

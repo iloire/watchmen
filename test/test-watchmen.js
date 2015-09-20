@@ -36,7 +36,7 @@ describe('watchmen', function () {
 
   describe('event emitter',function(){
 
-    it('should emit "new-outage" when ping fails for the first time', function (done) {
+    it('should emit "new-outage" when ping fails if "failuresToBeOutage" is not defined', function (done) {
       mockedPing.mockedResponse = ERROR_RESPONSE;
       var failedTimestamp = +new Date();
 
@@ -45,6 +45,71 @@ describe('watchmen', function () {
         assert.equal(outageData.error, 'mocked error', 'should have error property');
         assert.equal(outageData.timestamp, failedTimestamp, 'should have timestamp property');
         done();
+      });
+      watchmen.on('current-outage', function () {
+        done('should not be called');
+      });
+      watchmen.ping({service: service, timestamp: failedTimestamp}, noop);
+      clock.tick(ERROR_RESPONSE.latency);
+    });
+
+    it('should emit "new-outage" when number of failed pings is equal than "failuresToBeOutage"', function (done) {
+      mockedPing.mockedResponse = ERROR_RESPONSE;
+      service.failuresToBeOutage = 2;
+      var failedTimestamp = +new Date();
+
+      var watchmen = new Watchmen([service], new mockedStorage());
+      watchmen.on('new-outage', function (service, outageData) {
+        assert.equal(outageData.error, 'mocked error', 'should have error property');
+        assert.equal(outageData.timestamp, failedTimestamp, 'should have timestamp property');
+        done();
+      });
+      watchmen.on('current-outage', function () {
+        done('should not be called');
+      });
+      watchmen.ping({service: service, timestamp: failedTimestamp}, noop);
+      clock.tick(ERROR_RESPONSE.latency);
+      watchmen.ping({service: service, timestamp: failedTimestamp}, noop);
+      clock.tick(ERROR_RESPONSE.latency);
+    });
+
+    it('should emit "service-error" when ping fails', function (done) {
+      mockedPing.mockedResponse = ERROR_RESPONSE;
+      var failedTimestamp = +new Date();
+
+      var watchmen = new Watchmen([service], new mockedStorage());
+      watchmen.on('service-error', function (service, outageData) {
+        assert.equal(outageData.error, 'mocked error', 'should have error property');
+        assert.equal(outageData.currentFailureCount, 1, 'should have currentFailureCount');
+        done();
+      });
+      watchmen.ping({service: service, timestamp: failedTimestamp}, noop);
+      clock.tick(ERROR_RESPONSE.latency);
+    });
+
+    it('should ping next on failureInterval interval when check fails', function (done) {
+      mockedPing.mockedResponse = ERROR_RESPONSE;
+      var failedTimestamp = +new Date();
+
+      var watchmen = new Watchmen([service], new mockedStorage());
+      watchmen.ping({service: service, timestamp: failedTimestamp}, function(err, nextInterval){
+        assert.equal(nextInterval, service.failureInterval);
+        done();
+      });
+      clock.tick(ERROR_RESPONSE.latency);
+    });
+
+    it('should not emit "new-outage" when number of failed ping is less than "failuresToBeOutage"', function (done) {
+      mockedPing.mockedResponse = ERROR_RESPONSE;
+      service.failuresToBeOutage = 2;
+      var failedTimestamp = +new Date();
+
+      var watchmen = new Watchmen([service], new mockedStorage());
+      watchmen.on('service-error', function () {
+        done();
+      });
+      watchmen.on('new-outage', function () {
+        done('should not be called');
       });
       watchmen.ping({service: service, timestamp: failedTimestamp}, noop);
       clock.tick(ERROR_RESPONSE.latency);
@@ -68,6 +133,7 @@ describe('watchmen', function () {
       });
       clock.tick(ERROR_RESPONSE.latency);
     });
+
 
     it('should emit "service-ok" when ping success', function (done) {
       mockedPing.mockedResponse = SUCCESS_RESPONSE;
