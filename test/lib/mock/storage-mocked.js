@@ -42,6 +42,13 @@ StorageMocked.prototype.increaseOutageFailureCount = function (service, callback
   });
 };
 
+StorageMocked.prototype.resetOutageFailureCount = function (service, callback){
+  this.failureCount = 0;
+  process.nextTick(function () {
+    callback();
+  });
+};
+
 StorageMocked.prototype.flush_database = function (callback){
   process.nextTick(callback);
 };
