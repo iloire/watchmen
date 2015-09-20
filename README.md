@@ -215,7 +215,7 @@ var eventHandlers = {
    */
 
   onFailedCheck: function (service, data) {
-    var errorMsg = service.name + ' check failed!'.red + '. Error: ' + JSON.stringify(outage.error).red;
+    var errorMsg = service.name + ' check failed!'.red + '. Error: ' + JSON.stringify(data.error).red;
     console.log(errorMsg);
   },
 
