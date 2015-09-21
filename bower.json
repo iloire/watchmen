@@ -1,7 +1,7 @@
 {
   "name": "WatchMen",
   "description": "A simple service monitor",
-  "version": "0.0.0",
+  "version": "3.1.0",
   "homepage": "https://github.com/iloire/WatchMen",
   "license": "MIT",
   "private": true,

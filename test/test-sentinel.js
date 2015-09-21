@@ -19,7 +19,7 @@ describe('sentinel', function () {
     assert.equal(removedServices.length, 2);
   });
 
-  it('should find modified services when whitelisted fields change', function () {
+  it('should find modified services when white-listed fields change', function () {
     var dbServices = [{id: '1', interval: 2000}, {id: '2', interval: 3000}];
     var runningServices = [{id: '1', interval: 2300}, {id: '2', interval: 3000}];
     var sentinel = new sentinelFactory([], null);

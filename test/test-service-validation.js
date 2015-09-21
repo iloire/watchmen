@@ -23,98 +23,130 @@ describe('service validator', function () {
     checkNonEmpty('name');
   });
 
-  it('should have an "interval" field', function () {
-    checkNonEmpty('interval');
-  });
-
-  it('should have a minimum interval of 500ms', function () {
-    service.interval = 400;
-    var errors = serviceValidator.validate(service);
-    assert.equal(errors.length, 1);
-    assert.equal(errors[0].field, 'interval');
-  });
-
-  it('should have an "failureInterval" field', function () {
-    checkNonEmpty('failureInterval');
-  });
-
-  it('should have a minimum failureInterval of 500ms', function () {
-    service.failureInterval = 400;
-    var errors = serviceValidator.validate(service);
-    assert.equal(errors.length, 1);
-    assert.equal(errors[0].field, 'failureInterval');
-  });
-
   it('should have an "url" field', function () {
     checkNonEmpty('url');
-  });
-
-  it('should have an "port" field', function () {
-    checkNonEmpty('port');
-  });
-
-  it('should have a numberic value for "port"', function () {
-    checkIntField('3434invalidnumber', 'port');
-  });
-
-  it('should have a "timeout" field', function () {
-    checkNonEmpty('timeout');
-  });
-
-  it('should have a numberic value for "timeout"', function () {
-    checkIntField('3434invalidnumber', 'timeout');
-  });
-
-  it('should have a "warningThreshold" field', function () {
-    checkNonEmpty('warningThreshold');
-  });
-
-  it('should have a numberic value for "warningThreshold"', function () {
-    checkIntField('3434invalidnumber', 'warningThreshold');
   });
 
   it('should have a "pingServiceName" field', function () {
     checkNonEmpty('pingServiceName');
   });
 
-  it('should have valid emails in "restrictedTo" field', function(){
-    service.restrictedTo = 'invalidemail, user@domain.com';
-    var errors = serviceValidator.validate(service);
-    assert.equal(errors.length, 1, errors);
-    assert.equal(errors[0].field, 'restrictedTo');
+  describe('"interval" field', function () {
+    it('should exist', function () {
+      checkNonEmpty('interval');
+    });
+
+    it('should have a minimum value of 500ms', function () {
+      service.interval = 400;
+      var errors = serviceValidator.validate(service);
+      assert.equal(errors.length, 1);
+      assert.equal(errors[0].field, 'interval');
+    });
   });
 
-  it('should have valid not empty values in "restrictedTo" field', function(){
-    service.restrictedTo = 'admin@domain.com, , user@domain.com';
-    var errors = serviceValidator.validate(service);
-    assert.equal(errors.length, 1, errors);
-    assert.equal(errors[0].field, 'restrictedTo');
+  describe('"failureInterval" field', function () {
+    it('should exist', function () {
+      checkNonEmpty('failureInterval');
+    });
+
+    it('should have a minimum value of 500ms', function () {
+      service.failureInterval = 400;
+      var errors = serviceValidator.validate(service);
+      assert.equal(errors.length, 1);
+      assert.equal(errors[0].field, 'failureInterval');
+    });
   });
 
-  it('should validate "restrictedTo" field if correct', function(){
-    service.restrictedTo = 'admin@domain.com, user@domain.com';
-    var errors = serviceValidator.validate(service);
-    assert.equal(errors.length, 0, errors);
+  describe('"port" field', function () {
+    it('should exist', function () {
+      checkNonEmpty('port');
+    });
+
+    it('should have a numeric value', function () {
+      checkIntField('3434invalidnumber', 'port');
+    });
+
+    it('should reject negative values', function () {
+      checkIntField(-1, 'port');
+    });
   });
 
-  it('should have valid emails in "alertTo" field', function(){
-    service.alertTo = 'invalidemail, user@domain.com';
-    var errors = serviceValidator.validate(service);
-    assert.equal(errors.length, 1, errors);
-    assert.equal(errors[0].field, 'alertTo');
+  describe('"failuresToBeOutage" field', function () {
+    it('should have a numeric value', function () {
+      checkIntField('3434invalidnumber', 'failuresToBeOutage');
+    });
+
+    it('should reject negative values', function () {
+      checkIntField(-2, 'failuresToBeOutage');
+    });
   });
 
-  it('should have valid not empty values in "alertTo" field', function(){
-    service.alertTo = 'admin@domain.com, , user@domain.com';
-    var errors = serviceValidator.validate(service);
-    assert.equal(errors.length, 1, errors);
-    assert.equal(errors[0].field, 'alertTo');
+  describe('"timeout" field', function () {
+    it('should exist', function () {
+      checkNonEmpty('timeout');
+    });
+
+    it('should have a numeric value', function () {
+      checkIntField('3434invalidnumber', 'timeout');
+    });
+
+    it('should not be negative', function () {
+      checkIntField(-1000, 'timeout');
+    });
   });
 
-  it('should validate "alertTo" field if correct', function(){
-    service.alertTo = 'admin@domain.com, user@domain.com';
-    var errors = serviceValidator.validate(service);
-    assert.equal(errors.length, 0, errors);
+  describe('"warningThreshold" field', function () {
+    it('should exist', function () {
+      checkNonEmpty('warningThreshold');
+    });
+
+    it('should have a numeric value', function () {
+      checkIntField('3434invalidnumber', 'warningThreshold');
+    });
+  });
+
+  describe('"restrictedTo" field', function () {
+    it('should reject invalid emails', function () {
+      service.restrictedTo = 'invalidemail, user@domain.com';
+      var errors = serviceValidator.validate(service);
+      assert.equal(errors.length, 1, errors);
+      assert.equal(errors[0].field, 'restrictedTo');
+    });
+
+    it('should reject empty values', function () {
+      service.restrictedTo = 'admin@domain.com, , user@domain.com';
+      var errors = serviceValidator.validate(service);
+      assert.equal(errors.length, 1, errors);
+      assert.equal(errors[0].field, 'restrictedTo');
+    });
+
+    it('should validate if input is correct', function () {
+      service.restrictedTo = 'admin@domain.com, user@domain.com';
+      var errors = serviceValidator.validate(service);
+      assert.equal(errors.length, 0, errors);
+    });
+  });
+
+  describe('"alertTo" field', function () {
+    it('should reject invalid emails', function () {
+      service.alertTo = 'invalidemail, user@domain.com';
+      var errors = serviceValidator.validate(service);
+      assert.equal(errors.length, 1, errors);
+      assert.equal(errors[0].field, 'alertTo');
+    });
+
+    it('should reject empty values', function () {
+      service.alertTo = 'admin@domain.com, , user@domain.com';
+      var errors = serviceValidator.validate(service);
+      assert.equal(errors.length, 1, errors);
+      assert.equal(errors[0].field, 'alertTo');
+    });
+
+    it('should validate if input is correct', function () {
+      service.alertTo = 'admin@domain.com, user@domain.com';
+      var errors = serviceValidator.validate(service);
+      assert.equal(errors.length, 0, errors);
+    });
   });
 
   function checkNonEmpty(field) {

@@ -51,6 +51,13 @@
                 <div class="descr col-sm-4">How often to poll if service is down</div>
             </div>
             <div class="form-group">
+                <label for="service-failure-threshold" class="col-sm-2 control-label">Failure threshold</label>
+                <div class="col-sm-6">
+                    <input ng-required="true" ng-model="service.failuresToBeOutage" type="number" class="form-control" id="service-failure-threshold" placeholder="1">
+                </div>
+                <div class="descr col-sm-4">Number of failed pings to be considered outage</div>
+            </div>
+            <div class="form-group">
                 <label for="service-timeout" class="col-sm-2 control-label">Timeout (ms)</label>
                 <div class="col-sm-6">
                     <input ng-required="true" ng-model="service.timeout" type="number" class="form-control" id="service-timeout" placeholder="10000">

@@ -182,8 +182,10 @@ var eventHandlers = {
 
   /**
    * On a new outage
-   * @param service
-   * @param outage
+   * @param {Object} service
+   * @param {Object} outage
+   * @param {Object} outage.error check error
+   * @param {number} outage.timestamp outage timestamp
    */
 
   onNewOutage: function (service, outage) {
@@ -193,8 +195,10 @@ var eventHandlers = {
 
   /**
    * Failed ping on an existing outage
-   * @param service
-   * @param outage
+   * @param {Object} service
+   * @param {Object} outage
+   * @param {Object} outage.error check error
+   * @param {number} outage.timestamp outage timestamp
    */
 
   onCurrentOutage: function (service, outage) {
@@ -203,9 +207,23 @@ var eventHandlers = {
   },
 
   /**
+   * Failed check (it will be an outage or not according to service.failuresToBeOutage
+   * @param {Object} service
+   * @param {Object} data
+   * @param {Object} data.error check error
+   * @param {number} data.currentFailureCount number of consecutive check failures
+   */
+
+  onFailedCheck: function (service, data) {
+    var errorMsg = service.name + ' check failed!'.red + '. Error: ' + JSON.stringify(data.error).red;
+    console.log(errorMsg);
+  },
+
+  /**
    * Warning alert
-   * @param service
-   * @param data.elapsedTime ms
+   * @param {Object} service
+   * @param {Object} data
+   * @param {number} data.elapsedTime (ms)
    */
 
   onLatencyWarning: function (service, data) {
@@ -215,8 +233,10 @@ var eventHandlers = {
 
   /**
    * Service is back online
-   * @param service
-   * @param lastOutage
+   * @param {Object} service
+   * @param {Object} lastOutage
+   * @param {Object} lastOutage.error
+   * @param {number} lastOutage.timestamp (ms)
    */
 
   onServiceBack: function (service, lastOutage) {
@@ -226,8 +246,9 @@ var eventHandlers = {
 
   /**
    * Service is responding correctly
-   * @param service
-   * @param data
+   * @param {Object} service
+   * @param {Object} data
+   * @param {number} data.elapsedTime (ms)
    */
 
   onServiceOk: function (service, data) {
@@ -240,6 +261,7 @@ var eventHandlers = {
 function ConsolePlugin(watchmen) {
   watchmen.on('new-outage', eventHandlers.onNewOutage);
   watchmen.on('current-outage', eventHandlers.onCurrentOutage);
+  watchmen.on('service-error', eventHandlers.onFailedCheck);
 
   watchmen.on('latency-warning', eventHandlers.onLatencyWarning);
   watchmen.on('service-back', eventHandlers.onServiceBack);
@@ -262,6 +284,7 @@ service:<serviceId> - hashMap with service details
 service:<serviceId>:outages:current - current outage for a service (if any)
 service:<serviceId>:outages - sorted set with outages info
 service:<serviceId>:latency - sorted set with latency info
+service:<serviceId>:failurecount - number of consecutive pings failures (to determine if it is an outage)
 ```
 
 ##### Configuration
@@ -334,6 +357,11 @@ You can contribute by:
 - Reporting bugs.
 
 ## History
+
+**3.1.0**
+
+- Only notify on sustained outages in-progress (new ``service.failureThreshold`` property).
+- Introduce a new "service-error" event that gets triggered when a ping fails.
 
 **3.0.0**
 
