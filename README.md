@@ -9,7 +9,7 @@
 
 # Demo
 
-Check the [web interface in action](http://ec2-54-204-149-175.compute-1.amazonaws.com:3334/services).
+Check the [web interface in action](http://watchmen.letsnode.com/services).
 
 ![watchmen, service details](https://github.com/iloire/watchmen/raw/master/screenshots/watchmen-details-mobile-01.png)
 
