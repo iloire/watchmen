@@ -33,9 +33,9 @@ Get redis from [redis.io](http://redis.io/download) and install it.
 
 ## Install watchmen
 
-    git clone git@github.com:iloire/watchmen.git
-    cd WatchMen
-
+    $ git clone git@github.com:iloire/watchmen.git
+    $ cd watchmen
+    $ bower install
     $ npm install
 
 # Running and stopping watchmen
