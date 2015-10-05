@@ -39,7 +39,7 @@
 
     <div class="row">
 
-        <div class="col-md-8 chart-container">
+        <div class="chart-container" ng-class="{'col-md-8': latestOutages.length, 'col-md-12': !latestOutages.length}">
 
             <div class="chart-wrapper" ng-show="showLastHourChart">
                 <h4>Last hour</h4>
@@ -99,7 +99,7 @@
             </div>
         </div>
 
-        <div class="col-md-4">
+        <div class="col-md-4" ng-if="latestOutages.length">
             <div class="outages-list">
                 <%- include partials/outages.html %>
             </div>
