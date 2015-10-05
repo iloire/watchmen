@@ -14,7 +14,7 @@
   "homepage": "http://letsnode.com",
   "repository": {
     "type": "git",
-    "url": "git://github.com/iloire/WatchMen.git"
+    "url": "git://github.com/iloire/watchmen.git"
   },
   "engines": {
     "node": ">=0.10"
