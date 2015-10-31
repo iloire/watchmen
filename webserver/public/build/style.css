@@ -1598,7 +1598,7 @@ td.visible-print,th.visible-print{display:table-cell!important}
 .c3-chart-arcs .c3-chart-arcs-gauge-unit{fill:#000;font-size:1pc}
 .c3-chart-arcs .c3-chart-arcs-gauge-max,.c3-chart-arcs .c3-chart-arcs-gauge-min{fill:#777}
 .c3-chart-arc .c3-gauge-value{fill:#000}
-.details-page .chart{margin-top:5px;margin-left:-10px}
+.details-page .chart{margin-left:-10px}
 .details-page .chart .c3-line-Latency{stroke-width:1px}
 .details-page .chart .c3 .c3-axis-x line,.details-page .chart .c3 .c3-axis-x path,.details-page .chart .c3 .c3-axis-y line,.details-page .chart .c3 .c3-axis-y path{stroke:#c2c2c2}
 .details-page .chart .c3-region.region-outage{fill:#d9534f}
@@ -1623,7 +1623,7 @@ h2{margin:10px 0;color:gray;font-size:2.1em}
 .details-page .glyphicon-exclamation-sign{color:#d9534f;font-size:.8em}
 .details-page .chart-wrapper{margin-bottom:1.5em}
 .details-page .current-outage{font-size:1.2em;border:1px solid #eee;border-radius:3px;border-left-color:#ce4844;border-left-width:5px;padding:20px;margin:10px 0}
-.details-page .chart-wrapper>span{font-size:1.4em;color:gray;display:inline-block;width:32%;border:1px solid #d3d3d3;text-align:center;padding:.3em}
+.details-page .chart-wrapper>span{font-size:1.2em;color:gray;display:inline-block;width:32%;text-align:center;padding:.2em}
 .details-page .chart-wrapper>span.uptime{color:green}
 .details-page .chart-wrapper>span.downtime{color:#d9534f}
 .details-page .edit-link{font-size:.5em}
