@@ -58,9 +58,11 @@
   "devDependencies": {
     "assert": "^1.3.0",
     "bower": "1.4.x",
+    "del": "^2.0.2",
     "faker": "^2.1.5",
-    "gulp": "^3.8.11",
+    "gulp": "^3.9.0",
     "gulp-concat": "^2.5.2",
+    "gulp-copy": "0.0.2",
     "gulp-filter": "^2.0.2",
     "gulp-if": "^1.2.5",
     "gulp-jshint": "^1.10.0",
@@ -74,6 +76,7 @@
     "main-bower-files": "^2.6.2",
     "mocha": "^2.2.5",
     "passport-mock": "0.0.3",
+    "run-sequence": "^1.1.4",
     "sinon": "^1.14.1",
     "supertest": "^1.0.1"
   }

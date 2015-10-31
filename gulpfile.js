@@ -1,86 +1,70 @@
 var gulp = require('gulp');
 var plugins = require('gulp-load-plugins')();
-var main_bower_files = require('main-bower-files');
+var mainBowerFiles = require('main-bower-files');
+var del = require('del');
+var runSequence = require('run-sequence');
 
 function js(shouldMinify) {
-  return gulp.src(['./webserver/public/js/*.js', './webserver/public/js/*/*.js'])
-      .pipe(plugins.jshint())
-      .pipe(plugins.jshint.reporter('default'))
-      .pipe(plugins.concat('app.js'))
+  return gulp.src(mainBowerFiles().concat([ // not taking wildcards
+    './webserver/public/js/controllers/**',
+    './webserver/public/js/charting/**',
+    './webserver/public/js/directives/**',
+    './webserver/public/js/**'
+  ]))
+      .pipe(plugins.filter('*.js'))
+      .pipe(plugins.concat('scripts.js'))
       .pipe(plugins.if(shouldMinify, plugins.ngAnnotate()))
       .pipe(plugins.if(shouldMinify, plugins.uglify()))
-      .pipe(gulp.dest('webserver/public/build'));
+      .pipe(gulp.dest('./webserver/public/build'));
 }
 
-function less(shouldMinify) {
-  return gulp.src('./webserver/public/less/*.less')
+function css(shouldMinify) {
+  return gulp.src(mainBowerFiles().concat(['./webserver/public/less/*.less']))
+      .pipe(plugins.filter(['*.css', '*.less']))
       .pipe(plugins.less())
-      .pipe(plugins.concat('app.css'))
+      .pipe(plugins.concat('style.css'))
       .pipe(plugins.if(shouldMinify, plugins.minifyCss({keepBreaks: true})))
-      .pipe(gulp.dest('webserver/public/build'));
+      .pipe(gulp.dest('./webserver/public/build'));
 }
 
-// todo: fix bootstrap font path
-function bowerCSS() {
-  return gulp.src(main_bower_files())
-      .pipe(plugins.filter('*.css'))
-      .pipe(plugins.minifyCss({keepBreaks: true}))
-      .pipe(plugins.concat('vendor.css'))
-      .pipe(gulp.dest('webserver/public/build'));
-}
+gulp.task('clean', function () {
+  return del([
+    './webserver/public/build/*',
+    './webserver/public/fonts/*'
+  ]);
+});
 
-function bowerJS(shouldMinify) {
-  return gulp.src(main_bower_files())
-      .pipe(plugins.filter('*.js'))
-      .pipe(plugins.if(shouldMinify, plugins.uglify()))
-      .pipe(plugins.concat('vendor.js'))
-      .pipe(gulp.dest('webserver/public/build'));
-}
+gulp.task('copy-fonts', function () {
+  return gulp.src('./webserver/public/bower_components/bootstrap/fonts/*')
+      .pipe(plugins.copy('./webserver/public/fonts/', {prefix: 5}))
+});
 
-function watch() {
-  gulp.watch('./webserver/public/bower_components/**/*', ['bower-js-dev']);
-  gulp.watch('./webserver/public/js/**', ['js-dev']);
-  gulp.watch('./webserver/public/less/*', ['less']);
-}
-
-// ---------------
-//  TASKS
-// ---------------
+gulp.task('lint', function () {
+  return gulp.src('./webserver/public/js/**')
+      .pipe(plugins.jshint())
+      .pipe(plugins.jshint.reporter('default'))
+});
 
 gulp.task('js-dev', function () {
-  return js(true);
+  return js(false);
 });
 
 gulp.task('js-prod', function () {
   return js(true);
 });
 
-gulp.task('bower-js-dev', function () {
-  return bowerJS(false);
-});
-
-gulp.task('bower-js', function () {
-  return bowerJS(true);
-});
-
-gulp.task('bower-css', function () {
-  return bowerCSS();
-});
-
-gulp.task('less', function () {
-  return less(true);
+gulp.task('css-prod', function () {
+  return css(true);
 });
 
 gulp.task('build', function () {
-  less(true);
-  js(true);
-  bowerJS(true);
+  return runSequence('clean', ['copy-fonts', 'js-prod', 'css-prod']);
 });
 
 gulp.task('watch', function () {
-  watch();
+  gulp.watch('./webserver/public/bower_components/**/*', ['css', 'js-dev']);
+  gulp.watch('./webserver/public/js/**', ['js-dev']);
+  gulp.watch('./webserver/public/less/*', ['css']);
 });
 
-gulp.task('default', function () {
-  watch();
-});
+gulp.task('default', ['build']);

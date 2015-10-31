@@ -25,17 +25,12 @@ Check the [web interface in action](http://watchmen.letsnode.com/services).
 
 ## Requirements
 
-Make sure bower is installed globally:
-
-    $ npm install -g bower
-
 Get redis from [redis.io](http://redis.io/download) and install it.
 
 ## Install watchmen
 
     $ git clone git@github.com:iloire/watchmen.git
     $ cd watchmen
-    $ bower install
     $ npm install
 
 # Running and stopping watchmen
@@ -45,6 +40,28 @@ Make sure you have `redis-server` in your `PATH`. Then you can run watchmen serv
     $ redis-server redis.conf
     $ node run-monitor-server.js
     $ node run-web-server.js
+
+## Development workflow
+
+Make sure bower is installed globally:
+
+    $ npm install -g bower
+
+### Fetching bower dependencies
+
+    $ bower install
+
+### Re-building watchmen assets
+
+    $ gulp build
+
+### Dev watch
+
+    $ gulp watch
+
+### Running tests
+
+See below.
 
 ## Managing your node processes with pm2
 
@@ -355,6 +372,10 @@ You can contribute by:
 - Creating monitor plugins.
 - Creating ping services.
 - Reporting bugs.
+
+### Style guide
+
+Please use [semantic commit messages](http://seesparkbox.com/foundry/semantic_commit_messages)
 
 ## History
 

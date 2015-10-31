@@ -2,11 +2,7 @@
 <html lang="en" ng-app="watchmenApp">
   <head>
     <title>watchmen, http monitor for node.js - <%= title %></title>
-    <link rel='stylesheet' href='<%=baseUrl%>bower_components/bootstrap/dist/css/bootstrap.min.css' />
-    <link rel='stylesheet' href='<%=baseUrl%>bower_components/bootstrap/dist/css/bootstrap-theme.min.css' />
-    <link rel='stylesheet' href='<%=baseUrl%>bower_components/ng-table/dist/ng-table.min.css' />
-    <link rel='stylesheet' href='<%=baseUrl%>bower_components/c3/c3.min.css' />
-    <link rel='stylesheet' href='<%=baseUrl%>build/app.css' />
+    <link rel='stylesheet' href='<%=baseUrl%>build/style.css' />
     <meta name="viewport" content="width=device-width">
     <base href="<%=baseUrl%>">
   </head>
@@ -46,11 +42,13 @@
     author: <a target="_blank" href="http://iloire.com">iloire.com</a> | bitcoin: 1DQRybRW7cQtRq65qCxkpGNLX9BVjmfJaY
   </footer>
 
+  <script src="<%=baseUrl%>build/scripts.js"></script>
+
   <% if (ga_analytics_ID) { %>
   <script>
     (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
-    (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
-    m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+      (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+            m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
     })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
 
     ga('create', '<%=ga_analytics_ID%>', 'auto');
@@ -58,7 +56,5 @@
   </script>
   <% } %>
 
-  <script src="<%=baseUrl%>build/vendor.js"></script>
-  <script src="<%=baseUrl%>build/app.js"></script>
   </body>
 </html>
