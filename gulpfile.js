@@ -62,9 +62,9 @@ gulp.task('build', function () {
 });
 
 gulp.task('watch', function () {
-  gulp.watch('./webserver/public/bower_components/**/*', ['css', 'js-dev']);
+  gulp.watch('./webserver/public/bower_components/**/*', ['css-prod', 'js-dev']);
   gulp.watch('./webserver/public/js/**', ['js-dev']);
-  gulp.watch('./webserver/public/less/*', ['css']);
+  gulp.watch('./webserver/public/less/*', ['css-prod']);
 });
 
 gulp.task('default', ['build']);
