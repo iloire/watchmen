@@ -62,12 +62,12 @@ describe('service access filter', function () {
     });
 
     it('should filter a single service', function () {
-      var reports = serviceFilter.filterReports(SERVICES_REPORTS[1], {email : 'admin@domain.com'})
+      var reports = serviceFilter.filterReports(SERVICES_REPORTS[1], {email : 'admin@domain.com'});
       assert.equal(reports, undefined);
     });
 
     it('should handle null parameters', function () {
-      var reports = serviceFilter.filterReports(null, {email : 'admin@domain.com'})
+      var reports = serviceFilter.filterReports(null, {email : 'admin@domain.com'});
       assert.equal(reports, undefined);
     });
   });
@@ -85,12 +85,12 @@ describe('service access filter', function () {
     });
 
     it('should filter a single service', function () {
-      var services = serviceFilter.filterServices(SERVICES[1], {email : 'admin@domain.com'})
+      var services = serviceFilter.filterServices(SERVICES[1], {email : 'admin@domain.com'});
       assert.equal(services, undefined);
     });
 
     it('should handle null parameters', function () {
-      var services = serviceFilter.filterServices(null, {email : 'admin@domain.com'})
+      var services = serviceFilter.filterServices(null, {email : 'admin@domain.com'});
       assert.equal(services, undefined);
     });
   });

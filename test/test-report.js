@@ -65,7 +65,9 @@ describe('reporting', function () {
   });
 
   after(function (done) {
-    clock && clock.restore();
+    if (clock) {
+      clock.restore();
+    }
     done();
   });
 
@@ -344,8 +346,7 @@ describe('reporting', function () {
           });
         });
       });
-
-    })
+    });
   });
 
   describe('services', function () {
@@ -369,7 +370,7 @@ describe('reporting', function () {
         reporter.getServices({}, function (err, servicesData) {
           assert.ifError(err);
           var _service = servicesData.filter(function (row) {
-            return row.service.id == services[0].id
+            return row.service.id == services[0].id;
           })[0];
           assert.equal(_service.status.lastWeek.numberOutages, 6);
           done();
@@ -388,7 +389,7 @@ describe('reporting', function () {
         reporter.getServices({}, function (err, servicesData) {
           assert.ifError(err);
           var _service = servicesData.filter(function (row) {
-            return row.service.id == services[0].id
+            return row.service.id == services[0].id;
           })[0];
           assert.equal(_service.status.last24Hours.numberOutages, 3);
           done();

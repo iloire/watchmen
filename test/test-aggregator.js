@@ -38,7 +38,7 @@ describe('aggregator', function () {
       assert.equal(data[0].l, 150);
       assert.equal(data[1].l, 750);
       done();
-    })
+    });
 
   });
 

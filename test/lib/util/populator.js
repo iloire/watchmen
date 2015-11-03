@@ -19,7 +19,7 @@ exports = module.exports = (function(){
       }
 
       function addService(service, cb) {
-        var errors = serviceValidator.validate(service)
+        var errors = serviceValidator.validate(service);
         if (errors.length === 0){
           storage.addService(service, cb);
         } else {
@@ -36,6 +36,6 @@ exports = module.exports = (function(){
         });
       });
     }
-  }
+  };
 
 })();

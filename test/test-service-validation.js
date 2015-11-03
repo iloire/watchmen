@@ -16,7 +16,7 @@ describe('service validator', function () {
       warningThreshold: 3000,
       pingServiceName: 'http',
       restrictedTo: 'user@domain.com, admin@domain.com'
-    }
+    };
   });
 
   it('should have an "name" field', function () {

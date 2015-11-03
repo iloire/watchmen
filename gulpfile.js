@@ -40,7 +40,7 @@ gulp.task('copy-fonts', function () {
 });
 
 gulp.task('lint', function () {
-  return gulp.src('./webserver/public/js/**')
+  return gulp.src(['./webserver/public/js/**', './lib/**/*.js', './test/**/*.js'])
       .pipe(plugins.jshint())
       .pipe(plugins.jshint.reporter('default'))
 });

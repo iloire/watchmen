@@ -4,7 +4,7 @@ exports = module.exports = (function(){
 
   function getRandomName(long) {
     if (long) {
-      return faker.internet.domainName(); + ' ' + faker.finance.accountName(); // long enough for layout testing purposes
+      return faker.internet.domainName() + ' ' + faker.finance.accountName(); // long enough for layout testing purposes
     }
     else {
       return faker.internet.domainName();
@@ -21,7 +21,7 @@ exports = module.exports = (function(){
       timeout: 10000,
       warningThreshold: 3000,
       pingServiceName: 'http-head'
-    }
+    };
   }
 
   return {

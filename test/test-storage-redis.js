@@ -23,7 +23,9 @@ describe('redis storage', function(){
   });
 
   after(function(done){
-    clock && clock.restore();
+    if (clock) {
+      clock.restore();
+    }
     done();
   });
 
@@ -39,7 +41,7 @@ describe('redis storage', function(){
           assert.equal(service.interval, 1000);
           done();
         });
-      })
+      });
     });
 
     it('should update service', function(done) {
@@ -56,7 +58,7 @@ describe('redis storage', function(){
             done();
           });
         });
-      })
+      });
     });
 
     it('should delete service object', function(done) {
@@ -73,7 +75,7 @@ describe('redis storage', function(){
             });
           });
         });
-      })
+      });
     });
 
     it('should return all services', function(done) {
@@ -98,9 +100,9 @@ describe('redis storage', function(){
             assert.equal(data[1].interval, 2000);
             assert.equal(data[2].interval, 3000);
             done();
-          })
+          });
         });
-      })
+      });
     });
 
   });
