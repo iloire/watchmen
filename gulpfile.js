@@ -27,6 +27,13 @@ function css(shouldMinify) {
       .pipe(gulp.dest('./webserver/public/build'));
 }
 
+gulp.task('unit', function(){
+  return gulp.src(['test/test-*.js'], { read: false })
+      .pipe(plugins.mocha({
+        reporter: 'spec'
+      }));
+});
+
 gulp.task('clean', function () {
   return del([
     './webserver/public/build/*',
@@ -74,6 +81,7 @@ gulp.task('watch', function () {
   gulp.watch('./webserver/public/bower_components/**/*', ['css-prod', 'js-dev']);
   gulp.watch('./webserver/public/js/**', ['js-dev']);
   gulp.watch('./webserver/public/less/*', ['css-prod']);
+  gulp.watch('./test/*.js', ['unit']);
 });
 
 gulp.task('default', ['build']);
