@@ -1643,9 +1643,10 @@ h2{margin:10px 0;color:gray;font-size:2.1em}
 .table-services td.outages{color:#d9534f}
 .table-services td.warnings{color:orange}
 .table-services td.service{text-transform:uppercase;margin-top:20px;opacity:.6;font-size:100%;color:gray}
-.table-services tr .outages.admin span.admin-operations{display:none}
-.table-services tr .outages.admin span.label,.table-services tr:hover .outages.admin span.admin-operations{display:inline}
-.table-services tr:hover .outages.admin span.label{display:none}
+.table-services td.status{width:5pc}
+.table-services td.admin-operations{width:70px}
+.table-services td.admin-operations .dropdown-menu{padding:10px;width:250px;text-align:center}
+.table-services td.admin-operations .dropdown-menu .btn{font-size:11pt;margin:0 5px}
 .filter-container{margin:10px 0}
 .filter-container input.query{padding-left:30px;display:block}
 .filter-container span.icon{position:absolute;left:10px;padding:10px 9pt;pointer-events:none}

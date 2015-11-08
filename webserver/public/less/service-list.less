@@ -45,21 +45,22 @@
     color: gray;
   }
 
-  tr .outages.admin {
-    span.admin-operations {
-      display:none;
-    }
-    span.label {
-      display:inline;
-    }
+  td.status {
+    width:80px;
   }
 
-  tr:hover .outages.admin {
-    span.admin-operations {
-      display: inline;
-    }
-    span.label {
-      display: none;
+  td.admin-operations {
+    width: 70px;
+
+    .dropdown-menu{
+      padding:10px;
+      width:250px;
+      text-align: center;
+
+      .btn {
+        font-size: 11pt;
+        margin:0 5px;
+      }
     }
   }
 }
