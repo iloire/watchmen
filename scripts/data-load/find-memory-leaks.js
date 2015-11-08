@@ -28,7 +28,7 @@ var current = 0;
 function run (service, cb){
   watchmen.ping({service:service, timestamp: +new Date()}, function(err, status){
     if (current < numberTimes){
-      if (current % 1000 == 0) {
+      if (current % 1000 === 0) {
         debug('processing ', current);
       }
       current++;

@@ -36,7 +36,7 @@ exports = module.exports.getRoutes = function (){
       return {
         name: pluginName.replace(PREFIX_PING_PLUGIN, ''),
         options: getOptions(pluginName)
-      }
+      };
     });
 
     return res.json(plugins);

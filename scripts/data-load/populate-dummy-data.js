@@ -54,7 +54,7 @@ function run(programOptions, callback) {
   function populatedata(services, cb) {
     debug('populating data for ' + services.length + ' services');
     async.eachSeries(services, generateDataForService, function (err) {
-      debug('data populated for all services')
+      debug('data populated for all services');
       cb(err);
     });
   }

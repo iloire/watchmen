@@ -6,9 +6,9 @@ var methodOverride = require('method-override');
 var errorHandler = require('errorhandler');
 var session = require('express-session');
 var compress = require('compression');
-var api = require('./routes/api-service-route')
-var report = require('./routes/api-report-route')
-var web = require('./routes/web-route')
+var api = require('./routes/api-service-route');
+var report = require('./routes/api-report-route');
+var web = require('./routes/web-route');
 var plugins = require('./routes/api-ping-plugins-route');
 var auth = require('./routes/web-auth-route');
 

@@ -20,5 +20,5 @@ exports = module.exports = (function(){
 
   return {
     getRandomResponse : getRandomResponse
-  }
+  };
 })();

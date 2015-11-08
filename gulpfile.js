@@ -36,13 +36,22 @@ gulp.task('clean', function () {
 
 gulp.task('copy-fonts', function () {
   return gulp.src('./webserver/public/bower_components/bootstrap/fonts/*')
-      .pipe(plugins.copy('./webserver/public/fonts/', {prefix: 5}))
+      .pipe(plugins.copy('./webserver/public/fonts/', {prefix: 5}));
 });
 
 gulp.task('lint', function () {
-  return gulp.src(['./webserver/public/js/**', './lib/**/*.js', './test/**/*.js'])
+  return gulp.src([
+    './webserver/**/*.js',
+    '!./webserver/public/bower_components/**/*.js',
+    '!./webserver/public/build/**/*.js',
+    './lib/**/*.js',
+    './test/**/*.js',
+    './config/**/*.js',
+    './scripts/**/*.js',
+    './*.js'
+  ])
       .pipe(plugins.jshint())
-      .pipe(plugins.jshint.reporter('default'))
+      .pipe(plugins.jshint.reporter('default'));
 });
 
 gulp.task('js-dev', function () {
