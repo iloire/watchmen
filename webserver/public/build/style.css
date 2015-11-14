@@ -1651,11 +1651,10 @@ h2{margin:10px 0;color:gray;font-size:2.1em}
 .filter-container input.query{padding-left:30px;display:block}
 .filter-container span.icon{position:absolute;left:10px;padding:10px 9pt;pointer-events:none}
 .filter-container div.filter-to-me{padding-top:5px}
-.services-sidebar{padding:1.2em;width:250px;font-size:1.1em}
+.services-sidebar{padding:1em 0 0 .5em;font-size:1em}
 .services-sidebar table{width:100%}
-.services-sidebar table td{padding:.1em}
 .services-sidebar table td.name{max-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
-.services-sidebar table td.uptime{width:30%;padding-right:10px}
+.services-sidebar table td.uptime{width:30%;padding-right:5px}
 .services-sidebar table td.uptime span{display:inline-block;min-width:45px;font-weight:700}
 .services-sidebar table td.uptime span.down{color:#d9534f}
 .services-sidebar table td.uptime span.up{color:green}

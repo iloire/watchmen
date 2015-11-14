@@ -4,6 +4,8 @@
 
   angular.module('watchmenFactories', []);
 
+  var CACHE_EXPIRATION = 30000; // ms
+
   var factories = angular.module('watchmenFactories');
   var reportCache;
   var pingPluginsCache;
@@ -13,7 +15,7 @@
 
     setInterval(function(){
       reportCache.removeAll();
-    }, 30000);
+    }, CACHE_EXPIRATION);
     
     var Report = $resource('/api/report/services/:id', {id: '@id'}, {
       'get': { method:'GET', cache: reportCache},

@@ -45,14 +45,6 @@
       }
 
       loading();
-      $scope.showConfig = false;
-      $scope.isAdmin = window.isAdmin;
-
-      $scope.services = Report.query(function(){  // for sidebar
-        $scope.services.sort(function(a, b){
-          return a.status.last24Hours.uptime - b.status.last24Hours.uptime; });
-      });
-
       $scope.serviceDetails = Report.get({id: $stateParams.id}, function (data) {
         loaded();
         $scope.latestOutages = data.status.latestOutages;
@@ -128,6 +120,14 @@
 
         }, 0);
       }, errHandler);
+
+      $scope.showConfig = false;
+      $scope.isAdmin = window.isAdmin;
+
+      $scope.services = Report.query(function(){  // for sidebar
+        $scope.services.sort(function(a, b){
+          return a.status.last24Hours.uptime - b.status.last24Hours.uptime; });
+      });
 
     });
 

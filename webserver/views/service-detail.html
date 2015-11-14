@@ -5,41 +5,44 @@
     <span>{{errorLoadingService}}</span>
 </div>
 
-<div class="details-page" ng-show="!loading && !errorLoadingService">
+<div class="details-page">
 
     <a style="float:right" href="/services" class="hidden-xs">
         <span class="glyphicon glyphicon-chevron-left"></span> back to list
     </a>
 
-    <h2>
-        <span ng-if="serviceDetails.service.isRestricted" class="glyphicon glyphicon-lock" aria-hidden="true"></span> {{serviceDetails.service.name}}
-        <span ng-if="!serviceDetails.status.currentOutage">
-          <span title="site is up!" class="glyphicon glyphicon-ok-circle" aria-hidden="true"></span>
-        </span>
-        <span ng-if="serviceDetails.status.currentOutage">
-          <span title="site is down!!" class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
-        </span>
-        <a class="edit-link" ng-if="isAdmin" href="/services/{{serviceDetails.service.id}}/edit">
-            <span class="glyphicon glyphicon-pencil" aria-hidden="true"></span> edit
-        </a>
-    </h2>
-
-    <div class="current-outage" ng-if="serviceDetails.status.currentOutage">
-      <span title="Outage" class="down">Site is down!. <strong>Error:</strong></span>
-      <span class="error">
-          {{serviceDetails.status.currentOutage.error}}
-      </span>
-      <div class="timestamp">
-          Outage started
-          <span>{{serviceDetails.status.currentOutage.timestamp | amDateFormat:'MMMM Do, HH:mm:ss'}}</span>
-          -
-          <span class="timeago" am-time-ago="serviceDetails.status.currentOutage.timestamp"></span>
-      </div>
-    </div>
-
     <div class="row">
 
-        <div class="chart-container" ng-class="{'col-md-8': latestOutages.length, 'col-md-12': !latestOutages.length}">
+        <div class="col-md-2 hidden-sm hidden-xs">
+            <%- include partials/services-sidebar.html %>
+        </div>
+
+        <div ng-show="!loading" class="chart-container" ng-class="{'col-md-6': latestOutages.length, 'col-md-10': !latestOutages.length}">
+            <h2>
+                <span ng-if="serviceDetails.service.isRestricted" class="glyphicon glyphicon-lock" aria-hidden="true"></span> {{serviceDetails.service.name}}
+                <span ng-if="serviceDetails.status && !serviceDetails.status.currentOutage">
+                  <span title="site is up!" class="glyphicon glyphicon-ok-circle" aria-hidden="true"></span>
+                </span>
+                <span ng-if="serviceDetails.status.currentOutage">
+                  <span title="site is down!!" class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
+                </span>
+                <a class="edit-link" ng-if="isAdmin" href="/services/{{serviceDetails.service.id}}/edit">
+                    <span class="glyphicon glyphicon-pencil" aria-hidden="true"></span> edit
+                </a>
+            </h2>
+
+            <div class="current-outage" ng-if="serviceDetails.status.currentOutage">
+                <span title="Outage" class="down">Site is down!. <strong>Error:</strong></span>
+                <span class="error">
+                  {{serviceDetails.status.currentOutage.error}}
+                </span>
+                <div class="timestamp">
+                    Outage started
+                    <span>{{serviceDetails.status.currentOutage.timestamp | amDateFormat:'MMMM Do, HH:mm:ss'}}</span>
+                    -
+                    <span class="timeago" am-time-ago="serviceDetails.status.currentOutage.timestamp"></span>
+                </div>
+            </div>
 
             <div class="chart-wrapper" ng-show="showLastHourChart">
                 <h4>Last hour</h4>
@@ -99,7 +102,7 @@
             </div>
         </div>
 
-        <div class="col-md-4" ng-if="latestOutages.length">
+        <div ng-show="!loading" class="col-md-4" ng-if="latestOutages.length">
             <div class="outages-list">
                 <%- include partials/outages.html %>
             </div>

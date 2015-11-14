@@ -10,17 +10,6 @@
             <a class="navbar-brand" href="/">watchmen</a>
         </div>
         <div class="navbar-collapse collapse" id="main-nav-bar">
-            <ul class="nav navbar-nav navbar-left hidden-sm hidden-xs">
-              <li>
-                  <a class="btn dropdown-toggle" type="button" id="dropdownServices" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
-                    services
-                    <span class="caret"></span>
-                  </a>
-                  <div class="dropdown-menu" aria-labelledby="dropdownServices">
-                    <%- include partials/services-sidebar.html %>
-                  </div>
-              </li>
-            </ul>
             <ul class="nav navbar-nav navbar-right">
                 <% if (user && user.isAdmin) { %>
                 <li>
