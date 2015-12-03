@@ -93,6 +93,33 @@ Server list:
 
 ![List of pm2 services](https://github.com/iloire/watchmen/raw/master/screenshots/pm2-01.png)
 
+
+## Managing with node-foreman
+
+`node-foreman` can be used to run the monitor and web server as an Upstart
+service. On Ubuntu systems, this allows the usage of `service watchmen start`.
+
+Watchmen already include a `Procfile` so you can also manage with `nf`.
+
+```
+$ npm install -g foreman
+$ nf start
+```
+
+To export as an Upstart script using the environment variables in a `.env` file:
+
+```
+$ PATH="/home/user/.nvm/versions/v5.1.0/bin:$PATH" nf export -o /etc/init -a watchmen
+```
+
+You can run this without the `-o /etc/init` flag and move the files to this
+directory (or the appropriate Upstart) directory yourself. Make sure you have
+the correct path to the `node` bin, you can find out with `which node`.
+
+More documentation on `node-foreman`:
+
+https://github.com/strongloop/node-foreman
+
 ## Configuration
 
 Config is set through ``env`` variables.
