@@ -371,11 +371,6 @@ watchmen uses [debug](https://www.npmjs.com/package/debug)
 set DEBUG=*
 ```
 
-## TODO
-
- - Define a data expiration period (per service)
- - Handle auth in ping services.
-
 ## Contributions
 
 You can contribute by:
@@ -541,14 +536,10 @@ Please use [semantic commit messages](http://seesparkbox.com/foundry/semantic_co
 
 ## TODO
 
-- Event pagination in service details
-- Twitter integration (pipe events to a twitter account)
-- Security (authentication for accesing the web UI and or editing stuff)
-- Google charts
-- Change configuration from control panel
-- Reset stats from control panel
-- Regular expressions support
-- Reset warning and error counter according to event expiration.
+- Use a beautiful template, like [the Gentella Admin Bootstrap Theme](http://demo.kimlabs.com/gentelella/production/index.html).
+- Regular expressions support in the ``http-contains`` plugin.
+- Define a data expiration period (per service)
+- Handle auth in ping services.
 
 ## Third party attribution
 
