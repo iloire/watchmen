@@ -380,6 +380,15 @@ You can contribute by:
 - Creating ping services.
 - Reporting bugs.
 
+## Contributors
+
+- [Iván Loire](http://twitter.com/ivanloire)
+- [Oden](https://github.com/Odenius)
+- [Tom Atkinson](https://github.com/Nibbler999)
+- [Martin Bučko](https://github.com/MartinBucko)
+- [Eric Elliott](https://github.com/ericelliott)
+- [Emily Horsman](https://github.com/emilyhorsman)
+
 ### Style guide
 
 Please use [semantic commit messages](http://seesparkbox.com/foundry/semantic_commit_messages)
@@ -524,15 +533,6 @@ Please use [semantic commit messages](http://seesparkbox.com/foundry/semantic_co
 **0.1**
 
 - First release.
-
-## Contributors
-
-- [Iván Loire](http://twitter.com/ivanloire)
-- [Oden](https://github.com/Odenius)
-- [Tom Atkinson](https://github.com/Nibbler999)
-- [Martin Bučko](https://github.com/MartinBucko)
-- [Eric Elliott](https://github.com/ericelliott)
-- [Emily Horsman](https://github.com/emilyhorsman)
 
 ## TODO
 
