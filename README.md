@@ -173,9 +173,9 @@ PingService.prototype.getDefaultOptions = function(){
 
 ![Select ping service](https://github.com/iloire/watchmen/raw/master/screenshots/ping-service-selection.png)
 
-### Monitor plugins
+### Monitor plugins
 
-#### AWS SES Notifications
+#### AWS SES Notifications plugin (provided)
 
 https://github.com/iloire/watchmen-plugin-aws-ses
 
@@ -189,12 +189,15 @@ export WATCHMEN_AWS_SECRET='your AWS secret'
 
 ```
 
-#### Console output
+#### Nodemailer Notifications plugin (third party contribution)
+
+https://www.npmjs.com/package/watchmen-plugin-nodemailer
+
+#### Console output plugin (provided)
 
 https://github.com/iloire/watchmen-plugin-console
 
-
-#### Creating your own plugin
+#### Creating your own custom plugin
 
 A ``watchmen`` instance will be injected through your plugin constructor. Then you can subscribe to the desired events. Best is to show it through an example.
 
@@ -534,6 +537,7 @@ Please use [semantic commit messages](http://seesparkbox.com/foundry/semantic_co
 - [Tom Atkinson](https://github.com/Nibbler999)
 - [Martin Bučko](https://github.com/MartinBucko)
 - [Eric Elliott](https://github.com/ericelliott)
+- [Emily Horsman](https://github.com/emilyhorsman)
 
 ## TODO
 
