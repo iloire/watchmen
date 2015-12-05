@@ -220,6 +220,10 @@ export WATCHMEN_AWS_SECRET='your AWS secret'
 
 https://www.npmjs.com/package/watchmen-plugin-nodemailer
 
+#### Slack Notifications plugin (third party contribution)
+
+https://www.npmjs.com/package/watchmen-plugin-slack
+
 #### Console output plugin (provided)
 
 https://github.com/iloire/watchmen-plugin-console
