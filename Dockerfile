@@ -3,7 +3,7 @@ FROM node:0.10
 WORKDIR /watchmen
 
 # Installs dependencies first
-ADD package.json bower.json /watchmen/
+ADD package.json bower.json .bowerrc /watchmen/
 RUN set -x \
  && npm install -g bower \
  && npm install \
