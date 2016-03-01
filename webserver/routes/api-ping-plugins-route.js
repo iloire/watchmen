@@ -6,7 +6,7 @@ exports = module.exports.getRoutes = function (){
   var PREFIX_PING_PLUGIN = 'watchmen-ping-';
 
   var router = express.Router();
-  var pkgJson = require(path.join(__dirname, '/../../package.json'));
+  var pkgJson = require(path.resolve(__dirname, '../../package.json'));
 
   function getOptions(dep){
       try {
