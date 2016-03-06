@@ -426,6 +426,16 @@ Please use [semantic commit messages](http://seesparkbox.com/foundry/semantic_co
 
 ## History
 
+**3.2.0**
+
+- Add collapsed nav-bar in mobile.
+- Mobile friendly admin buttons.
+- Move services menu to sidebar.
+- Add support for node foreman.
+- Request avatar with the current URL scheme.
+- Fix package.json loading when using node >= 5.x
+- Other minor fixes and optimisations.
+
 **3.1.0**
 
 - Only notify on sustained outages in-progress (new ``service.failureThreshold`` property).
