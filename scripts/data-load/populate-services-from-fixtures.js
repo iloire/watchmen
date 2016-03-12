@@ -12,10 +12,7 @@ function run(program){
     return;
   }
 
-  if (program.file) {
-    console.log('Populating from ' + program.file);
-    services = require(program.file);
-  } else if (program.real) {
+  if (program.real) {
     console.log('Populating real services...');
     services = require('../../test/fixtures/real-services');
   } else {
@@ -37,7 +34,6 @@ function run(program){
 var program = require('commander');
 program
     .option('-r, --real', 'User real data')
-    .option('-f, --file [file]', 'Fixture file')
     .option('-e, --env [env]', 'Storage environment key')
     .option('-s, --number-services [numberServices]', 'Number of services')
     .parse(process.argv);
