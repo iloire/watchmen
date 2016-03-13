@@ -445,6 +445,10 @@ Please use [semantic commit messages](http://seesparkbox.com/foundry/semantic_co
 
 ## History
 
+**3.3.0**
+
+- Add docker-compose
+
 **3.2.0**
 
 - Add collapsed nav-bar in mobile.
