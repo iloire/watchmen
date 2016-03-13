@@ -1,0 +1,22 @@
+redis:
+    image: redis:2
+    ports:
+        - "6379"
+    # expose db in the host /data dir, make sure to create and set permissions for this folder
+    volumes:
+        - ./redis.conf:/usr/local/etc/redis/redis.conf
+        - /data:/data
+watchmenweb:
+    build: ./
+    ports:
+        - "3000:3000"
+    links:
+        - redis
+    command: node run-web-server.js
+    env_file: docker-compose.env
+watchmenserver:
+    build: ./
+    links:
+        - redis
+    command: node run-monitor-server.js
+    env_file: docker-compose.env
