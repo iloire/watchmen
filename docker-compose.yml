@@ -4,14 +4,8 @@ redis:
         - "6379"
     # expose db in the host /data dir, make sure to create and set permissions for this folder
     volumes:
+        - ./redis.conf:/usr/local/etc/redis/redis.conf
         - /data:/data
-watchmenpopulate:
-    # populates with stub data of real services
-    build: ./
-    links:
-        - redis
-    command: node scripts/data-load/populate-services-from-fixtures.js -r -e production
-    env_file: docker-compose.env
 watchmenweb:
     build: ./
     ports:

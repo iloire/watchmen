@@ -380,7 +380,9 @@ To run with docker, make sure you have docker-compose installed: https://docs.do
 
 Also, have a docker host running. A good way is using docker-machine with a local VM: https://docs.docker.com/machine/get-started/
 
-To build and run Watchmen, run the following:
+Edit ``docker-compose.env`` and set up the configuration.
+
+Then, to build and run Watchmen, run the following:
 
 ```
 docker-compose build
