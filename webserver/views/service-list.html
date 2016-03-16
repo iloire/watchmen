@@ -30,7 +30,7 @@
             <tr ng-class={'result-disabled':row.service.enabled===false,'result-success':!row.status.currentOutage,'result-error':row.status.currentOutage}
                 ng-repeat="row in $data | filter:serviceFilter">
 
-                <% if (user && user.isAdmin) { %>
+                <% if ((user && user.isAdmin) || no_auth) { %>
                 <td class="admin-operations" data-title="'Admin'">
                     <div class="btn-group">
                         <a class="btn dropdown-toggle" data-toggle="dropdown" href="#">
