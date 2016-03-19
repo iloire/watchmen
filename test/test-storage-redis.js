@@ -163,5 +163,29 @@ describe('redis storage', function(){
         });
       });
     });
+
+    it('should retrieve latency in old or new format', function(done) {
+      var time = +new Date();
+      var multi = redisStorage.redis.multi();
+      //old format (memeber = elapsed)
+      multi.zadd(service.id+':'+'latency', time-300, 100);
+      multi.zadd(service.id+':'+'latency', time-200, 200);
+      //new format (member = timestamp:elapsed)
+      multi.zadd(service.id+':'+'latency', time-100, (time-100)+':'+300);
+      multi.zadd(service.id+':'+'latency', time, time+':'+400);
+      multi.exec(function(err){
+        assert.ifError(err);
+        redisStorage.getLatencySince(service, null, null, function(err, results){
+          assert.ifError(err);
+          assert.equal(results.arr[0].l, 400);
+          assert.equal(results.arr[1].l, 300);
+          assert.equal(results.arr[2].l, 200);
+          assert.equal(results.arr[3].l, 100);
+          assert.equal(results.mean, 250);
+          done();
+        });
+      });
+
+    });
   });
 });
