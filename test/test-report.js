@@ -188,10 +188,8 @@ describe('reporting', function () {
         var data = [
           {timestamp: INITIAL_TIME, latency: 100},
           {timestamp: INITIAL_TIME + 1.1 * DAY, latency: 200},
-
-          {timestamp: INITIAL_TIME + 2 * DAY, latency: 400},
-
-          {timestamp: INITIAL_TIME + 3 * DAY, latency: 900},
+          {timestamp: INITIAL_TIME + 2.1 * DAY, latency: 400},
+          {timestamp: INITIAL_TIME + 3.1 * DAY, latency: 900},
           {timestamp: INITIAL_TIME + 3.5 * DAY, latency: 1100}
         ];
 
