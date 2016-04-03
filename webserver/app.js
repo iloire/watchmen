@@ -23,6 +23,7 @@ exports = module.exports = function(storage){
 
   app.use(compress());
   app.use(session({
+    store: storage.getSessionStore(session),
     secret: 'myBigSecret',
     saveUninitialized: true,
     resave: true
