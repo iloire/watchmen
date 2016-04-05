@@ -10,7 +10,7 @@
     "test": "mocha -R list -b test/*.js"
   },
   "description": "A simple service monitor",
-  "version": "3.3.0",
+  "version": "3.3.1",
   "homepage": "http://letsnode.com",
   "repository": {
     "type": "git",

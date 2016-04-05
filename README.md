@@ -483,6 +483,11 @@ Please use [semantic commit messages](http://seesparkbox.com/foundry/semantic_co
 
 ## History
 
+**3.3.1**
+
+- Fixed redis sorted set member uniqueness (zadd). Thanks Adriano Emerick Cola!
+- Add terraform for digital ocean
+
 **3.3.0**
 
 - Add docker-compose
