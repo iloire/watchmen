@@ -14,7 +14,7 @@ var auth = require('./routes/web-auth-route');
 
 exports = module.exports = function(storage){
   if (!storage) {
-    throw 'storage is required';
+    throw new Error('storage is required');
   }
 
   app.set('views', __dirname + '/views');

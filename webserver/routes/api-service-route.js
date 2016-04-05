@@ -7,7 +7,7 @@ var accessFilter = require('./../../lib/service-access-filter');
 module.exports.getRoutes = function (storage) {
 
   if (!storage) {
-    throw 'storage needed';
+    throw new Error('storage needed');
   }
 
   var router = express.Router();

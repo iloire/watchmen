@@ -2,12 +2,35 @@
 
 [![Build Status](https://secure.travis-ci.org/iloire/watchmen.png?branch=master)](http://travis-ci.org/iloire/watchmen)
 
+- [What is watchmen?](#what-is-watchmen)
+- [Demo](#demo)
+- [Installation](#installation)
+- [Running and stopping watchmen](#running-and-stopping-watchmen)
+- [Development workflow](#development-workflow)
+- [Managing your node processes with pm2](#managing-your-node-processes-with-pm2)
+- [Managing processes with node-foreman](#managing-processes-with-node-foreman)
+- [Configuration](#configuration)
+- [Ping services](#ping-services)
+- [Monitor plugins](#monitor-plugins)
+- [Storage providers](#storage-providers)
+- [Using fake data for development](#using-fake-data-for-development)
+- [Running with docker](#running-with-docker)
+- [Terraform scripts for digital-ocean](#terraform-scripts-for-digital-ocean)
+- [Tests](#tests)
+- [Debugging](#debugging)
+- [Contributing](#contributing)
+- [Style guide](#style-guide)
+- [History](#history)
+- [License](#license)
+
+## What is watchmen?
+
 - watchmen monitors health (outages, uptime, response time warnings, avg. response time, etc) for your servers.
 - **ping types are pluggable** through npm modules. At this time, `http-head` and `http-contains` are available. Read more about ping services and how to create one below.
 - watchmen provides **custom actions through plugins** (console outpug, email notifications, etc).
 - the code base aims to be simple and easy to understand and modify.
 
-# Demo
+## Demo
 
 Check the [web interface in action](http://watchmen.letsnode.com/services).
 
@@ -20,14 +43,13 @@ Check the [web interface in action](http://watchmen.letsnode.com/services).
 ![watchmen, list services](https://github.com/iloire/watchmen/raw/master/screenshots/watchmen-list-wide-01.png)
 
 
+## Installation
 
-# Installation
-
-## Requirements
+### Requirements
 
 Get redis from [redis.io](http://redis.io/download) and install it.
 
-## Install watchmen
+### Installing watchmen
 
 Clone the repo by using
 
@@ -42,7 +64,7 @@ Then install the required dependencies using ``npm``
     $ cd watchmen
     $ npm install
 
-# Running and stopping watchmen
+## Running and stopping watchmen
 
 Make sure you have `redis-server` in your `PATH`. Then you can run watchmen services:
 
@@ -93,8 +115,7 @@ Server list:
 
 ![List of pm2 services](https://github.com/iloire/watchmen/raw/master/screenshots/pm2-01.png)
 
-
-## Managing with node-foreman
+## Managing processes with node-foreman
 
 `node-foreman` can be used to run the monitor and web server as an Upstart
 service. On Ubuntu systems, this allows the usage of `service watchmen start`.
@@ -150,26 +171,25 @@ export WATCHMEN_GOOGLE_CLIENT_ID='<your key>'
 export WATCHMEN_GOOGLE_CLIENT_SECRET='<your secret>'
 ```
 
-### Ping services
+## Ping services
 
+### Embedded ping services
 
-#### Embedded ping services
-
-##### HTTP-HEAD
+#### HTTP-HEAD
 
 https://www.npmjs.com/package/watchmen-ping-http-head
 
-##### HTTP-CONTAINS
+#### HTTP-CONTAINS
 
 https://www.npmjs.com/package/watchmen-ping-http-contains
 
-#### Creating your own ping service
+### Creating your own ping service
 
 Ping services are npm modules with the ``'watchmen-ping'`` prefix.
 
 For example, if you want to create a smtp ping service:
 
-##### a) create a watchmen-ping-smtp module and publish it. This is how a simple HTTP ping service looks like:
+#### a) create a watchmen-ping-smtp module and publish it. This is how a simple HTTP ping service looks like:
 
 ```javascript
 var request = require('request');
@@ -190,23 +210,23 @@ PingService.prototype.getDefaultOptions = function(){
 }
 ```
 
-##### b) npm install it in watchmen:
+#### b) npm install it in watchmen:
 
 ```sh
      npm install watchmen-ping-smtp
 ```
 
-##### c) create a service that uses that ping service
+#### c) create a service that uses that ping service
 
 ![Select ping service](https://github.com/iloire/watchmen/raw/master/screenshots/ping-service-selection.png)
 
-### Monitor plugins
+## Monitor plugins
 
-#### AWS SES Notifications plugin (provided)
+### AWS SES Notifications plugin (provided)
 
 https://github.com/iloire/watchmen-plugin-aws-ses
 
-##### Settings
+#### Settings
 
 ```sh
 export WATCHMEN_AWS_FROM='your@email'
@@ -216,19 +236,19 @@ export WATCHMEN_AWS_SECRET='your AWS secret'
 
 ```
 
-#### Nodemailer Notifications plugin (third party contribution)
+### Nodemailer Notifications plugin (third party contribution)
 
 https://www.npmjs.com/package/watchmen-plugin-nodemailer
 
-#### Slack Notifications plugin (third party contribution)
+### Slack Notifications plugin (third party contribution)
 
 https://www.npmjs.com/package/watchmen-plugin-slack
 
-#### Console output plugin (provided)
+### Console output plugin (provided)
 
 https://github.com/iloire/watchmen-plugin-console
 
-#### Creating your own custom plugin
+### Creating your own custom plugin
 
 A ``watchmen`` instance will be injected through your plugin constructor. Then you can subscribe to the desired events. Best is to show it through an example.
 
@@ -331,11 +351,11 @@ function ConsolePlugin(watchmen) {
 exports = module.exports = ConsolePlugin;
 ```
 
-### Storage providers
+## Storage providers
 
-#### Redis
+### Redis
 
-##### Data schema
+#### Data schema
 
 ```
 service - set with service id's
@@ -347,7 +367,7 @@ service:<serviceId>:latency - sorted set with latency info
 service:<serviceId>:failurecount - number of consecutive pings failures (to determine if it is an outage)
 ```
 
-##### Configuration
+### Configuration
 
 ```sh
 export WATCHMEN_REDIS_PORT_PRODUCTION=1216
@@ -357,8 +377,7 @@ export WATCHMEN_REDIS_PORT_DEVELOPMENT=1216
 export WATCHMEN_REDIS_DB_DEVELOPMENT=2
 ```
 
-
-### Using fake data for development
+## Using fake data for development
 
 ```sh
 cd scripts
@@ -393,6 +412,20 @@ After this Watchmen webserver will be running and exposed in the port 3000 of th
 
 To configure, please look `docker-compose.yml` and `docker-compose.env`.
 
+## Terraform scripts for digital-ocean
+
+You can deploy watchmen in a Digital Ocean droplet in a matter of minutes.
+
+1. Install terraform from [terraform.io](https://www.terraform.io/).
+2. If you don't have one yet, create an account in Digital Ocean. Use [this link](https://m.do.co/c/23602cbcfcc3) to get an initial $10 credit so you can play around with it for free.
+3. Open a terminal in ``terraform/digital-ocean``
+4. Fill up ``user-data.yml`` with your configuration. Don't forget to also setup ``DIGITALOCEAN_TOKEN`` and ``SSH_FINGERPRINT`` env variables (see apply.sh):
+5. Run ``sh apply.sh`` to create your droplet.
+
+Terraform will create a droplet based on Ubuntu with the necessary packages, compile nodejs from source, install a redis server, install and configure an nginx in front of watchmen, and setup and run watchmen from the latest master using [pm2](https://github.com/Unitech/pm2).
+
+![watchmen droplet](https://github.com/iloire/watchmen/raw/master/screenshots/watchmen-droplet-01.png)
+
 ## Tests
 
 ```sh
@@ -421,7 +454,7 @@ watchmen uses [debug](https://www.npmjs.com/package/debug)
 set DEBUG=*
 ```
 
-## Contributions
+## Contributing
 
 You can contribute by:
 
@@ -430,7 +463,7 @@ You can contribute by:
 - Creating ping services.
 - Reporting bugs.
 
-## Contributors
+### Contributors
 
 - [Iván Loire](http://twitter.com/ivanloire)
 - [Oden](https://github.com/Odenius)
@@ -439,7 +472,7 @@ You can contribute by:
 - [Eric Elliott](https://github.com/ericelliott)
 - [Emily Horsman](https://github.com/emilyhorsman)
 
-### Style guide
+## Style guide
 
 Please use [semantic commit messages](http://seesparkbox.com/foundry/semantic_commit_messages)
 
