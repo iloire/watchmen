@@ -470,7 +470,12 @@ You can contribute by:
 - [Tom Atkinson](https://github.com/Nibbler999)
 - [Martin Bučko](https://github.com/MartinBucko)
 - [Eric Elliott](https://github.com/ericelliott)
+- [Dan Abramov](https://twitter.com/dan_abramov)
+- [Vaios Karampinis](https://github.com/vkarampinis)
 - [Emily Horsman](https://github.com/emilyhorsman)
+- [Luís Bianchin](https://github.com/labianchin)
+- [Marcus Kida](https://github.com/kimar)
+- [Adriano Emerick Cola](https://github.com/adrianocola)
 
 ## Style guide
 
