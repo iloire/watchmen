@@ -657,6 +657,11 @@ Please use [semantic commit messages](http://seesparkbox.com/foundry/semantic_co
 
 (see package.json and bower.json for a complete list of libraries and dependencies)
 
+## Donation
+
+You can buy me a beer by sending BTC at 1DQRybRW7cQtRq65qCxkpGNLX9BVjmfJaY.
+Yeah, it turns out researchers have uncovered that beer release endorphins in our brain that we use as a reward and motivation for coding on open source projects.
+
 ## License
 
 Copyright (c) 2012 - 2015 Iván Loire
