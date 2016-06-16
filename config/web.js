@@ -1,6 +1,6 @@
 module.exports = {
 
-    no_auth: false,
+    no_auth: process.env.WATCHMEN_WEB_NO_AUTH === 'true',
 
     public_host_name: process.env.WATCHMEN_BASE_URL, // required for OAuth dance
 

@@ -172,6 +172,14 @@ export WATCHMEN_GOOGLE_CLIENT_ID='<your key>'
 export WATCHMEN_GOOGLE_CLIENT_SECRET='<your secret>'
 ```
 
+## Disabling authentication
+
+If you want to disable authentication access and let anyone access and edit your services use:
+
+```
+export WATCHMEN_WEB_NO_AUTH='true'
+```
+
 ## Ping services
 
 ### Embedded ping services
