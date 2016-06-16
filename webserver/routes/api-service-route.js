@@ -3,6 +3,7 @@ var express = require('express');
 var debug = require('debug')('service-route');
 var serviceValidator = require('./../../lib/service-validator');
 var accessFilter = require('./../../lib/service-access-filter');
+var config = require('../../config/web');
 
 module.exports.getRoutes = function (storage) {
 
@@ -13,7 +14,7 @@ module.exports.getRoutes = function (storage) {
   var router = express.Router();
 
   var requireAdmin = function (req, res, next) {
-    if (req.user && req.user.isAdmin) {
+    if ((req.user && req.user.isAdmin) || config.no_auth) {
       next();
     } else {
       return res.status(401).json({error: 'auth required'});
