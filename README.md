@@ -492,6 +492,11 @@ Please use [semantic commit messages](http://seesparkbox.com/foundry/semantic_co
 
 ## History
 
+**3.4.0**
+
+- Add non authenticated access
+- Add redis-store for session persistence
+
 **3.3.1**
 
 - Fixed redis sorted set member uniqueness (zadd). Thanks Adriano Emerick Cola!
