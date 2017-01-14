@@ -14,7 +14,7 @@ module.exports = (function (){
   }
 
   function isAdmin(email){
-    var admins = (process.env.WATCHMEN_ADMINS || '').split(',').map(function(email){ return email.trim (); });
+    var admins = (config.admins || '').split(',').map(function(email){ return email.trim (); });
     return admins.indexOf(email)>-1;
   }
 
