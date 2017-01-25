@@ -67,7 +67,7 @@
     var time = [];
     var latency = [];
     for (var i = 0; i < arr.length; i++) {
-      time.push([arr[i][fieldTime]]);
+      time.push(new Date(arr[i][fieldTime]));
       latency.push(Math.round([arr[i][fieldData]]));
     }
     return {time: time, data: latency};
