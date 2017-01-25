@@ -2,6 +2,9 @@
   "author": "Iván Loire <ivan@iloire.com> (http://iloire.com/)",
   "name": "watchmen",
   "scripts": {
+    "start": "node run-web-server",
+    "build": "bower install && gulp build",
+    "build:watch": "gulp watch",
     "coverage": "./node_modules/istanbul/lib/cli.js cover ./node_modules/mocha/bin/_mocha -- --ui bdd -R spec -t 5000",
     "postcoverage": "kill `cat test/redis.pid`",
     "posttest": "kill `cat test/redis.pid`",
