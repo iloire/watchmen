@@ -75,21 +75,13 @@ Make sure you have `redis-server` in your `PATH`. Then you can run watchmen serv
 
 ## Development workflow
 
-Make sure bower is installed globally:
+### Fetching bower dependencies and building static assets
 
-    $ npm install -g bower
+    $ npm run build
 
-### Fetching bower dependencies
+### Dev build watch
 
-    $ bower install
-
-### Re-building watchmen assets
-
-    $ gulp build
-
-### Dev watch
-
-    $ gulp watch
+    $ npm run build:watch
 
 ### Running tests
 
