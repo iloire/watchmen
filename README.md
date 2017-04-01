@@ -184,6 +184,13 @@ https://www.npmjs.com/package/watchmen-ping-http-head
 
 https://www.npmjs.com/package/watchmen-ping-http-contains
 
+### Third party contributions
+
+#### NightmareJS Plugin for Watchmen
+
+Allows Nightmare scripts to be executed by a Watchmen instance
+https://www.npmjs.com/package/watchmen-ping-nightmare
+
 ### Creating your own ping service
 
 Ping services are npm modules with the ``'watchmen-ping'`` prefix.
