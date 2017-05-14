@@ -3,7 +3,7 @@
 [![Build Status](https://secure.travis-ci.org/iloire/watchmen.png?branch=master)](http://travis-ci.org/iloire/watchmen)
 
 - [What is watchmen?](#what-is-watchmen)
-- [Demo](#demo)
+- [Screenshots](#screenshots)
 - [Installation](#installation)
 - [Running and stopping watchmen](#running-and-stopping-watchmen)
 - [Development workflow](#development-workflow)
@@ -31,9 +31,7 @@
 - watchmen provides **custom actions through plugins** (console outpug, email notifications, etc).
 - the code base aims to be simple and easy to understand and modify.
 
-## Demo
-
-Check the [web interface in action](http://watchmen-demo.letsnode.com).
+## Screenshots
 
 ![watchmen, service details](https://github.com/iloire/watchmen/raw/master/screenshots/watchmen-details-mobile-01.png)
 
