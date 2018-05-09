@@ -588,7 +588,7 @@ Please use [semantic commit messages](http://seesparkbox.com/foundry/semantic_co
 - [Knockout.js](http://knockoutjs.com) has been removed. Watchmen uses handlebars now instead. Faster, simpler code, and avoids some client side memory leacks.
 - Client side is using [moment.js](http://momentjs.com) for rendering dates.
 - [Express.js](http://expressjs.com) routes now are handled on /routes
-- [Mocha](visionmedia.github.com/mocha/ ) is used for unit testing. Mocked storages and ping services are used.
+- [Mocha](http://mochajs.org/) is used for unit testing. Mocked storages and ping services are used.
 - Configuration is now spread in separate files, under the /config directory
 - Better reporting web interface. **Uptime statistics**. Outages count, warnings count.
 
