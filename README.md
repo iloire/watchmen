@@ -56,7 +56,7 @@ Clone the repo by using
 
 or
 
-    $git clone https://github.com/iloire/watchmen.git
+    $ git clone https://github.com/iloire/watchmen.git
 
 Then install the required dependencies using ``npm``
 
